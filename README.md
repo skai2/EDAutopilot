@@ -1,4 +1,4 @@
-# EliteDangerousAutoPilot2
+# Elite Dangerous: AutoPilot
 Elite Dangerous computer vision and ahk based autopilot
 
 Program uses AHK to control inputs in Elite Dangerous and Python scripts using OpenCV
