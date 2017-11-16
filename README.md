@@ -10,7 +10,7 @@ USAGE:
 
 CONFIGURATION:
 1. Download and extract zip.
-2. Inside the "Data" folder extract "GetNavPointOffset.zip"
+2. Download "GetNavPointOffset.zip" from https://drive.google.com/open?id=1QzeZpSk4ehW8sIZxv9VsbJg8HBX0HQbz and extract into Data folder.
 3. Open the "AutoPilot.ahk" and configure controls settings in section 1. (Optionally configure other settings)
 4. Run the script and enter game.
 5. Press PgUp key to initiate configuration wizard.
