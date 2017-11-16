@@ -10,10 +10,11 @@ USAGE:
 
 CONFIGURATION:
 1. Download and extract zip.
-2. Open the "AutoPilot.ahk" and configure controls settings in section 1. (Optionally configure other settings)
-3. Run the script and enter game.
-4. Press PgUp key to initiate configuration wizard.
-5. Optionally, plot route to nearby star, manually aim ship at the star and press F10 to check offset (should be close to 0,0)
+2. Inside the "Data" folder extract "GetNavPointOffset.zip"
+3. Open the "AutoPilot.ahk" and configure controls settings in section 1. (Optionally configure other settings)
+4. Run the script and enter game.
+5. Press PgUp key to initiate configuration wizard.
+6. Optionally, plot route to nearby star, manually aim ship at the star and press F10 to check offset (should be close to 0,0)
 
 AUTOPILOT:
 1. Plot route in galaxy map OR press Insert key and type in destination.
