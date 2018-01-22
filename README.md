@@ -22,7 +22,10 @@ AUTOPILOT:
 3. Press End key at any time to abort and shutdown autopilot.
 
 OTHER:
-1. If you are changing ship and wish yo keep your settings just save the generated settings.txt file with a different name and replace as necessary
+1. If you are changing ship and wish to keep your settings just save the generated settings.txt file with a different name and replace as necessary
 
 WARNING:
 This NOT to be used unsupervised. Do so at your own and your own ship's risk!
+
+CONTACT:
+skai2mail@gmail.com
