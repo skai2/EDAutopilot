@@ -7,7 +7,7 @@
 #Persistent
 #UseHook
 #SingleInstance force
-;#IfWinActive, Elite - Dangerous (CLIENT)
+#IfWinActive, Elite - Dangerous (CLIENT)
 ; AHK Parameters
 SetKeyDelay, 0, 50
 SendMode Input
@@ -34,7 +34,7 @@ Global ScreenX = A_ScreenWidth
 Global ScreenY = A_ScreenHeight
 ; CONTROLS
 ; Pitch
-Global PitchModifierKey := "lol"
+Global PitchModifierKey := "lol" ; DEFAULT Alt
 Global PitchUpKey := "w"
 Global PitchDownKey := "s"
 ; Roll
@@ -42,7 +42,7 @@ Global RollModifierKey := "lol" ; DO NOT USE
 Global RollRightKey := "e"
 Global RollLeftKey := "q"
 ; Yaw
-Global YawModifierKey := "lol" ; DISABLED BY ERIC
+Global YawModifierKey := "lol" ; Default Shift
 Global YawRightKey := "d"
 Global YawLeftKey := "a"
 ; Boostv
@@ -1353,7 +1353,6 @@ ShutOff() {
 ; -------------- SECTION SIX: ANTICOLLISION FAILSAFE PROGAM --------------------
 ; -------------Do not change unless you know what you are doing-----------------
 ; ------------------------------------------------------------------------------
-CoordMode, Mouse, Screen
 checkFailsafe() {
   FailsafeX := % (ScreenX / 2)
   FailsafeY := % (ScreenY / 2)
