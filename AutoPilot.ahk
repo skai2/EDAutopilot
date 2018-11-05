@@ -1006,13 +1006,9 @@ AlignShip() {
 
 InitiateJump() {
   Advise("Jump", 0)
+  checkFailsafe()
   Speed()
-  if (checkFailsafe()) {
-    Jump() ; Start Jump
-  }
-  else {
-    Abort()
-  }
+  Jump() ; Start Jump
   Sleep, % FSDChargeTime + FSDChargeTimeSafety
   if (JumpFailed() = 1) {
     Advise("Alignment Fail", 0)
@@ -1353,8 +1349,10 @@ ShutOff() {
 ; ------------------------------------------------------------------------------
 ; -------------- SECTION SIX: ANTICOLLISION FAILSAFE PROGAM --------------------
 ; -------------Do not change unless you know what you are doing-----------------
+; ---------Returns true(1) if failsafe is triggered - false(0) if not-----------
+; ----Pass abortOnFail as false if you do not want to abort when check fails----
 ; ------------------------------------------------------------------------------
-checkFailsafe() {
+checkFailsafe(abortOnFail := true) {
   FailsafeX := % (ScreenX / 2)
   FailsafeY := % (ScreenY / 2)
   FailsafeW := 25
@@ -1387,15 +1385,18 @@ checkFailsafe() {
   if (Red >= RedThreshhold) {
     Advise("EMERGENCY FAILSAFE TRIGGERED. ALL STOP. " + "Red Value: " + Red, 0)
     Brake()
+    if(abortOnFail) {
+      Abort()
+    }
     Loop, 10
     {
       SoundBeep, 900, 500  ; Play a higher pitch for half a second.
       SoundBeep, 400, 250 ; Play the default pitch and duration.
       Sleep, 100
     }
-    return true
+    return true ;1
   }
-  return false
+  return false ;0
 }
 
 HexToDec(hex)
