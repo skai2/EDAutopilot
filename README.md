@@ -15,6 +15,7 @@ CONFIGURATION:
 4. Run the script and enter game.
 5. Press PgUp key to initiate configuration wizard.
 6. Optionally, plot route to nearby star, manually aim ship at the star and press F10 to check offset (should be close to 0,0)
+7. Optionally, point ship towards a star at navpoint distance, then press F9 to initiate a star failsafe check to ensure that you will minimize your chance of accidentally flying into a star. 
 
 AUTOPILOT:
 1. Plot route in galaxy map OR press Insert key and type in destination.
@@ -31,3 +32,7 @@ This NOT to be used unsupervised. Do so at your own and your own ship's risk!
 CONTACT:
 
 skai2mail@gmail.com
+
+ADD. FEATURES/MODIFIED BY:
+
+eric@enumc.com
