@@ -27,7 +27,7 @@ OTHER:
 
 WARNING:
 
-This NOT to be used unsupervised. Do so at your own and your own ship's risk!
+This is NOT to be used unsupervised. Do so at your own and your own ship's risk!
 
 CONTACT:
 
