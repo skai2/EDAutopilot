@@ -1007,7 +1007,7 @@ AlignShip() {
 InitiateJump() {
   Advise("Jump", 0)
   Speed()
-  if (checkFailsafe) {
+  if (checkFailsafe()) {
     Jump() ; Start Jump
   }
   else {
