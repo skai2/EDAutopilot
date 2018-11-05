@@ -10,12 +10,11 @@ USAGE:
 
 CONFIGURATION:
 1. Download and extract zip.
-2. Download "GetNavPointOffset.zip" from https://drive.google.com/open?id=1QzeZpSk4ehW8sIZxv9VsbJg8HBX0HQbz and extract into Data folder.
-3. Open the "AutoPilot.ahk" and configure controls settings in section 1. (Optionally configure other settings)
-4. Run the script and enter game.
-5. Press PgUp key to initiate configuration wizard.
-6. Optionally, plot route to nearby star, manually aim ship at the star and press F10 to check offset (should be close to 0,0)
-7. Optionally, point ship towards a star at navpoint distance, then press F9 to initiate a star failsafe check to ensure that you will minimize your chance of accidentally flying into a star. 
+2. Open the "AutoPilot.ahk" and configure controls settings in section 1. (Optionally configure other settings, but keep in mind that section 2 can be configured via step 4 below)
+3. Run the script and enter game.
+4. Press PgUp key to initiate configuration wizard.
+5. Optionally, plot route to nearby star, manually aim ship at the star and press F10 to check offset (should be close to 0,0)
+6. Optionally, point ship towards a star(F/G/K/M [Red/Yellow-ish planets]) at navpoint distance (The distance right after you FSD jump into a system), then press F9 to initiate a failsafe check to minimize your chance of accidentally flying into a star. 
 
 AUTOPILOT:
 1. Plot route in galaxy map OR press Insert key and type in destination.
