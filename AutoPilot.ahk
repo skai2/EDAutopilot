@@ -1052,9 +1052,10 @@ FinishJump() {
     FailCount++
     Sleep, 100
     Brake()
-    if (FailCount > 40)
+    if (FailCount > 40) {
       Advise("Navigation Error", 2)
       Abort()
+    }
   }
   Advise("Full Stop", 0)
   Loop, 5 {
