@@ -1,0 +1,7 @@
+pystray==0.14.4
+PyAutoGUI==0.9.42
+opencv_python==4.1.0.25
+kthread==0.2.2
+keyboard==0.13.3
+numpy==1.16.2
+Pillow==6.0.0

@@ -1,38 +1,49 @@
-# Elite Dangerous: AutoPilot
-Elite Dangerous computer vision and ahk based autopilot
+# Elite Dangerous: AutoPilot v2
+Elite Dangerous computer vision based autopilot version 2
 
-Program uses AHK to control inputs in Elite Dangerous and Python scripts using OpenCV
-to read information of the game screen and auto-navigate the ship through a set Route.
+Program uses openCV and other tools in python to navigate automatically in Elite Dangerous.
 
+Look [here](https://github.com/skai2/EDAutopilot2/releases/tag/v19.04.26-alpha-14) for the alpha release.
 
+## Usage:
+Press **Home** key to start autopilot.
 
-USAGE:
+Press **End** key to abort autopilot.
 
-CONFIGURATION:
-1. Download and extract zip.
-2. Download "GetNavPointOffset.zip" from https://drive.google.com/open?id=1QzeZpSk4ehW8sIZxv9VsbJg8HBX0HQbz and extract into Data folder.
-3. Open the "AutoPilot.ahk" and configure controls settings in section 1. (Optionally configure other settings)
-4. Run the script and enter game.
-5. Press PgUp key to initiate configuration wizard.
-6. Optionally, plot route to nearby star, manually aim ship at the star and press F10 to check offset (should be close to 0,0)
-7. Optionally, point ship towards a star at navpoint distance, then press F9 to initiate a star failsafe check to ensure that you will minimize your chance of accidentally flying into a star. 
+## Optimal Game Settings:
+1. Game resolution:      1080p Borderless
+2. Ship UI color:        Orange (default colour)
+3. Ship UI brightness:   Maximum
 
-AUTOPILOT:
-1. Plot route in galaxy map OR press Insert key and type in destination.
-2. Press Home key to initiate autopilot
-3. Press End key at any time to abort and shutdown autopilot.
+Additionally, for full functionality, "Advanced Autodocking" and "Supercruise Assist" modules must be outfitted on ship.
 
-OTHER:
-1. If you are changing ship and wish to keep your settings just save the generated settings.txt file with a different name and replace as necessary
+##
+Or if you'd like to set it up and run the script directly...
 
-WARNING:
+## Setup:
+_Requires **python 3** and **git**_
+1. Clone this repository
+```sh
+> git clone https://github.com/skai2/EDAutopilot2.git
+```
+2. Install requirements
+```sh
+> cd EDAutoPilot2
+> pip install -r requirements.txt
+```
+3. Run script
+```sh
+> python autopilot.py
+```
 
-This is NOT to be used unsupervised. Do so at your own and your own ship's risk!
+## WARNING:
 
-CONTACT:
+ALPHA VERSION IN DEVELOPMENT. 
+
+Absolutely DO NOT LEAVE UNSUPERVISED. 
+
+Use at YOUR OWN RISK.
+
+## CONTACT:
 
 skai2mail@gmail.com
-
-ADD. FEATURES/MODIFIED BY:
-
-eric@enumc.com
