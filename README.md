@@ -24,11 +24,11 @@ Or if you'd like to set it up and run the script directly...
 _Requires **python 3** and **git**_
 1. Clone this repository
 ```sh
-> git clone https://github.com/skai2/EDAutopilot2.git
+> git clone https://github.com/skai2/EDAutopilot.git
 ```
 2. Install requirements
 ```sh
-> cd EDAutoPilot2
+> cd EDAutoPilot
 > pip install -r requirements.txt
 ```
 3. Run script
