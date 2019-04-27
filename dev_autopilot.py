@@ -22,10 +22,11 @@
 
 # ## Imports
 
-# In[5]:
+# In[320]:
 
 
 import sys
+import datetime
 from os import environ, listdir
 from os.path import join, isfile, getctime, abspath
 from json import loads
@@ -40,7 +41,7 @@ from src.directinput import * # see reference 5
 from pyautogui import size# see reference 6
 
 
-# In[6]:
+# In[321]:
 
 
 def resource_path(relative_path):
@@ -56,7 +57,7 @@ def resource_path(relative_path):
 
 # ## Constants
 
-# In[7]:
+# In[322]:
 
 
 PATH_LOG_FILES = None
@@ -72,7 +73,7 @@ SCREEN_WIDTH, SCREEN_HEIGHT = size()
 
 # ### Get latest log file
 
-# In[8]:
+# In[323]:
 
 
 def get_latest_log(path_logs=None):
@@ -86,7 +87,7 @@ def get_latest_log(path_logs=None):
     return latest_log
 
 
-# In[9]:
+# In[324]:
 
 
 # get_latest_log(PATH_LOG_FILES)
@@ -94,12 +95,14 @@ def get_latest_log(path_logs=None):
 
 # ### Extract ship info from log
 
-# In[10]:
+# In[325]:
 
 
 def ship():
     """Returns a 'status' dict containing relevant game status information (state, fuel, ...)"""
+    latest_log = get_latest_log(PATH_LOG_FILES)
     ship = {
+        'time': (datetime.now() - datetime.fromtimestamp(getctime(latest_log))).seconds,
         'status': None,
         'location': None,
         'target': None,
@@ -108,7 +111,6 @@ def ship():
         'fuel_percent': None,
         'is_scooping': False,
     }
-    latest_log = get_latest_log(PATH_LOG_FILES)
     # Read log line by line and parse data
     with open(latest_log, encoding="utf-8") as f:
         for line in f:
@@ -147,21 +149,24 @@ def ship():
                 if 'FuelCapacity' in log and 'FuelLevel' in log:
                     ship['fuel_capacity'] = log['FuelCapacity']
                     ship['fuel_level'] = log['FuelLevel']
-                    ship['fuel_percent'] = round((ship['fuel_capacity'] / ship['fuel_level'])*100)
+                    ship['fuel_percent'] = round((ship['fuel_level'] / ship['fuel_capacity'])*100)
                 elif log_event == 'FuelScoop' and 'Total' in log:
                     ship['fuel_level'] = log['Total']
                     ship['fuel_percent'] = round((ship['fuel_level'] / ship['fuel_capacity'])*100)
                 elif 'FuelLevel' in log:
                     ship['fuel_level'] = log['FuelLevel']
-                    ship['fuel_percent'] = round((ship['fuel_capacity'] / ship['fuel_level'])*100)
+                    ship['fuel_percent'] = round((ship['fuel_level'] / ship['fuel_capacity'])*100)
+                    
                 # parse scoop
-                if log_event == 'FuelScoop' and ship['fuel_percent'] < 100:
+                if log_event == 'FuelScoop' and ship['time'] < 10 and ship['fuel_percent'] < 100:
                     ship['is_scooping'] = True
                 else:
                     ship['is_scooping'] = False
+                    
                 # parse location
                 if (log_event == 'Location' or log_event == 'FSDJump') and 'StarSystem' in log:
                     ship['location'] = log['StarSystem']
+                    
                 # parse target
                 if log_event == 'FSDTarget':
                     if log['Name'] == ship['location']:
@@ -179,7 +184,7 @@ def ship():
     return ship
 
 
-# In[11]:
+# In[326]:
 
 
 # ship()
@@ -189,7 +194,7 @@ def ship():
 
 # ### Get necessary keybinds
 
-# In[12]:
+# In[327]:
 
 
 def get_bindings(path_bindings=None):
@@ -203,7 +208,7 @@ def get_bindings(path_bindings=None):
         'YawLeftButton',
         'YawRightButton',
         'SetSpeedZero',
-        'SetSpeed75',
+        'SetSpeed100',
         'UI_Back',
         'UIFocus',
         'UI_Up',
@@ -248,7 +253,7 @@ def get_bindings(path_bindings=None):
         return direct_input_keys
 
 
-# In[13]:
+# In[328]:
 
 
 keys = get_bindings(PATH_KEYBINDINGS)
@@ -257,7 +262,7 @@ keys = get_bindings(PATH_KEYBINDINGS)
 
 # ## Direct input function
 
-# In[14]:
+# In[329]:
 
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
@@ -291,7 +296,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             sleep(KEY_REPEAT_DELAY)
 
 
-# In[15]:
+# In[330]:
 
 
 # sleep(3)
@@ -302,7 +307,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 # ### Get screen
 
-# In[16]:
+# In[331]:
 
 
 def get_screen(x_left, y_top, x_right, y_bot):
@@ -314,7 +319,7 @@ def get_screen(x_left, y_top, x_right, y_bot):
 
 # ### HSV slider tool
 
-# In[17]:
+# In[332]:
 
 
 def callback(x):
@@ -368,7 +373,7 @@ def hsv_slider():
             break
 
 
-# In[18]:
+# In[333]:
 
 
 # hsv_slider()
@@ -376,7 +381,7 @@ def hsv_slider():
 
 # ### Filter sun
 
-# In[19]:
+# In[334]:
 
 
 def filter_sun(image=None, testing=False):
@@ -399,7 +404,7 @@ def filter_sun(image=None, testing=False):
     return filtered
 
 
-# In[20]:
+# In[335]:
 
 
 # filter_sun(testing=True)
@@ -407,7 +412,7 @@ def filter_sun(image=None, testing=False):
 
 # ### Filter orange
 
-# In[21]:
+# In[336]:
 
 
 def filter_orange(image=None, testing=False):
@@ -430,7 +435,7 @@ def filter_orange(image=None, testing=False):
     return filtered
 
 
-# In[22]:
+# In[337]:
 
 
 # filter_orange(testing=True)
@@ -438,7 +443,7 @@ def filter_orange(image=None, testing=False):
 
 # ### Filter orange2
 
-# In[23]:
+# In[338]:
 
 
 def filter_orange2(image=None, testing=False):
@@ -461,7 +466,7 @@ def filter_orange2(image=None, testing=False):
     return filtered
 
 
-# In[24]:
+# In[339]:
 
 
 # filter_orange2(testing=True)
@@ -469,7 +474,7 @@ def filter_orange2(image=None, testing=False):
 
 # ### Filter blue
 
-# In[25]:
+# In[340]:
 
 
 def filter_blue(image=None, testing=False):
@@ -492,7 +497,7 @@ def filter_blue(image=None, testing=False):
     return filtered
 
 
-# In[26]:
+# In[341]:
 
 
 # filter_blue(testing=True)
@@ -500,7 +505,7 @@ def filter_blue(image=None, testing=False):
 
 # ### Get sun
 
-# In[27]:
+# In[342]:
 
 
 def sun_percent():
@@ -513,7 +518,7 @@ def sun_percent():
     return result * 100
 
 
-# In[28]:
+# In[343]:
 
 
 # sleep(3)
@@ -522,7 +527,7 @@ def sun_percent():
 
 # ### Get compass image
 
-# In[29]:
+# In[344]:
 
 
 def get_compass_image(testing=False):
@@ -553,7 +558,7 @@ def get_compass_image(testing=False):
     return compass_image, compass_width+(2*doubt), compass_height+(2*doubt)
 
 
-# In[30]:
+# In[345]:
 
 
 # get_compass_image(testing=True)
@@ -561,7 +566,7 @@ def get_compass_image(testing=False):
 
 # ### Get navpoint offset
 
-# In[31]:
+# In[346]:
 
 
 def get_navpoint_offset(testing=False):
@@ -593,7 +598,7 @@ def get_navpoint_offset(testing=False):
         return {'x':final_x, 'y':final_y}
 
 
-# In[32]:
+# In[347]:
 
 
 # get_navpoint_offset(testing=True)
@@ -601,7 +606,7 @@ def get_navpoint_offset(testing=False):
 
 # ### Get destination offset
 
-# In[33]:
+# In[348]:
 
 
 def get_destination_offset(testing=False):
@@ -635,7 +640,7 @@ def get_destination_offset(testing=False):
         return {'x':final_x, 'y':final_y}
 
 
-# In[34]:
+# In[349]:
 
 
 # sleep(3)
@@ -646,7 +651,7 @@ def get_destination_offset(testing=False):
 
 # ### Undock
 
-# In[35]:
+# In[350]:
 
 
 def undock():
@@ -671,7 +676,7 @@ def undock():
     return True
 
 
-# In[36]:
+# In[351]:
 
 
 # sleep(3)
@@ -680,7 +685,7 @@ def undock():
 
 # ### Dock
 
-# In[37]:
+# In[352]:
 
 
 def dock():
@@ -718,7 +723,7 @@ def dock():
     return True
 
 
-# In[38]:
+# In[353]:
 
 
 # sleep(3)
@@ -727,7 +732,7 @@ def dock():
 
 # ### Align
 
-# In[39]:
+# In[354]:
 
 
 def x_angle(point=None):
@@ -740,14 +745,14 @@ def x_angle(point=None):
         return -90 - result
 
 
-# In[40]:
+# In[355]:
 
 
 def align():
     if not (ship()['status'] == 'in_supercruise' or ship()['status'] == 'in_space'):
         raise Exception('not ready to jump')
     
-    send(keys['SetSpeed75'])
+    send(keys['SetSpeed100'])
     
     while sun_percent() > 5:
         send(keys['PitchUpButton'], state=1)
@@ -776,7 +781,7 @@ def align():
         ang = x_angle(off)
         
     sleep(0.5)    
-    close = 100
+    close = 80
     hold_pitch = 0.2
     hold_yaw = 0.3
     off = get_destination_offset()
@@ -800,7 +805,7 @@ def align():
             return
 
 
-# In[41]:
+# In[356]:
 
 
 # sleep(3)
@@ -809,7 +814,7 @@ def align():
 
 # ### Jump
 
-# In[42]:
+# In[357]:
 
 
 def jump():
@@ -832,38 +837,52 @@ def jump():
 
 # ### Refuel
 
-# In[43]:
+# In[358]:
 
 
 def refuel():
     if ship()['status'] != 'in_supercruise':
         raise Exception('not ready to refuel')
-    if ship()['fuel_percent'] > 20:
+    if not ship()['fuel_percent'] < 20:
         return
-    send(keys['SetSpeed75'])
-    while not ship()['is_scooping']:
-        sleep(1)
-    sleep(2)
-    send(keys['SetSpeedZero'])
+    send(keys['SetSpeed100'])
+#     while not ship()['is_scooping']:
+#         sleep(1)
+    sleep(4)
+    send(keys['SetSpeedZero'], repeat=3)
     while not ship()['fuel_percent'] == 100:
         sleep(1)
     return True
 
 
+# In[359]:
+
+
+# sleep(3)
+# refuel()
+
+
 # ### Position
 
-# In[44]:
+# In[360]:
 
 
 def position():
     send(keys['PitchUpButton'], hold=5)
-    send(keys['SetSpeed75'])
+    send(keys['SetSpeed100'])
     while sun_percent() > 5:
         send(keys['PitchUpButton'], state=1)
     sleep(3)
     send(keys['PitchUpButton'], state=0)
     sleep(15)
     return True
+
+
+# In[361]:
+
+
+# sleep(3)
+# position()
 
 
 # ## Autopilot main
@@ -884,10 +903,12 @@ def position():
 # 
 # 'in-docking'
 
-# In[45]:
+# In[362]:
 
 
 def autopilot():
+#     if ship()['target']:
+#         undock()
     while ship()['target']:
         if ship()['status'] == 'in_space' or ship()['status'] == 'in_supercruise':
             align()
@@ -897,7 +918,7 @@ def autopilot():
         send(keys['SetSpeedZero'])
 
 
-# In[46]:
+# In[363]:
 
 
 # sleep(3)
