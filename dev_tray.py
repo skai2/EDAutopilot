@@ -1,6 +1,7 @@
 from pystray import Icon, MenuItem, Menu
 from PIL import Image # big
 from dev_autopilot import autopilot, resource_path
+import threading
 import kthread
 import keyboard
 
@@ -14,16 +15,13 @@ def exit_action():
     icon.stop()
 
 def start_action():
-    global thread
-    if not thread:
-        thread = kthread.KThread(target = autopilot, name = "EDAutopilot")
-        thread.start()
+    stop_action()
+    kthread.KThread(target = autopilot, name = "EDAutopilot").start()
 
 def stop_action():
-    global thread
-    if thread:
-        thread.terminate()
-        thread = None
+    for thread in threading.enumerate():
+        if thread.getName() == 'EDAutopilot':
+            thread.kill()
 
 def tray():
     global icon, thread
@@ -36,7 +34,6 @@ def tray():
     icon.icon = logo
 
     icon.menu = Menu(
-            MenuItem('Start', lambda : start_action()),
             MenuItem('Exit', lambda : exit_action()),
         )
 
