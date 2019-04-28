@@ -3,7 +3,7 @@ Elite Dangerous computer vision based autopilot version 2
 
 Program uses openCV and other tools in python to navigate automatically in Elite Dangerous.
 
-Look [here](https://github.com/skai2/EDAutopilot/releases/tag/v19-04-26-alpha-14) for the alpha release.
+Look [here](https://github.com/skai2/EDAutopilot/releases) for the alpha release.
 
 ## Usage:
 Press **Home** key to start autopilot.
@@ -24,11 +24,11 @@ Or if you'd like to set it up and run the script directly...
 _Requires **python 3** and **git**_
 1. Clone this repository
 ```sh
-> git clone https://github.com/skai2/EDAutopilot2.git
+> git clone https://github.com/skai2/EDAutopilot.git
 ```
 2. Install requirements
 ```sh
-> cd EDAutoPilot2
+> cd EDAutoPilot
 > pip install -r requirements.txt
 ```
 3. Run script
