@@ -1,10 +1,10 @@
 from pystray import Icon, MenuItem, Menu
 from PIL import Image # big
-from dev_autopilot import autopilot, resource_path
+from dev_autopilot import autopilot, resource_path, get_bindings, clear_input
+from src.directinput import *
 import threading
 import kthread
 import keyboard
-
 
 def setup(icon):
     icon.visible = True
@@ -22,6 +22,7 @@ def stop_action():
     for thread in threading.enumerate():
         if thread.getName() == 'EDAutopilot':
             thread.kill()
+    clear_input(get_bindings())
 
 def tray():
     global icon, thread
