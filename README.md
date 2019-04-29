@@ -6,6 +6,8 @@ Program uses openCV and other tools in python to navigate automatically in Elite
 Look [here](https://github.com/skai2/EDAutopilot/releases) for the alpha release.
 
 ## Usage:
+The program will create an icon on the taskbar.
+
 Press **Home** key to start autopilot.
 
 Press **End** key to abort autopilot.
@@ -15,7 +17,9 @@ Press **End** key to abort autopilot.
 2. Ship UI color:        Orange (default colour)
 3. Ship UI brightness:   Maximum
 
-Additionally, for full functionality, "Advanced Autodocking" and "Supercruise Assist" modules must be outfitted on ship.
+## General Guidelines
+
+I recommend setting your route finder to use only scoopable stars, Additionally, for full functionality, "Advanced Autodocking" and  "Supercruise Assist" modules must be outfitted on ship.
 
 ##
 Or if you'd like to set it up and run the script directly...
