@@ -22,7 +22,7 @@
 
 # ## Imports
 
-# In[1]:
+# In[124]:
 
 
 import sys
@@ -39,17 +39,9 @@ from xml.etree.ElementTree import parse
 import cv2 # see reference 2
 from src.directinput import * # see reference 5
 from pyautogui import size# see reference 6
-import logging
-from autologging import logged, TRACE, traced
 
 
-# In[2]:
-
-
-logging.basicConfig(filename='autopilot.log',level=logging.DEBUG)
-
-
-# In[3]:
+# In[125]:
 
 
 def resource_path(relative_path):
@@ -65,7 +57,7 @@ def resource_path(relative_path):
 
 # ## Constants
 
-# In[4]:
+# In[126]:
 
 
 PATH_LOG_FILES = None
@@ -81,7 +73,7 @@ SCREEN_WIDTH, SCREEN_HEIGHT = size()
 
 # ### Get latest log file
 
-# In[5]:
+# In[127]:
 
 
 def get_latest_log(path_logs=None):
@@ -95,7 +87,7 @@ def get_latest_log(path_logs=None):
     return latest_log
 
 
-# In[6]:
+# In[128]:
 
 
 # get_latest_log(PATH_LOG_FILES)
@@ -103,7 +95,7 @@ def get_latest_log(path_logs=None):
 
 # ### Extract ship info from log
 
-# In[7]:
+# In[129]:
 
 
 def ship():
@@ -203,7 +195,7 @@ def ship():
     return ship
 
 
-# In[8]:
+# In[130]:
 
 
 # ship()
@@ -213,7 +205,7 @@ def ship():
 
 # ### Get necessary keybinds
 
-# In[9]:
+# In[131]:
 
 
 def get_bindings(path_bindings=None):
@@ -272,7 +264,7 @@ def get_bindings(path_bindings=None):
         return direct_input_keys
 
 
-# In[10]:
+# In[132]:
 
 
 keys = get_bindings(PATH_KEYBINDINGS)
@@ -283,7 +275,7 @@ keys = get_bindings(PATH_KEYBINDINGS)
 
 # ### Send input
 
-# In[11]:
+# In[133]:
 
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
@@ -317,7 +309,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             sleep(KEY_REPEAT_DELAY)
 
 
-# In[12]:
+# In[134]:
 
 
 # sleep(3)
@@ -326,7 +318,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 # ### Clear input
 
-# In[1]:
+# In[135]:
 
 
 def clear_input(to_clear=None):
@@ -334,7 +326,7 @@ def clear_input(to_clear=None):
         send(to_clear[key], state=0)
 
 
-# In[66]:
+# In[136]:
 
 
 # clear_input(keys)
@@ -344,7 +336,7 @@ def clear_input(to_clear=None):
 
 # ### Tkinter test
 
-# In[13]:
+# In[137]:
 
 
 # import tkinter as tk
@@ -368,7 +360,7 @@ def clear_input(to_clear=None):
 
 # ### Get screen
 
-# In[14]:
+# In[138]:
 
 
 def get_screen(x_left, y_top, x_right, y_bot):
@@ -380,7 +372,7 @@ def get_screen(x_left, y_top, x_right, y_bot):
 
 # ### HSV slider tool
 
-# In[15]:
+# In[139]:
 
 
 def callback(x):
@@ -434,7 +426,7 @@ def hsv_slider():
             break
 
 
-# In[16]:
+# In[140]:
 
 
 # hsv_slider()
@@ -442,7 +434,7 @@ def hsv_slider():
 
 # ### Filter sun
 
-# In[17]:
+# In[141]:
 
 
 def filter_sun(image=None, testing=False):
@@ -465,7 +457,7 @@ def filter_sun(image=None, testing=False):
     return filtered
 
 
-# In[18]:
+# In[142]:
 
 
 # filter_sun(testing=True)
@@ -473,7 +465,7 @@ def filter_sun(image=None, testing=False):
 
 # ### Filter orange
 
-# In[19]:
+# In[143]:
 
 
 def filter_orange(image=None, testing=False):
@@ -496,7 +488,7 @@ def filter_orange(image=None, testing=False):
     return filtered
 
 
-# In[20]:
+# In[144]:
 
 
 # filter_orange(testing=True)
@@ -504,7 +496,7 @@ def filter_orange(image=None, testing=False):
 
 # ### Filter orange2
 
-# In[21]:
+# In[145]:
 
 
 def filter_orange2(image=None, testing=False):
@@ -527,7 +519,7 @@ def filter_orange2(image=None, testing=False):
     return filtered
 
 
-# In[22]:
+# In[146]:
 
 
 # filter_orange2(testing=True)
@@ -535,7 +527,7 @@ def filter_orange2(image=None, testing=False):
 
 # ### Filter blue
 
-# In[23]:
+# In[147]:
 
 
 def filter_blue(image=None, testing=False):
@@ -558,7 +550,7 @@ def filter_blue(image=None, testing=False):
     return filtered
 
 
-# In[24]:
+# In[148]:
 
 
 # filter_blue(testing=True)
@@ -566,7 +558,7 @@ def filter_blue(image=None, testing=False):
 
 # ### Get sun
 
-# In[25]:
+# In[149]:
 
 
 def sun_percent():
@@ -579,7 +571,7 @@ def sun_percent():
     return result * 100
 
 
-# In[26]:
+# In[150]:
 
 
 # sleep(3)
@@ -588,7 +580,7 @@ def sun_percent():
 
 # ### Get compass image
 
-# In[27]:
+# In[151]:
 
 
 def get_compass_image(testing=False):
@@ -619,7 +611,7 @@ def get_compass_image(testing=False):
     return compass_image, compass_width+(2*doubt), compass_height+(2*doubt)
 
 
-# In[28]:
+# In[152]:
 
 
 # get_compass_image(testing=True)
@@ -627,7 +619,7 @@ def get_compass_image(testing=False):
 
 # ### Get navpoint offset
 
-# In[29]:
+# In[153]:
 
 
 same_last_count = 0
@@ -674,7 +666,7 @@ def get_navpoint_offset(testing=False, last=None):
         return {'x':final_x, 'y':final_y}
 
 
-# In[30]:
+# In[154]:
 
 
 # get_navpoint_offset(testing=True)
@@ -682,7 +674,7 @@ def get_navpoint_offset(testing=False, last=None):
 
 # ### Get destination offset
 
-# In[31]:
+# In[155]:
 
 
 def get_destination_offset(testing=False):
@@ -716,7 +708,7 @@ def get_destination_offset(testing=False):
         return {'x':final_x, 'y':final_y}
 
 
-# In[32]:
+# In[156]:
 
 
 # sleep(3)
@@ -727,7 +719,7 @@ def get_destination_offset(testing=False):
 
 # ### Undock
 
-# In[33]:
+# In[157]:
 
 
 def undock():
@@ -752,7 +744,7 @@ def undock():
     return True
 
 
-# In[34]:
+# In[158]:
 
 
 # sleep(3)
@@ -761,7 +753,7 @@ def undock():
 
 # ### Dock
 
-# In[35]:
+# In[159]:
 
 
 def dock():
@@ -799,7 +791,7 @@ def dock():
     return True
 
 
-# In[36]:
+# In[160]:
 
 
 # sleep(3)
@@ -808,7 +800,7 @@ def dock():
 
 # ### Align
 
-# In[37]:
+# In[161]:
 
 
 def x_angle(point=None):
@@ -821,7 +813,7 @@ def x_angle(point=None):
         return -90 - result
 
 
-# In[38]:
+# In[162]:
 
 
 def align_old():
@@ -891,7 +883,7 @@ def align_old():
             return
 
 
-# In[39]:
+# In[163]:
 
 
 def align():
@@ -959,9 +951,9 @@ def align():
         return
     while (off['x'] > close) or           (off['x'] < -close) or           (off['y'] > close) or           (off['y'] < -close):
         
-        if off['x'] > close and ang > close:
+        if off['x'] > close:
             send(keys['YawRightButton'], hold=hold_yaw)
-        if off['x'] < -close and ang < -close:
+        if off['x'] < -close:
             send(keys['YawLeftButton'], hold=hold_yaw)
         if off['y'] > close:
             send(keys['PitchUpButton'], hold=hold_pitch)
@@ -975,7 +967,7 @@ def align():
             return
 
 
-# In[40]:
+# In[164]:
 
 
 # sleep(3)
@@ -984,7 +976,7 @@ def align():
 
 # ### Jump
 
-# In[41]:
+# In[165]:
 
 
 def jump():
@@ -1007,7 +999,7 @@ def jump():
     raise Exception("jump failure")    
 
 
-# In[42]:
+# In[166]:
 
 
 # sleep(3)
@@ -1016,7 +1008,7 @@ def jump():
 
 # ### Refuel
 
-# In[43]:
+# In[167]:
 
 
 def refuel():
@@ -1036,7 +1028,7 @@ def refuel():
         return True
 
 
-# In[44]:
+# In[168]:
 
 
 # sleep(3)
@@ -1045,7 +1037,7 @@ def refuel():
 
 # ### Position
 
-# In[45]:
+# In[169]:
 
 
 def position():
@@ -1060,7 +1052,7 @@ def position():
     return True
 
 
-# In[46]:
+# In[170]:
 
 
 # sleep(3)
@@ -1085,11 +1077,9 @@ def position():
 # 
 # 'in-docking'
 
-# In[47]:
+# In[171]:
 
 
-@traced
-@logged
 def autopilot():
 #     if ship()['target']:
 #         undock()
@@ -1102,7 +1092,7 @@ def autopilot():
     send(keys['SetSpeedZero'])
 
 
-# In[48]:
+# In[172]:
 
 
 # sleep(3)
