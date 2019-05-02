@@ -22,7 +22,7 @@
 
 # ## Imports
 
-# In[124]:
+# In[351]:
 
 
 import sys
@@ -39,9 +39,10 @@ from xml.etree.ElementTree import parse
 import cv2 # see reference 2
 from src.directinput import * # see reference 5
 from pyautogui import size# see reference 6
+import logging
 
 
-# In[125]:
+# In[352]:
 
 
 def resource_path(relative_path):
@@ -57,7 +58,14 @@ def resource_path(relative_path):
 
 # ## Constants
 
-# In[126]:
+# In[353]:
+
+
+logging.basicConfig(filename='autopilot.log', level=logging.DEBUG)
+logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
+
+
+# In[354]:
 
 
 PATH_LOG_FILES = None
@@ -68,12 +76,21 @@ KEY_REPEAT_DELAY = 0.100
 FUNCTION_DEFAULT_DELAY = 0.500
 SCREEN_WIDTH, SCREEN_HEIGHT = size()
 
+logging.info('PATH_LOG_FILES='+str(PATH_LOG_FILES))
+logging.info('PATH_KEYBINDINGS='+str(PATH_KEYBINDINGS))
+logging.info('KEY_MOD_DELAY='+str(KEY_MOD_DELAY))
+logging.info('KEY_DEFAULT_DELAY='+str(KEY_DEFAULT_DELAY))
+logging.info('KEY_REPEAT_DELAY='+str(KEY_REPEAT_DELAY))
+logging.info('FUNCTION_DEFAULT_DELAY='+str(FUNCTION_DEFAULT_DELAY))
+logging.info('SCREEN_WIDTH='+str(SCREEN_WIDTH))
+logging.info('SCREEN_HEIGHT='+str(SCREEN_HEIGHT))
+
 
 # ## Read ED logs
 
 # ### Get latest log file
 
-# In[127]:
+# In[355]:
 
 
 def get_latest_log(path_logs=None):
@@ -87,15 +104,15 @@ def get_latest_log(path_logs=None):
     return latest_log
 
 
-# In[128]:
+# In[356]:
 
 
-# get_latest_log(PATH_LOG_FILES)
+logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
 
 
 # ### Extract ship info from log
 
-# In[129]:
+# In[357]:
 
 
 def ship():
@@ -191,21 +208,23 @@ def ship():
                     
             # exceptions
             except Exception as e:
+                logging.exception("Exception occurred")
                 print(e)
+#     logging.debug('ship='+str(ship))
     return ship
 
 
-# In[130]:
+# In[358]:
 
 
-# ship()
+logging.debug('ship='+str(ship()))
 
 
 # ## Control ED with direct input
 
 # ### Get necessary keybinds
 
-# In[131]:
+# In[359]:
 
 
 def get_bindings(path_bindings=None):
@@ -249,22 +268,27 @@ def get_bindings(path_bindings=None):
     bindings_root = bindings_tree.getroot()
     for item in bindings_root:
         if item.tag in keys_to_obtain:
-            binding = {'key': SCANCODE['DIK_'+str(item[0].attrib['Key'][4:]).upper()]}
+            binding = {'key': 'DIK_'+str(item[0].attrib['Key'][4:]).upper()}
             if len(item[0]) > 0:
                 mod = item[0][0].attrib['Key']
                 if mod in convert_to_direct_keys:
                     mod = convert_to_direct_keys[mod]
                 else:
                     mod = mod[4:]
-                binding['mod'] = SCANCODE['DIK_'+mod.upper()]
+                binding['mod'] = 'DIK_'+mod.upper()
+            logging.info('BINDING_<'+str(item.tag)+'>='+str(binding))
+            binding['key'] = SCANCODE[binding['key']]
+            if 'mod' in binding:
+                binding['mod'] = SCANCODE[binding['mod']]
             direct_input_keys[item.tag] = binding
+    logging.info('DIRECT_INPUT='+str(direct_input_keys))
     if len(list(direct_input_keys.keys())) < 1:
         return None
     else:
         return direct_input_keys
 
 
-# In[132]:
+# In[360]:
 
 
 keys = get_bindings(PATH_KEYBINDINGS)
@@ -275,11 +299,12 @@ keys = get_bindings(PATH_KEYBINDINGS)
 
 # ### Send input
 
-# In[133]:
+# In[361]:
 
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     global KEY_MOD_DELAY, KEY_DEFAULT_DELAY, KEY_REPEAT_DELAY
+    logging.debug('send=key:'+str(key)+',hold:'+str(hold)+',repeat:'+str(repeat)+',repeat_delay:'+str(repeat_delay)+',state:'+str(state))
     
     for i in range(repeat):
         
@@ -309,7 +334,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             sleep(KEY_REPEAT_DELAY)
 
 
-# In[134]:
+# In[362]:
 
 
 # sleep(3)
@@ -318,15 +343,16 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 # ### Clear input
 
-# In[135]:
+# In[363]:
 
 
 def clear_input(to_clear=None):
     for key in to_clear.keys():
         send(to_clear[key], state=0)
+    logging.debug('clear_input')
 
 
-# In[136]:
+# In[364]:
 
 
 # clear_input(keys)
@@ -336,7 +362,7 @@ def clear_input(to_clear=None):
 
 # ### Tkinter test
 
-# In[137]:
+# In[365]:
 
 
 # import tkinter as tk
@@ -360,7 +386,7 @@ def clear_input(to_clear=None):
 
 # ### Get screen
 
-# In[138]:
+# In[366]:
 
 
 def get_screen(x_left, y_top, x_right, y_bot):
@@ -372,7 +398,7 @@ def get_screen(x_left, y_top, x_right, y_bot):
 
 # ### HSV slider tool
 
-# In[139]:
+# In[367]:
 
 
 def callback(x):
@@ -426,7 +452,7 @@ def hsv_slider():
             break
 
 
-# In[140]:
+# In[368]:
 
 
 # hsv_slider()
@@ -434,7 +460,7 @@ def hsv_slider():
 
 # ### Filter sun
 
-# In[141]:
+# In[369]:
 
 
 def filter_sun(image=None, testing=False):
@@ -457,7 +483,7 @@ def filter_sun(image=None, testing=False):
     return filtered
 
 
-# In[142]:
+# In[370]:
 
 
 # filter_sun(testing=True)
@@ -465,7 +491,7 @@ def filter_sun(image=None, testing=False):
 
 # ### Filter orange
 
-# In[143]:
+# In[371]:
 
 
 def filter_orange(image=None, testing=False):
@@ -488,7 +514,7 @@ def filter_orange(image=None, testing=False):
     return filtered
 
 
-# In[144]:
+# In[372]:
 
 
 # filter_orange(testing=True)
@@ -496,7 +522,7 @@ def filter_orange(image=None, testing=False):
 
 # ### Filter orange2
 
-# In[145]:
+# In[373]:
 
 
 def filter_orange2(image=None, testing=False):
@@ -519,7 +545,7 @@ def filter_orange2(image=None, testing=False):
     return filtered
 
 
-# In[146]:
+# In[374]:
 
 
 # filter_orange2(testing=True)
@@ -527,7 +553,7 @@ def filter_orange2(image=None, testing=False):
 
 # ### Filter blue
 
-# In[147]:
+# In[375]:
 
 
 def filter_blue(image=None, testing=False):
@@ -550,7 +576,7 @@ def filter_blue(image=None, testing=False):
     return filtered
 
 
-# In[148]:
+# In[376]:
 
 
 # filter_blue(testing=True)
@@ -558,7 +584,7 @@ def filter_blue(image=None, testing=False):
 
 # ### Get sun
 
-# In[149]:
+# In[377]:
 
 
 def sun_percent():
@@ -571,7 +597,7 @@ def sun_percent():
     return result * 100
 
 
-# In[150]:
+# In[378]:
 
 
 # sleep(3)
@@ -580,7 +606,7 @@ def sun_percent():
 
 # ### Get compass image
 
-# In[151]:
+# In[379]:
 
 
 def get_compass_image(testing=False):
@@ -611,7 +637,7 @@ def get_compass_image(testing=False):
     return compass_image, compass_width+(2*doubt), compass_height+(2*doubt)
 
 
-# In[152]:
+# In[380]:
 
 
 # get_compass_image(testing=True)
@@ -619,7 +645,7 @@ def get_compass_image(testing=False):
 
 # ### Get navpoint offset
 
-# In[153]:
+# In[381]:
 
 
 same_last_count = 0
@@ -657,16 +683,24 @@ def get_navpoint_offset(testing=False, last=None):
                 same_last_count = 0
             if same_last_count > 5:
                 same_last_count = 0
-                return {'x': 1, 'y': 100}
+                result = {'x': 1, 'y': 100}
             else:
-                return last
+                result = last
         else:
-            return None
+            result = None
     else:
-        return {'x':final_x, 'y':final_y}
+        result = {'x':final_x, 'y':final_y}
+    logging.debug('get_navpoint_offset='+str(result))
+    return result
 
 
-# In[154]:
+# In[ ]:
+
+
+
+
+
+# In[382]:
 
 
 # get_navpoint_offset(testing=True)
@@ -674,7 +708,7 @@ def get_navpoint_offset(testing=False, last=None):
 
 # ### Get destination offset
 
-# In[155]:
+# In[383]:
 
 
 def get_destination_offset(testing=False):
@@ -703,12 +737,14 @@ def get_destination_offset(testing=False):
         else:
             break
     if pt[0] == 0 and pt[1] == 0:
-        return None
+        result = None
     else:
-        return {'x':final_x, 'y':final_y}
+        result = {'x':final_x, 'y':final_y}
+    logging.debug('get_destination_offset='+str(result))
+    return result
 
 
-# In[156]:
+# In[384]:
 
 
 # sleep(3)
@@ -719,11 +755,13 @@ def get_destination_offset(testing=False):
 
 # ### Undock
 
-# In[157]:
+# In[385]:
 
 
 def undock():
+    logging.debug('undock')
     if ship()['status'] != "in_station":
+        logging.error('undock=err1')
         raise Exception('undock error 1')
     send(keys['UI_Back'], repeat=10)
     send(keys['HeadLookReset'])
@@ -731,6 +769,7 @@ def undock():
     send(keys['UI_Select'])
     sleep(1)
     if not (ship()['status'] == "starting_undock" or ship()['status'] == "in_undock"):
+        logging.error('undock=err2')
         raise Exception("undock error 2")
     send(keys['HeadLookReset'])
     send(keys['SetSpeedZero'], repeat=2)
@@ -738,13 +777,15 @@ def undock():
     for i in range(wait):
         sleep(1)
         if i > wait - 1:
+            logging.error('undock=err3')
             raise Exception('undock error 3')
         if ship()['status'] == "in_space":
             break
+    logging.debug('undock=complete')
     return True
 
 
-# In[158]:
+# In[386]:
 
 
 # sleep(3)
@@ -753,11 +794,13 @@ def undock():
 
 # ### Dock
 
-# In[159]:
+# In[387]:
 
 
 def dock():
+    logging.debug('dock')
     if ship()['status'] != "in_space":
+        logging.error('dock=err1')
         raise Exception('dock error 1')
     tries = 3
     for i in range(tries):
@@ -774,6 +817,7 @@ def dock():
         if ship()['status'] == "starting_dock" or ship()['status'] == "in_dock":
             break
         if i > tries-1:
+            logging.error('dock=err2')
             raise Exception("dock error 2")
     send(keys['UI_Back'])
     send(keys['HeadLookReset'])
@@ -782,16 +826,18 @@ def dock():
     for i in range(wait):
         sleep(1)
         if i > wait-1:
+            logging.error('dock=err3')
             raise Exception('dock error 3')
         if ship()['status'] == "in_station":
             break
     send(keys['UI_Up'], hold=3)
     send(keys['UI_Down'])
     send(keys['UI_Select'])
+    logging.debug('dock=complete')
     return True
 
 
-# In[160]:
+# In[388]:
 
 
 # sleep(3)
@@ -800,7 +846,7 @@ def dock():
 
 # ### Align
 
-# In[161]:
+# In[389]:
 
 
 def x_angle(point=None):
@@ -813,95 +859,31 @@ def x_angle(point=None):
         return -90 - result
 
 
-# In[162]:
-
-
-def align_old():
-    if not (ship()['status'] == 'in_supercruise' or ship()['status'] == 'in_space'):
-        raise Exception('not ready to jump')
-    
-    send(keys['SetSpeed100'])
-    
-    while sun_percent() > 5:
-        send(keys['PitchUpButton'], state=1)
-    send(keys['PitchUpButton'], state=0)
-    
-    off = get_navpoint_offset()
-    while not off:
-        send(keys['PitchUpButton'], state=1)
-        off = get_navpoint_offset(last=off)
-    send(keys['PitchUpButton'], state=0)
-    
-    close = 3
-    close_a = 8
-    hold_pitch = 0.7
-    hold_roll = 0.3
-    ang = x_angle(off)
-    while (off['x'] > close and ang > close_a) or           (off['x'] < -close and ang < -close_a) or           (off['y'] > close) or           (off['y'] < -close):
-        
-        if off['x'] > close and ang > close:
-            send(keys['RollRightButton'], hold=hold_roll)
-        if off['x'] < -close and ang < -close:
-            send(keys['RollLeftButton'], hold=hold_roll)
-        if off['y'] > close:
-            send(keys['PitchUpButton'], hold=hold_pitch)
-        if off['y'] < -close:
-            send(keys['PitchDownButton'], hold=hold_pitch)
-            
-        if ship()['status'] == 'starting_hyperspace':
-            return
-        off = get_navpoint_offset(last=off)
-        ang = x_angle(off)
-        
-    sleep(0.5)    
-    close = 80
-    hold_pitch = 0.200
-    hold_yaw = 0.3
-    for i in range(8):
-        new = get_destination_offset()
-        if new:
-            off = new
-            break
-        sleep(0.25)
-    if not off:
-        return
-    while (off['x'] > close) or           (off['x'] < -close) or           (off['y'] > close) or           (off['y'] < -close):
-        
-        if off['x'] > close and ang > close:
-            send(keys['YawRightButton'], hold=hold_yaw)
-        if off['x'] < -close and ang < -close:
-            send(keys['YawLeftButton'], hold=hold_yaw)
-        if off['y'] > close:
-            send(keys['PitchUpButton'], hold=hold_pitch)
-        if off['y'] < -close:
-            send(keys['PitchDownButton'], hold=hold_pitch)
-            
-        if ship()['status'] == 'starting_hyperspace':
-            return
-        off = get_destination_offset()
-        if not off:
-            return
-
-
-# In[163]:
+# In[390]:
 
 
 def align():
+    logging.debug('align')
     if not (ship()['status'] == 'in_supercruise' or ship()['status'] == 'in_space'):
-        raise Exception('not ready to jump')
+        logging.error('align=err1')
+        raise Exception('align error 1')
     
+    logging.debug('align= speed 100')
     send(keys['SetSpeed100'])
     
+    logging.debug('align= avoid sun')
     while sun_percent() > 5:
         send(keys['PitchUpButton'], state=1)
     send(keys['PitchUpButton'], state=0)
     
+    logging.debug('align= find navpoint')
     off = get_navpoint_offset()
     while not off:
         send(keys['PitchUpButton'], state=1)
         off = get_navpoint_offset()
     send(keys['PitchUpButton'], state=0)
     
+    logging.debug('align= crude align')
     close = 3
     close_a = 18
     hold_pitch = 0.350
@@ -937,6 +919,7 @@ def align():
         off = get_navpoint_offset(last=off)
         ang = x_angle(off)
 
+    logging.debug('align= fine align')
     sleep(0.5)    
     close = 110
     hold_pitch = 0.200
@@ -965,9 +948,11 @@ def align():
         off = get_destination_offset()
         if not off:
             return
+    
+    logging.debug('align=complete')
 
 
-# In[164]:
+# In[391]:
 
 
 # sleep(3)
@@ -976,30 +961,39 @@ def align():
 
 # ### Jump
 
-# In[165]:
+# In[392]:
 
 
 def jump():
+    logging.debug('jump')
     tries = 3
     for i in range(tries):
+        logging.debug('jump= try:'+str(i))
         if not (ship()['status'] == 'in_supercruise' or ship()['status'] == 'in_space'):
+            logging.error('jump=err1')
             raise Exception('not ready to jump')
         sleep(0.5)
+        logging.debug('jump= start fsd')
         send(keys['HyperSuperCombination'], hold=1)
         sleep(16)
         if ship()['status'] != 'starting_hyperspace':
+            logging.debug('jump= misalign stop fsd')
             send(keys['HyperSuperCombination'])
             sleep(2)
             align()
         else:
+            logging.debug('jump= in jump')
             while ship()['status'] != 'in_supercruise':
                 sleep(1)
+            logging.debug('jump= speed 0')
             send(keys['SetSpeedZero'])
+            logging.debug('jump=complete')
             return True
+    logging.error('jump=err2')
     raise Exception("jump failure")    
 
 
-# In[166]:
+# In[393]:
 
 
 # sleep(3)
@@ -1008,27 +1002,32 @@ def jump():
 
 # ### Refuel
 
-# In[167]:
+# In[394]:
 
 
 def refuel():
+    logging.debug('refuel')
     scoopable_stars = ['F', 'O', 'G', 'K', 'B', 'A', 'M']
     
     if ship()['status'] != 'in_supercruise':
+        logging.error('refuel=err1')
         raise Exception('not ready to refuel')
         
+    logging.debug('refuel= start refuel')
     if ship()['fuel_percent'] < 33 and ship()['star_class'] in scoopable_stars:
         send(keys['SetSpeed100'])
     #     while not ship()['is_scooping']:
     #         sleep(1)
         sleep(4)
+        logging.debug('refuel= wait for refuel')
         send(keys['SetSpeedZero'], repeat=3)
         while not ship()['fuel_percent'] == 100:
             sleep(1)
+        logging.debug('refuel=complete')
         return True
 
 
-# In[168]:
+# In[395]:
 
 
 # sleep(3)
@@ -1037,10 +1036,11 @@ def refuel():
 
 # ### Position
 
-# In[169]:
+# In[396]:
 
 
 def position():
+    logging.debug('position')
     send(keys['PitchUpButton'], state=1)
     sleep(5)
     send(keys['SetSpeed100'])
@@ -1049,10 +1049,11 @@ def position():
     sleep(2)
     send(keys['PitchUpButton'], state=0)
     sleep(5)
+    logging.debug('position=complete')
     return True
 
 
-# In[170]:
+# In[397]:
 
 
 # sleep(3)
@@ -1077,22 +1078,28 @@ def position():
 # 
 # 'in-docking'
 
-# In[171]:
+# In[398]:
 
 
 def autopilot():
+    '\n'+200*'-'+'\n'+'---- AUTOPILOT START '+179*'-'+'\n'+200*'-'
 #     if ship()['target']:
 #         undock()
     while ship()['target']:
         if ship()['status'] == 'in_space' or ship()['status'] == 'in_supercruise':
+            '\n'+200*'-'+'\n'+'---- AUTOPILOT ALIGN '+179*'-'+'\n'+200*'-'
             align()
+            '\n'+200*'-'+'\n'+'---- AUTOPILOT JUMP '+180*'-'+'\n'+200*'-'
             jump()
+            '\n'+200*'-'+'\n'+'---- AUTOPILOT REFUEL '+178*'-'+'\n'+200*'-'
             refuel()
+            '\n'+200*'-'+'\n'+'---- AUTOPILOT POSIT '+179*'-'+'\n'+200*'-'
             position()
     send(keys['SetSpeedZero'])
+    logging.debug('\n'+200*'-'+'\n'+'---- AUTOPILOT END '+181*'-'+'\n'+200*'-')
 
 
-# In[172]:
+# In[399]:
 
 
 # sleep(3)
