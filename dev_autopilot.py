@@ -150,7 +150,8 @@ def ship():
                     ship['status'] = 'in_space'
                     
                 elif log_event == 'Undocked':
-                    ship['status'] = 'starting_undocking'
+#                     ship['status'] = 'starting_undocking'
+                    ship['status'] = 'in_space'
                     
                 elif log_event == 'DockingRequested':
                     ship['status'] = 'starting_docking'
