@@ -12,6 +12,33 @@ Press **Home** key to start autopilot.
 
 Press **End** key to abort autopilot.
 
+## Necessary Setup:
+You have configured primary keyboard keys for all of the following:
+    In 'Flight Rotation':
+        Yaw Left
+        Yaw Right
+        Roll Left
+        Roll Right
+        Pitch Up
+        Pitch Down
+    In 'Flight Throttle':
+        Set Speed To 0%
+        Set Speed To 100%
+    In 'Flight Miscellaneous'
+        Toggle Frameshift Drive
+    In 'Mode Switches':
+        UI Focus
+    In 'Interface Mode':
+        UI Panel Up
+        UI Panel Down
+        UI Panel Left
+        UI Panel Right
+        UI Panel Select
+        UI Back
+        Next Panel Tab
+    In 'Headlook Mode':
+        Reset Headlook
+
 ## Optimal Game Settings:
 1. Game resolution:      1080p Borderless
 2. Ship UI color:        Orange (default colour)
@@ -19,7 +46,7 @@ Press **End** key to abort autopilot.
 
 ## General Guidelines
 
-I recommend setting your route finder to use only scoopable stars, Additionally, for full functionality, "Advanced Autodocking" and  "Supercruise Assist" modules must be outfitted on ship.
+I recommend setting your route finder to use only scoopable stars, Additionally, for full functionality, "Advanced Autodocking" module must be outfitted on ship.
 
 ##
 Or if you'd like to set it up and run the script directly...
