@@ -8,6 +8,8 @@ Look [here for the autopilot alpha version release](https://github.com/skai2/EDA
 ## Usage:
 The program will create an icon on the taskbar.
 
+Setup a route in the galaxy map as you would normally, then:
+
 Press **Home** key to start autopilot.
 
 Press **End** key to abort autopilot.
