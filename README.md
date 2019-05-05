@@ -15,7 +15,8 @@ Press **Home** key to start autopilot.
 Press **End** key to abort autopilot.
 
 ## Necessary Setup:
-In game, you must have configured primary keyboard keys for all of the following:
+In game, you must have configured primary keyboard keys for all of the following. You may configure them in either
+the left or the right slot, and this program will automatically fetch your most recent changes.
   * In 'Flight Rotation':
     * Yaw Left
     * Yaw Right
@@ -67,7 +68,14 @@ _Requires **python 3** and **git**_
 3. Run script
 ```sh
 > python autopilot.py
+OR you may have to run
+> python3 autopilot.py
+if you have both python 2 and 3 installed.
 ```
+
+If you encounter any issues during pip install, try running:
+> python -m pip install -r requirements.txt
+instead of > pip install -r requirements.txt
 
 ## WARNING:
 
