@@ -1,3 +1,8 @@
-Settings.txt
-Data/NavPoint.txt
-Data/RouteIndex.txt
+venv
+.ipynb_checkpoints
+__pycache__
+*.spec
+build
+dist
+*.bat
+*.log

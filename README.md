@@ -1,37 +1,82 @@
-# Elite Dangerous: AutoPilot
-Elite Dangerous computer vision and ahk based autopilot
+# Elite Dangerous: AutoPilot v2
+Elite Dangerous computer vision based autopilot version 2
 
-Program uses AHK to control inputs in Elite Dangerous and Python scripts using OpenCV
-to read information of the game screen and auto-navigate the ship through a set Route.
+Program uses openCV and other tools in python to navigate automatically in Elite Dangerous.
 
+Look [here for the autopilot alpha version release](https://github.com/skai2/EDAutopilot/releases).
 
+## Usage:
+The program will create an icon on the taskbar.
 
-USAGE:
+Setup a route in the galaxy map as you would normally, then:
 
-CONFIGURATION:
-1. Download and extract zip.
-2. Open the "AutoPilot.ahk" and configure controls settings in section 1. (Optionally configure other settings, but keep in mind that section 2 can be configured via step 4 below)
-3. Run the script and enter game.
-4. Press PgUp key to initiate configuration wizard.
-5. Optionally, plot route to nearby star, manually aim ship at the star and press F10 to check offset (should be close to 0,0)
-6. Optionally, point ship towards a star(F/G/K/M [Red/Yellow-ish planets]) at navpoint distance (The distance right after you FSD jump into a system), then press F9 to initiate a failsafe check to minimize your chance of accidentally flying into a star. 
+Press **Home** key to start autopilot.
 
-AUTOPILOT:
-1. Plot route in galaxy map OR press Insert key and type in destination.
-2. Press Home key to initiate autopilot
-3. Press End key at any time to abort and shutdown autopilot.
+Press **End** key to abort autopilot.
 
-OTHER:
-1. If you are changing ship and wish to keep your settings just save the generated settings.txt file with a different name and replace as necessary
+## Necessary Setup:
+In game, you must have configured primary keyboard keys for all of the following:
+  * In 'Flight Rotation':
+    * Yaw Left
+    * Yaw Right
+    * Roll Left
+    * Roll Right
+    * Pitch Up
+    * Pitch Down
+  * In 'Flight Throttle':
+    * Set Speed To 0%
+    * Set Speed To 100%
+  * In 'Flight Miscellaneous'
+    * Toggle Frameshift Drive
+  * In 'Mode Switches':
+    * UI Focus
+  * In 'Interface Mode':
+    * UI Panel Up
+    * UI Panel Down
+    * UI Panel Left
+    * UI Panel Right
+    * UI Panel Select
+    * UI Back
+    * Next Panel Tab
+  * In 'Headlook Mode':
+    * Reset Headlook
 
-WARNING:
+## Optimal Game Settings:
+1. Game resolution:      1080p Borderless
+2. Ship UI color:        Orange (default colour)
+3. Ship UI brightness:   Maximum
 
-This NOT to be used unsupervised. Do so at your own and your own ship's risk!
+## General Guidelines
 
-CONTACT:
+I recommend setting your route finder to use only scoopable stars. For full functionality, "Advanced Autodocking" module must be outfitted on ship. Definitely do not leave this running unsupervised unless you don't mind paying rebuy.
+
+##
+Or if you'd like to set it up and run the script directly...
+
+## Setup:
+_Requires **python 3** and **git**_
+1. Clone this repository
+```sh
+> git clone https://github.com/skai2/EDAutopilot.git
+```
+2. Install requirements
+```sh
+> cd EDAutoPilot
+> pip install -r requirements.txt
+```
+3. Run script
+```sh
+> python autopilot.py
+```
+
+## WARNING:
+
+ALPHA VERSION IN DEVELOPMENT. 
+
+Absolutely DO NOT LEAVE UNSUPERVISED. 
+
+Use at YOUR OWN RISK.
+
+## CONTACT:
 
 skai2mail@gmail.com
-
-ADD. FEATURES/MODIFIED BY:
-
-eric@enumc.com
