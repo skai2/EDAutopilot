@@ -268,19 +268,22 @@ def get_bindings(path_bindings=None):
     print ("Selected Keybinding File: ", latest_bindings)
     bindings_tree = parse(latest_bindings)
     bindings_root = bindings_tree.getroot()
+
+    # inputTypeA is primary (left) binding and inputTypeB is secondary (right) binding.
     inputTypeA = "undefined"
     inputTypeB = "undefined"
     for item in bindings_root:
         if item.tag in keys_to_obtain:
-            
-            # print ("test:", str(item[0].attrib['Device']).strip()[2:], ".")
-
             inputTypeA = item[0].attrib['Device'].strip()
             inputTypeB = item[1].attrib['Device'].strip()
+
             if inputTypeA == "Keyboard":
+                # use item[0] <- <Primary>
                 binding = {'pre_key': 'DIK_'+str(item[0].attrib['Key'][4:]).upper()}
             if inputTypeB == "Keyboard":
+                # use item[1] <- <Secondary>
                 binding = {'pre_key': 'DIK_'+str(item[1].attrib['Key'][4:]).upper()}
+
             if inputTypeA == "Keyboard" and len(item[0]) > 0:
                 mod = item[0][0].attrib['Key']
                 
@@ -288,7 +291,6 @@ def get_bindings(path_bindings=None):
                     mod = convert_to_direct_keys[mod]
                 else:
                     mod = mod[4:]
-                print("MOD: " , mod.upper())
                 binding['pre_mod'] = 'DIK_'+mod.upper()
             elif inputTypeB == "Keyboard" and len(item[1]) > 1:
                 mod = item[1][0].attrib['Key']
@@ -297,7 +299,6 @@ def get_bindings(path_bindings=None):
                     mod = convert_to_direct_keys[mod]
                 else:
                     mod = mod[4:]
-                print("MOD: " , mod.upper())
                 binding['pre_mod'] = 'DIK_'+mod.upper()
 
             if inputTypeA == "Keyboard" or inputTypeB == "Keyboard":
@@ -308,10 +309,11 @@ def get_bindings(path_bindings=None):
                     binding['mod'] = SCANCODE[binding['pre_mod']]
                 direct_input_keys[item.tag] = binding
             else:
+                # Sanity check - no keyboard keybind found.
                 print ("warn: ", item.tag, " does not have a valid keyboard keybind.")
             
     for keys in direct_input_keys:
-
+        # Print all binding keyboard input keys
         print (keys, ': ', direct_input_keys[keys])
 
     if len(list(direct_input_keys.keys())) < 1:
