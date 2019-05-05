@@ -48,7 +48,7 @@ In game, you must have configured primary keyboard keys for all of the following
 
 ## General Guidelines
 
-I recommend setting your route finder to use only scoopable stars, Additionally, for full functionality, "Advanced Autodocking" module must be outfitted on ship. Definitely do not leave this running unsupervised unless you don't mind paying rebuy.
+I recommend setting your route finder to use only scoopable stars. For full functionality, "Advanced Autodocking" module must be outfitted on ship. Definitely do not leave this running unsupervised unless you don't mind paying rebuy.
 
 ##
 Or if you'd like to set it up and run the script directly...
