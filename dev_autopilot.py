@@ -28,7 +28,7 @@
 import sys
 import datetime
 from os import environ, listdir
-from os.path import join, isfile, getctime, abspath
+from os.path import join, isfile, getctime, getmtime, abspath
 from json import loads
 from math import degrees, atan
 from time import sleep
@@ -100,7 +100,7 @@ def get_latest_log(path_logs=None):
     list_of_logs = [join(path_logs, f) for f in listdir(path_logs) if isfile(join(path_logs, f)) and f.startswith('Journal.')]
     if not list_of_logs:
         return None
-    latest_log = max(list_of_logs, key=getctime)
+    latest_log = max(list_of_logs, key=getmtime)
     return latest_log
 
 
@@ -264,23 +264,56 @@ def get_bindings(path_bindings=None):
     list_of_bindings = [join(path_bindings, f) for f in listdir(path_bindings) if isfile(join(path_bindings, f))]
     if not list_of_bindings:
         return None
-    latest_bindings = max(list_of_bindings, key=getctime)
+    latest_bindings = max(list_of_bindings, key=getmtime)
+    print ("Selected Keybinding File: ", latest_bindings)
     bindings_tree = parse(latest_bindings)
     bindings_root = bindings_tree.getroot()
+    inputTypeA = "undefined"
+    inputTypeB = "undefined"
     for item in bindings_root:
         if item.tag in keys_to_obtain:
-            binding = {'pre_key': 'DIK_'+str(item[0].attrib['Key'][4:]).upper()}
-            if len(item[0]) > 0:
+            
+            # print ("test:", str(item[0].attrib['Device']).strip()[2:], ".")
+
+            inputTypeA = item[0].attrib['Device'].strip()
+            inputTypeB = item[1].attrib['Device'].strip()
+            if inputTypeA == "Keyboard":
+                binding = {'pre_key': 'DIK_'+str(item[0].attrib['Key'][4:]).upper()}
+            if inputTypeB == "Keyboard":
+                binding = {'pre_key': 'DIK_'+str(item[1].attrib['Key'][4:]).upper()}
+            if inputTypeA == "Keyboard" and len(item[0]) > 0:
                 mod = item[0][0].attrib['Key']
+                
                 if mod in convert_to_direct_keys:
                     mod = convert_to_direct_keys[mod]
                 else:
                     mod = mod[4:]
+                print("MOD: " , mod.upper())
                 binding['pre_mod'] = 'DIK_'+mod.upper()
-            binding['key'] = SCANCODE[binding['pre_key']]
-            if 'pre_mod' in binding:
-                binding['mod'] = SCANCODE[binding['pre_mod']]
-            direct_input_keys[item.tag] = binding
+            elif inputTypeB == "Keyboard" and len(item[1]) > 1:
+                mod = item[1][0].attrib['Key']
+                
+                if mod in convert_to_direct_keys:
+                    mod = convert_to_direct_keys[mod]
+                else:
+                    mod = mod[4:]
+                print("MOD: " , mod.upper())
+                binding['pre_mod'] = 'DIK_'+mod.upper()
+
+            if inputTypeA == "Keyboard" or inputTypeB == "Keyboard":
+                # print (binding['pre_key'])
+                # print (item.tag, ": ", SCANCODE[binding['pre_key']])
+                binding['key'] = SCANCODE[binding['pre_key']]
+                if 'pre_mod' in binding:
+                    binding['mod'] = SCANCODE[binding['pre_mod']]
+                direct_input_keys[item.tag] = binding
+            else:
+                print ("warn: ", item.tag, " does not have a valid keyboard keybind.")
+            
+    for keys in direct_input_keys:
+
+        print (keys, ': ', direct_input_keys[keys])
+
     if len(list(direct_input_keys.keys())) < 1:
         return None
     else:
