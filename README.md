@@ -15,7 +15,7 @@ Press **Home** key to start autopilot.
 Press **End** key to abort autopilot.
 
 ## Necessary Setup:
-In game, you must have configured primary keyboard keys for all of the following. You may configure them in either
+In game, you must have configured keyboard keys for all of the following. You may configure them in either
 the left or the right slot, and this program will automatically fetch your most recent changes.
   * In 'Flight Rotation':
     * Yaw Left
