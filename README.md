@@ -3,7 +3,7 @@ Elite Dangerous computer vision based autopilot version 2
 
 Program uses openCV and other tools in python to navigate automatically in Elite Dangerous.
 
-Look [here](https://github.com/skai2/EDAutopilot/releases) for the alpha release.
+Look [here for the autopilot alpha version release](https://github.com/skai2/EDAutopilot/releases).
 
 ## Usage:
 The program will create an icon on the taskbar.
