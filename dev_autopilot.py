@@ -22,7 +22,7 @@
 
 # ## Imports
 
-# In[197]:
+# In[357]:
 
 
 import sys
@@ -31,7 +31,7 @@ from os import environ, listdir
 from os.path import join, isfile, getmtime, abspath
 from json import loads
 from math import degrees, atan
-from random import choice
+from random import random
 from time import sleep
 from numpy import array, sum, where
 from PIL import ImageGrab
@@ -44,7 +44,7 @@ import logging
 import colorlog
 
 
-# In[198]:
+# In[305]:
 
 
 def resource_path(relative_path):
@@ -60,7 +60,7 @@ def resource_path(relative_path):
 
 # ## Logging
 
-# In[199]:
+# In[306]:
 
 
 logging.basicConfig(filename='autopilot.log', level=logging.DEBUG)
@@ -88,7 +88,7 @@ logger.error('some error message. These information is usually used for errors a
 logger.critical('some critical message. These information is usually used for critical error, and will usually result in an exception.')
 
 
-# In[200]:
+# In[307]:
 
 
 logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
@@ -102,7 +102,7 @@ logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
 
 
 
-# In[201]:
+# In[308]:
 
 
 PATH_LOG_FILES = None
@@ -127,7 +127,7 @@ logging.info('SCREEN_HEIGHT='+str(SCREEN_HEIGHT))
 
 # ### Get latest log file
 
-# In[202]:
+# In[309]:
 
 
 def get_latest_log(path_logs=None):
@@ -141,7 +141,7 @@ def get_latest_log(path_logs=None):
     return latest_log
 
 
-# In[203]:
+# In[310]:
 
 
 logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
@@ -149,7 +149,7 @@ logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
 
 # ### Extract ship info from log
 
-# In[204]:
+# In[311]:
 
 
 def ship():
@@ -252,7 +252,7 @@ def ship():
     return ship
 
 
-# In[205]:
+# In[312]:
 
 
 logging.debug('ship='+str(ship()))
@@ -262,7 +262,7 @@ logging.debug('ship='+str(ship()))
 
 # ### Get necessary keybinds
 
-# In[206]:
+# In[313]:
 
 
 def get_latest_keybinds(path_bindings=None):
@@ -275,13 +275,13 @@ def get_latest_keybinds(path_bindings=None):
     return latest_bindings
 
 
-# In[207]:
+# In[314]:
 
 
 logging.info("get_latest_keybinds="+str(get_latest_keybinds()))
 
 
-# In[208]:
+# In[315]:
 
 
 def get_bindings():
@@ -370,7 +370,7 @@ def get_bindings():
         return direct_input_keys
 
 
-# In[209]:
+# In[316]:
 
 
 keys = get_bindings()
@@ -382,7 +382,7 @@ for key in keys.keys():
 
 # ### Send input
 
-# In[210]:
+# In[317]:
 
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
@@ -417,7 +417,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             sleep(KEY_REPEAT_DELAY)
 
 
-# In[211]:
+# In[318]:
 
 
 # sleep(3)
@@ -426,7 +426,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 # ### Clear input
 
-# In[212]:
+# In[319]:
 
 
 def clear_input(to_clear=None):
@@ -436,7 +436,7 @@ def clear_input(to_clear=None):
     logging.debug('clear_input')
 
 
-# In[213]:
+# In[320]:
 
 
 # clear_input(keys)
@@ -446,7 +446,7 @@ def clear_input(to_clear=None):
 
 # ### Tkinter test
 
-# In[214]:
+# In[321]:
 
 
 # import tkinter as tk
@@ -470,7 +470,7 @@ def clear_input(to_clear=None):
 
 # ### Get screen
 
-# In[215]:
+# In[322]:
 
 
 def get_screen(x_left, y_top, x_right, y_bot):
@@ -482,7 +482,7 @@ def get_screen(x_left, y_top, x_right, y_bot):
 
 # ### HSV slider tool
 
-# In[216]:
+# In[323]:
 
 
 def callback(x):
@@ -536,7 +536,7 @@ def hsv_slider():
             break
 
 
-# In[217]:
+# In[324]:
 
 
 # hsv_slider()
@@ -544,7 +544,7 @@ def hsv_slider():
 
 # ### Filter sun
 
-# In[218]:
+# In[325]:
 
 
 def filter_sun(image=None, testing=False):
@@ -567,7 +567,7 @@ def filter_sun(image=None, testing=False):
     return filtered
 
 
-# In[219]:
+# In[326]:
 
 
 # filter_sun(testing=True)
@@ -575,7 +575,7 @@ def filter_sun(image=None, testing=False):
 
 # ### Filter orange
 
-# In[220]:
+# In[327]:
 
 
 def filter_orange(image=None, testing=False):
@@ -598,7 +598,7 @@ def filter_orange(image=None, testing=False):
     return filtered
 
 
-# In[221]:
+# In[328]:
 
 
 # filter_orange(testing=True)
@@ -606,7 +606,7 @@ def filter_orange(image=None, testing=False):
 
 # ### Filter orange2
 
-# In[222]:
+# In[329]:
 
 
 def filter_orange2(image=None, testing=False):
@@ -629,7 +629,7 @@ def filter_orange2(image=None, testing=False):
     return filtered
 
 
-# In[223]:
+# In[330]:
 
 
 # filter_orange2(testing=True)
@@ -637,7 +637,7 @@ def filter_orange2(image=None, testing=False):
 
 # ### Filter blue
 
-# In[224]:
+# In[331]:
 
 
 def filter_blue(image=None, testing=False):
@@ -660,7 +660,7 @@ def filter_blue(image=None, testing=False):
     return filtered
 
 
-# In[225]:
+# In[332]:
 
 
 # filter_blue(testing=True)
@@ -668,7 +668,7 @@ def filter_blue(image=None, testing=False):
 
 # ### Get sun
 
-# In[226]:
+# In[333]:
 
 
 def sun_percent():
@@ -681,7 +681,7 @@ def sun_percent():
     return result * 100
 
 
-# In[227]:
+# In[334]:
 
 
 # sleep(3)
@@ -690,7 +690,7 @@ def sun_percent():
 
 # ### Get compass image
 
-# In[228]:
+# In[335]:
 
 
 def get_compass_image(testing=False):
@@ -721,7 +721,7 @@ def get_compass_image(testing=False):
     return compass_image, compass_width+(2*doubt), compass_height+(2*doubt)
 
 
-# In[229]:
+# In[336]:
 
 
 # get_compass_image(testing=True)
@@ -729,7 +729,7 @@ def get_compass_image(testing=False):
 
 # ### Get navpoint offset
 
-# In[230]:
+# In[359]:
 
 
 same_last_count = 0
@@ -767,7 +767,10 @@ def get_navpoint_offset(testing=False, last=None):
                 same_last_count = 0
             if same_last_count > 5:
                 same_last_count = 0
-                result = choice([{'x': 1, 'y': 100}, {'x': 100, 'y': 1}])
+                if random() < .9:
+                    result = {'x': 1, 'y': 100}
+                else:
+                    result = {'x': 100, 'y': 1}
             else:
                 result = last
         else:
@@ -778,7 +781,7 @@ def get_navpoint_offset(testing=False, last=None):
     return result
 
 
-# In[231]:
+# In[338]:
 
 
 # get_navpoint_offset(testing=True)
@@ -786,7 +789,7 @@ def get_navpoint_offset(testing=False, last=None):
 
 # ### Get destination offset
 
-# In[232]:
+# In[339]:
 
 
 def get_destination_offset(testing=False):
@@ -822,10 +825,9 @@ def get_destination_offset(testing=False):
     return result
 
 
-# In[233]:
+# In[340]:
 
 
-# sleep(3)
 # get_destination_offset(testing=True)
 
 
@@ -833,7 +835,7 @@ def get_destination_offset(testing=False):
 
 # ### Undock
 
-# In[234]:
+# In[341]:
 
 
 def undock():
@@ -863,7 +865,7 @@ def undock():
     return True
 
 
-# In[235]:
+# In[342]:
 
 
 # sleep(3)
@@ -872,7 +874,7 @@ def undock():
 
 # ### Dock
 
-# In[236]:
+# In[343]:
 
 
 def dock():
@@ -915,7 +917,7 @@ def dock():
     return True
 
 
-# In[237]:
+# In[344]:
 
 
 # sleep(3)
@@ -924,7 +926,7 @@ def dock():
 
 # ### Align
 
-# In[238]:
+# In[345]:
 
 
 def x_angle(point=None):
@@ -937,7 +939,7 @@ def x_angle(point=None):
         return -90 - result
 
 
-# In[239]:
+# In[356]:
 
 
 def align():
@@ -999,7 +1001,7 @@ def align():
 
     logging.debug('align= fine align')
     sleep(0.5)    
-    close = 110
+    close = 50
     hold_pitch = 0.200
     hold_yaw = 0.400
     for i in range(5):
@@ -1023,14 +1025,20 @@ def align():
             
         if ship()['status'] == 'starting_hyperspace':
             return
-        off = get_destination_offset()
+        
+        for i in range(5):
+            new = get_destination_offset()
+            if new:
+                off = new
+                break
+            sleep(0.25)
         if not off:
             return
     
     logging.debug('align=complete')
 
 
-# In[240]:
+# In[347]:
 
 
 # sleep(3)
@@ -1039,7 +1047,7 @@ def align():
 
 # ### Jump
 
-# In[241]:
+# In[348]:
 
 
 def jump():
@@ -1071,7 +1079,7 @@ def jump():
     raise Exception("jump failure")    
 
 
-# In[242]:
+# In[349]:
 
 
 # sleep(3)
@@ -1080,7 +1088,7 @@ def jump():
 
 # ### Refuel
 
-# In[243]:
+# In[350]:
 
 
 def refuel():
@@ -1109,7 +1117,7 @@ def refuel():
         logging.debug('refuel= needed, unsuitable star')
 
 
-# In[244]:
+# In[351]:
 
 
 # sleep(3)
@@ -1118,7 +1126,7 @@ def refuel():
 
 # ### Position
 
-# In[245]:
+# In[352]:
 
 
 def position():
@@ -1135,7 +1143,7 @@ def position():
     return True
 
 
-# In[246]:
+# In[353]:
 
 
 # sleep(3)
@@ -1160,7 +1168,7 @@ def position():
 # 
 # 'in-docking'
 
-# In[247]:
+# In[354]:
 
 
 def autopilot():
@@ -1183,7 +1191,7 @@ def autopilot():
     logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT END '+181*'-'+'\n'+200*'-')
 
 
-# In[248]:
+# In[355]:
 
 
 # sleep(3)
