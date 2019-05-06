@@ -7,22 +7,22 @@
 # ## References
 
 # Useful docs / articles / etc
-#   
+#
 #   1 - [A Python wrapper around AHK](https://pypi.org/project/ahk/)
-# 
+#
 #   2 - [OpenCV on Wheels](https://pypi.org/project/opencv-python/)
-# 
+#
 #   3 - [Autopilot for Elite Dangerous using OpenCV and thoughts on CV enabled bots in visual-to-keyboard loop](https://networkgeekstuff.com/projects/autopilot-for-elite-dangerous-using-opencv-and-thoughts-on-cv-enabled-bots-in-visual-to-keyboard-loop/)
-#   
+#
 #   4 - [Using PyInstaller to Easily Distribute Python Applications](https://realpython.com/pyinstaller-python/)
-#   
+#
 #   5 - [Direct Input to a Game - Python Plays GTA V](https://pythonprogramming.net/direct-input-game-python-plays-gta-v/)
-#   
+#
 #   6 - [Cross-platform GUI automation for human beings](https://pyautogui.readthedocs.io/en/latest/index.html)
 
 # ## Imports
 
-# In[357]:
+# In[1]:
 
 
 import sys
@@ -44,7 +44,7 @@ import logging
 import colorlog
 
 
-# In[305]:
+# In[2]:
 
 
 def resource_path(relative_path):
@@ -60,7 +60,7 @@ def resource_path(relative_path):
 
 # ## Logging
 
-# In[306]:
+# In[3]:
 
 
 logging.basicConfig(filename='autopilot.log', level=logging.DEBUG)
@@ -69,7 +69,7 @@ logger.setLevel(logging.DEBUG)
 handler = logging.StreamHandler()
 handler.setLevel(logging.INFO)
 handler.setFormatter(
-    colorlog.ColoredFormatter('%(log_color)s%(levelname)-8s%(reset)s %(white)s%(message)s', 
+    colorlog.ColoredFormatter('%(log_color)s%(levelname)-8s%(reset)s %(white)s%(message)s',
         log_colors={
             'DEBUG':    'fg_bold_cyan',
             'INFO':     'fg_bold_green',
@@ -88,7 +88,7 @@ logger.error('some error message. These information is usually used for errors a
 logger.critical('some critical message. These information is usually used for critical error, and will usually result in an exception.')
 
 
-# In[307]:
+# In[4]:
 
 
 logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
@@ -96,15 +96,10 @@ logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
 
 # ## Constants
 
-# In[ ]:
+# In[5]:
 
 
-
-
-
-# In[308]:
-
-
+RELEASE = 'v19.05.06-alpha-18'
 PATH_LOG_FILES = None
 PATH_KEYBINDINGS = None
 KEY_MOD_DELAY = 0.010
@@ -113,6 +108,7 @@ KEY_REPEAT_DELAY = 0.100
 FUNCTION_DEFAULT_DELAY = 0.500
 SCREEN_WIDTH, SCREEN_HEIGHT = size()
 
+logging.info('RELEASE='+str(RELEASE))
 logging.info('PATH_LOG_FILES='+str(PATH_LOG_FILES))
 logging.info('PATH_KEYBINDINGS='+str(PATH_KEYBINDINGS))
 logging.info('KEY_MOD_DELAY='+str(KEY_MOD_DELAY))
@@ -127,7 +123,7 @@ logging.info('SCREEN_HEIGHT='+str(SCREEN_HEIGHT))
 
 # ### Get latest log file
 
-# In[309]:
+# In[6]:
 
 
 def get_latest_log(path_logs=None):
@@ -141,7 +137,7 @@ def get_latest_log(path_logs=None):
     return latest_log
 
 
-# In[310]:
+# In[7]:
 
 
 logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
@@ -149,7 +145,7 @@ logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
 
 # ### Extract ship info from log
 
-# In[311]:
+# In[8]:
 
 
 def ship():
@@ -171,41 +167,41 @@ def ship():
     with open(latest_log, encoding="utf-8") as f:
         for line in f:
             log = loads(line)
-            
+
             # parse data
             try:
                 # parse ship status
                 log_event = log['event']
-                
+
                 if log_event == 'StartJump':
                     ship['status'] = str('starting_'+log['JumpType']).lower()
-                    
+
                 elif log_event == 'SupercruiseEntry' or log_event == 'FSDJump':
                     ship['status'] = 'in_supercruise'
-                    
+
                 elif log_event == 'SupercruiseExit' or log_event == 'DockingCancelled'                  or (log_event == 'Music' and ship['status'] == 'in_undocking')                  or (log_event == 'Location' and log['Docked'] == False):
                     ship['status'] = 'in_space'
-                    
+
                 elif log_event == 'Undocked':
 #                     ship['status'] = 'starting_undocking'
                     ship['status'] = 'in_space'
-                    
+
                 elif log_event == 'DockingRequested':
                     ship['status'] = 'starting_docking'
-                    
+
                 elif log_event == "Music" and log['MusicTrack'] == "DockingComputer":
                     if ship['status'] == 'starting_undocking':
                         ship['status'] = 'in_undocking'
                     elif ship['status'] == 'starting_docking':
                         ship['status'] = 'in_docking'
-                
+
                 elif log_event == 'Docked':
                     ship['status'] = 'in_station'
-                    
+
                 # parse ship type
                 if log_event == 'LoadGame' or log_event == 'Loadout':
                     ship['type'] = log['Ship']
-                    
+
                 # parse fuel
                 if 'FuelLevel' in log and ship['type'] != 'TestBuggy':
                     ship['fuel_level'] = log['FuelLevel']
@@ -220,19 +216,19 @@ def ship():
                     ship['fuel_percent'] = round((ship['fuel_level'] / ship['fuel_capacity'])*100)
                 else:
                     ship['fuel_percent'] = 10
-                    
+
                 # parse scoop
                 if log_event == 'FuelScoop' and ship['time'] < 10 and ship['fuel_percent'] < 100:
                     ship['is_scooping'] = True
                 else:
                     ship['is_scooping'] = False
-                    
+
                 # parse location
                 if (log_event == 'Location' or log_event == 'FSDJump') and 'StarSystem' in log:
                     ship['location'] = log['StarSystem']
                 if 'StarClass' in log:
                     ship['star_class'] = log['StarClass']
-                    
+
                 # parse target
                 if log_event == 'FSDTarget':
                     if log['Name'] == ship['location']:
@@ -242,8 +238,8 @@ def ship():
                 elif log_event == 'FSDJump':
                     if ship['location'] == ship['target']:
                         ship['target'] = None
-                
-                    
+
+
             # exceptions
             except Exception as e:
                 logging.exception("Exception occurred")
@@ -252,7 +248,7 @@ def ship():
     return ship
 
 
-# In[312]:
+# In[9]:
 
 
 logging.debug('ship='+str(ship()))
@@ -262,7 +258,7 @@ logging.debug('ship='+str(ship()))
 
 # ### Get necessary keybinds
 
-# In[313]:
+# In[10]:
 
 
 def get_latest_keybinds(path_bindings=None):
@@ -275,13 +271,13 @@ def get_latest_keybinds(path_bindings=None):
     return latest_bindings
 
 
-# In[314]:
+# In[11]:
 
 
 logging.info("get_latest_keybinds="+str(get_latest_keybinds()))
 
 
-# In[315]:
+# In[12]:
 
 
 def get_bindings():
@@ -322,7 +318,7 @@ def get_bindings():
     inputTypeB = "undefined"
     for item in bindings_root:
         if item.tag in keys_to_obtain:
-            
+
             # print ("test:", str(item[0].attrib['Device']).strip()[2:], ".")
 
             inputTypeA = item[0].attrib['Device'].strip()
@@ -333,7 +329,7 @@ def get_bindings():
                 binding = {'pre_key': 'DIK_'+str(item[1].attrib['Key'][4:]).upper()}
             if inputTypeA == "Keyboard" and len(item[0]) > 0:
                 mod = item[0][0].attrib['Key']
-                
+
                 if mod in convert_to_direct_keys:
                     mod = convert_to_direct_keys[mod]
                 else:
@@ -342,7 +338,7 @@ def get_bindings():
                 binding['pre_mod'] = 'DIK_'+mod.upper()
             elif inputTypeB == "Keyboard" and len(item[1]) > 1:
                 mod = item[1][0].attrib['Key']
-                
+
                 if mod in convert_to_direct_keys:
                     mod = convert_to_direct_keys[mod]
                 else:
@@ -360,7 +356,7 @@ def get_bindings():
             else:
                 # Sanity check - no keyboard keybind found.
                 logging.warn("get_bindings_<", item.tag, ">= does not have a valid keyboard keybind.")
-            
+
     # for keys in direct_input_keys:
     #    print (keys, ': ', direct_input_keys[keys])
 
@@ -370,7 +366,7 @@ def get_bindings():
         return direct_input_keys
 
 
-# In[316]:
+# In[13]:
 
 
 keys = get_bindings()
@@ -382,15 +378,15 @@ for key in keys.keys():
 
 # ### Send input
 
-# In[317]:
+# In[14]:
 
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     global KEY_MOD_DELAY, KEY_DEFAULT_DELAY, KEY_REPEAT_DELAY
     logging.debug('send=key:'+str(key)+',hold:'+str(hold)+',repeat:'+str(repeat)+',repeat_delay:'+str(repeat_delay)+',state:'+str(state))
-    
+
     for i in range(repeat):
-        
+
         if state is None or state == 1:
             if 'mod' in key:
                 PressKey(key['mod'])
@@ -410,14 +406,14 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             if 'mod' in key:
                 sleep(KEY_MOD_DELAY)
                 ReleaseKey(key['mod'])
-        
+
         if repeat_delay:
             sleep(repeat_delay)
         else:
             sleep(KEY_REPEAT_DELAY)
 
 
-# In[318]:
+# In[15]:
 
 
 # sleep(3)
@@ -426,7 +422,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 # ### Clear input
 
-# In[319]:
+# In[16]:
 
 
 def clear_input(to_clear=None):
@@ -436,7 +432,7 @@ def clear_input(to_clear=None):
     logging.debug('clear_input')
 
 
-# In[320]:
+# In[17]:
 
 
 # clear_input(keys)
@@ -446,7 +442,7 @@ def clear_input(to_clear=None):
 
 # ### Tkinter test
 
-# In[321]:
+# In[18]:
 
 
 # import tkinter as tk
@@ -470,19 +466,19 @@ def clear_input(to_clear=None):
 
 # ### Get screen
 
-# In[322]:
+# In[19]:
 
 
 def get_screen(x_left, y_top, x_right, y_bot):
     screen = array(ImageGrab.grab(bbox=(x_left, y_top, x_right, y_bot)))
     screen = cv2.cvtColor(screen, cv2.COLOR_RGB2BGR)
     return screen
-    
+
 
 
 # ### HSV slider tool
 
-# In[323]:
+# In[20]:
 
 
 def callback(x):
@@ -536,7 +532,7 @@ def hsv_slider():
             break
 
 
-# In[324]:
+# In[21]:
 
 
 # hsv_slider()
@@ -544,7 +540,7 @@ def hsv_slider():
 
 # ### Filter sun
 
-# In[325]:
+# In[22]:
 
 
 def filter_sun(image=None, testing=False):
@@ -567,7 +563,7 @@ def filter_sun(image=None, testing=False):
     return filtered
 
 
-# In[326]:
+# In[23]:
 
 
 # filter_sun(testing=True)
@@ -575,7 +571,7 @@ def filter_sun(image=None, testing=False):
 
 # ### Filter orange
 
-# In[327]:
+# In[24]:
 
 
 def filter_orange(image=None, testing=False):
@@ -598,7 +594,7 @@ def filter_orange(image=None, testing=False):
     return filtered
 
 
-# In[328]:
+# In[25]:
 
 
 # filter_orange(testing=True)
@@ -606,7 +602,7 @@ def filter_orange(image=None, testing=False):
 
 # ### Filter orange2
 
-# In[329]:
+# In[26]:
 
 
 def filter_orange2(image=None, testing=False):
@@ -629,7 +625,7 @@ def filter_orange2(image=None, testing=False):
     return filtered
 
 
-# In[330]:
+# In[27]:
 
 
 # filter_orange2(testing=True)
@@ -637,7 +633,7 @@ def filter_orange2(image=None, testing=False):
 
 # ### Filter blue
 
-# In[331]:
+# In[28]:
 
 
 def filter_blue(image=None, testing=False):
@@ -660,7 +656,7 @@ def filter_blue(image=None, testing=False):
     return filtered
 
 
-# In[332]:
+# In[29]:
 
 
 # filter_blue(testing=True)
@@ -668,7 +664,7 @@ def filter_blue(image=None, testing=False):
 
 # ### Get sun
 
-# In[333]:
+# In[30]:
 
 
 def sun_percent():
@@ -681,7 +677,7 @@ def sun_percent():
     return result * 100
 
 
-# In[334]:
+# In[31]:
 
 
 # sleep(3)
@@ -690,7 +686,7 @@ def sun_percent():
 
 # ### Get compass image
 
-# In[335]:
+# In[32]:
 
 
 def get_compass_image(testing=False):
@@ -721,7 +717,7 @@ def get_compass_image(testing=False):
     return compass_image, compass_width+(2*doubt), compass_height+(2*doubt)
 
 
-# In[336]:
+# In[33]:
 
 
 # get_compass_image(testing=True)
@@ -729,7 +725,7 @@ def get_compass_image(testing=False):
 
 # ### Get navpoint offset
 
-# In[359]:
+# In[34]:
 
 
 same_last_count = 0
@@ -781,7 +777,7 @@ def get_navpoint_offset(testing=False, last=None):
     return result
 
 
-# In[338]:
+# In[35]:
 
 
 # get_navpoint_offset(testing=True)
@@ -789,7 +785,7 @@ def get_navpoint_offset(testing=False, last=None):
 
 # ### Get destination offset
 
-# In[339]:
+# In[36]:
 
 
 def get_destination_offset(testing=False):
@@ -825,7 +821,7 @@ def get_destination_offset(testing=False):
     return result
 
 
-# In[340]:
+# In[37]:
 
 
 # get_destination_offset(testing=True)
@@ -835,7 +831,7 @@ def get_destination_offset(testing=False):
 
 # ### Undock
 
-# In[341]:
+# In[38]:
 
 
 def undock():
@@ -865,7 +861,7 @@ def undock():
     return True
 
 
-# In[342]:
+# In[39]:
 
 
 # sleep(3)
@@ -874,7 +870,7 @@ def undock():
 
 # ### Dock
 
-# In[343]:
+# In[40]:
 
 
 def dock():
@@ -917,7 +913,7 @@ def dock():
     return True
 
 
-# In[344]:
+# In[41]:
 
 
 # sleep(3)
@@ -926,7 +922,7 @@ def dock():
 
 # ### Align
 
-# In[345]:
+# In[42]:
 
 
 def x_angle(point=None):
@@ -939,7 +935,7 @@ def x_angle(point=None):
         return -90 - result
 
 
-# In[356]:
+# In[43]:
 
 
 def align():
@@ -947,22 +943,22 @@ def align():
     if not (ship()['status'] == 'in_supercruise' or ship()['status'] == 'in_space'):
         logging.error('align=err1')
         raise Exception('align error 1')
-    
+
     logging.debug('align= speed 100')
     send(keys['SetSpeed100'])
-    
+
     logging.debug('align= avoid sun')
     while sun_percent() > 5:
         send(keys['PitchUpButton'], state=1)
     send(keys['PitchUpButton'], state=0)
-    
+
     logging.debug('align= find navpoint')
     off = get_navpoint_offset()
     while not off:
         send(keys['PitchUpButton'], state=1)
         off = get_navpoint_offset()
     send(keys['PitchUpButton'], state=0)
-    
+
     logging.debug('align= crude align')
     close = 3
     close_a = 18
@@ -995,12 +991,12 @@ def align():
                 return
             off = get_navpoint_offset(last=off)
             ang = x_angle(off)
-            
+
         off = get_navpoint_offset(last=off)
         ang = x_angle(off)
 
     logging.debug('align= fine align')
-    sleep(0.5)    
+    sleep(0.5)
     close = 50
     hold_pitch = 0.200
     hold_yaw = 0.400
@@ -1013,7 +1009,7 @@ def align():
     if not off:
         return
     while (off['x'] > close) or           (off['x'] < -close) or           (off['y'] > close) or           (off['y'] < -close):
-        
+
         if off['x'] > close:
             send(keys['YawRightButton'], hold=hold_yaw)
         if off['x'] < -close:
@@ -1022,10 +1018,10 @@ def align():
             send(keys['PitchUpButton'], hold=hold_pitch)
         if off['y'] < -close:
             send(keys['PitchDownButton'], hold=hold_pitch)
-            
+
         if ship()['status'] == 'starting_hyperspace':
             return
-        
+
         for i in range(5):
             new = get_destination_offset()
             if new:
@@ -1034,11 +1030,11 @@ def align():
             sleep(0.25)
         if not off:
             return
-    
+
     logging.debug('align=complete')
 
 
-# In[347]:
+# In[44]:
 
 
 # sleep(3)
@@ -1047,7 +1043,7 @@ def align():
 
 # ### Jump
 
-# In[348]:
+# In[45]:
 
 
 def jump():
@@ -1076,10 +1072,10 @@ def jump():
             logging.debug('jump=complete')
             return True
     logging.error('jump=err2')
-    raise Exception("jump failure")    
+    raise Exception("jump failure")
 
 
-# In[349]:
+# In[46]:
 
 
 # sleep(3)
@@ -1088,17 +1084,17 @@ def jump():
 
 # ### Refuel
 
-# In[350]:
+# In[47]:
 
 
 def refuel():
     logging.debug('refuel')
     scoopable_stars = ['F', 'O', 'G', 'K', 'B', 'A', 'M']
-    
+
     if ship()['status'] != 'in_supercruise':
         logging.error('refuel=err1')
         raise Exception('not ready to refuel')
-        
+
     logging.debug('refuel= start refuel')
     if ship()['fuel_percent'] < 33 and ship()['star_class'] in scoopable_stars:
         send(keys['SetSpeed100'])
@@ -1117,7 +1113,7 @@ def refuel():
         logging.debug('refuel= needed, unsuitable star')
 
 
-# In[351]:
+# In[48]:
 
 
 # sleep(3)
@@ -1126,7 +1122,7 @@ def refuel():
 
 # ### Position
 
-# In[352]:
+# In[49]:
 
 
 def position():
@@ -1143,7 +1139,7 @@ def position():
     return True
 
 
-# In[353]:
+# In[50]:
 
 
 # sleep(3)
@@ -1153,22 +1149,22 @@ def position():
 # ## Autopilot main
 
 # ### status reference
-# 
+#
 # 'in-station'
-# 
+#
 # 'in-supercruise'
-# 
+#
 # 'in-space'
-# 
+#
 # 'starting-undocking'
-# 
+#
 # 'in-undocking'
-# 
+#
 # 'starting-docking'
-# 
+#
 # 'in-docking'
 
-# In[354]:
+# In[51]:
 
 
 def autopilot():
@@ -1191,9 +1187,8 @@ def autopilot():
     logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT END '+181*'-'+'\n'+200*'-')
 
 
-# In[355]:
+# In[52]:
 
 
 # sleep(3)
 # autopilot()
-

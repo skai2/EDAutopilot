@@ -1,6 +1,6 @@
 from pystray import Icon, MenuItem, Menu
 from PIL import Image # big
-from dev_autopilot import autopilot, resource_path, get_bindings, clear_input
+from dev_autopilot import autopilot, resource_path, get_bindings, clear_input, RELEASE
 from src.directinput import *
 import threading
 import kthread
