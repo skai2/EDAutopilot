@@ -96,10 +96,10 @@ logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
 
 # ## Constants
 
-# In[416]:
+# In[477]:
 
 
-RELEASE = 'v19.05.06-alpha-18'
+RELEASE = 'v19.05.07-alpha-15'
 PATH_LOG_FILES = None
 PATH_KEYBINDINGS = None
 KEY_MOD_DELAY = 0.010
