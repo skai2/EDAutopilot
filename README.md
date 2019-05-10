@@ -8,11 +8,13 @@ Look [here for the autopilot alpha version release](https://github.com/skai2/EDA
 ## Usage:
 The program will create an icon on the taskbar.
 
-Setup a route in the galaxy map as you would normally, then:
+  1. Setup a route in the galaxy map as you would normally, then:
+  
+  - Optionally right click the taskbar icon to set which fire group (primary or secondary) you have configured your discovery scanner to, to enable auto-scanner (remember you must have a *keyboard*, not mouse, binding as well)
 
-Press **Home** key to start autopilot.
+  2. Press **Home** key to start autopilot.
 
-Press **End** key to abort autopilot.
+  3. Press **End** key to abort autopilot.  
 
 ## Necessary Setup:
 In game, you must have configured keyboard keys for all of the following. You may configure them in either
