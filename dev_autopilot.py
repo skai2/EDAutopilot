@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # <h1>Elite Dangerous Autopilot v2<span class="tocSkip"></span></h1>
-# <div class="toc"><ul class="toc-item"><li><span><a href="#References" data-toc-modified-id="References-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>References</a></span></li><li><span><a href="#Imports" data-toc-modified-id="Imports-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Imports</a></span></li><li><span><a href="#Logging" data-toc-modified-id="Logging-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Logging</a></span></li><li><span><a href="#Constants" data-toc-modified-id="Constants-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Constants</a></span></li><li><span><a href="#Read-ED-logs" data-toc-modified-id="Read-ED-logs-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Read ED logs</a></span><ul class="toc-item"><li><span><a href="#Get-latest-log-file" data-toc-modified-id="Get-latest-log-file-5.1"><span class="toc-item-num">5.1&nbsp;&nbsp;</span>Get latest log file</a></span></li><li><span><a href="#Extract-ship-info-from-log" data-toc-modified-id="Extract-ship-info-from-log-5.2"><span class="toc-item-num">5.2&nbsp;&nbsp;</span>Extract ship info from log</a></span></li></ul></li><li><span><a href="#Control-ED-with-direct-input" data-toc-modified-id="Control-ED-with-direct-input-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Control ED with direct input</a></span><ul class="toc-item"><li><span><a href="#Get-latest-keybinds-file" data-toc-modified-id="Get-latest-keybinds-file-6.1"><span class="toc-item-num">6.1&nbsp;&nbsp;</span>Get latest keybinds file</a></span></li><li><span><a href="#Extract-necessary-keys" data-toc-modified-id="Extract-necessary-keys-6.2"><span class="toc-item-num">6.2&nbsp;&nbsp;</span>Extract necessary keys</a></span></li></ul></li><li><span><a href="#Direct-input-function" data-toc-modified-id="Direct-input-function-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Direct input function</a></span><ul class="toc-item"><li><span><a href="#Send-input" data-toc-modified-id="Send-input-7.1"><span class="toc-item-num">7.1&nbsp;&nbsp;</span>Send input</a></span></li><li><span><a href="#Clear-input" data-toc-modified-id="Clear-input-7.2"><span class="toc-item-num">7.2&nbsp;&nbsp;</span>Clear input</a></span></li></ul></li><li><span><a href="#Autopilot-UI" data-toc-modified-id="Autopilot-UI-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>Autopilot UI</a></span><ul class="toc-item"><li><span><a href="#Tkinter-test" data-toc-modified-id="Tkinter-test-8.1"><span class="toc-item-num">8.1&nbsp;&nbsp;</span>Tkinter test</a></span></li></ul></li><li><span><a href="#OpenCV" data-toc-modified-id="OpenCV-9"><span class="toc-item-num">9&nbsp;&nbsp;</span>OpenCV</a></span><ul class="toc-item"><li><span><a href="#Get-screen" data-toc-modified-id="Get-screen-9.1"><span class="toc-item-num">9.1&nbsp;&nbsp;</span>Get screen</a></span></li><li><span><a href="#HSV-slider-tool" data-toc-modified-id="HSV-slider-tool-9.2"><span class="toc-item-num">9.2&nbsp;&nbsp;</span>HSV slider tool</a></span></li><li><span><a href="#Equalization" data-toc-modified-id="Equalization-9.3"><span class="toc-item-num">9.3&nbsp;&nbsp;</span>Equalization</a></span></li><li><span><a href="#Filter-bright" data-toc-modified-id="Filter-bright-9.4"><span class="toc-item-num">9.4&nbsp;&nbsp;</span>Filter bright</a></span></li><li><span><a href="#Filter-sun" data-toc-modified-id="Filter-sun-9.5"><span class="toc-item-num">9.5&nbsp;&nbsp;</span>Filter sun</a></span></li><li><span><a href="#Filter-orange" data-toc-modified-id="Filter-orange-9.6"><span class="toc-item-num">9.6&nbsp;&nbsp;</span>Filter orange</a></span></li><li><span><a href="#Filter-orange2" data-toc-modified-id="Filter-orange2-9.7"><span class="toc-item-num">9.7&nbsp;&nbsp;</span>Filter orange2</a></span></li><li><span><a href="#Filter-blue" data-toc-modified-id="Filter-blue-9.8"><span class="toc-item-num">9.8&nbsp;&nbsp;</span>Filter blue</a></span></li><li><span><a href="#Get-sun" data-toc-modified-id="Get-sun-9.9"><span class="toc-item-num">9.9&nbsp;&nbsp;</span>Get sun</a></span></li><li><span><a href="#Get-compass-image" data-toc-modified-id="Get-compass-image-9.10"><span class="toc-item-num">9.10&nbsp;&nbsp;</span>Get compass image</a></span></li><li><span><a href="#Get-navpoint-offset" data-toc-modified-id="Get-navpoint-offset-9.11"><span class="toc-item-num">9.11&nbsp;&nbsp;</span>Get navpoint offset</a></span></li><li><span><a href="#Get-destination-offset" data-toc-modified-id="Get-destination-offset-9.12"><span class="toc-item-num">9.12&nbsp;&nbsp;</span>Get destination offset</a></span></li></ul></li><li><span><a href="#Autopilot-routines" data-toc-modified-id="Autopilot-routines-10"><span class="toc-item-num">10&nbsp;&nbsp;</span>Autopilot routines</a></span><ul class="toc-item"><li><span><a href="#Undock" data-toc-modified-id="Undock-10.1"><span class="toc-item-num">10.1&nbsp;&nbsp;</span>Undock</a></span></li><li><span><a href="#Dock" data-toc-modified-id="Dock-10.2"><span class="toc-item-num">10.2&nbsp;&nbsp;</span>Dock</a></span></li><li><span><a href="#Align" data-toc-modified-id="Align-10.3"><span class="toc-item-num">10.3&nbsp;&nbsp;</span>Align</a></span></li><li><span><a href="#Jump" data-toc-modified-id="Jump-10.4"><span class="toc-item-num">10.4&nbsp;&nbsp;</span>Jump</a></span></li><li><span><a href="#Refuel" data-toc-modified-id="Refuel-10.5"><span class="toc-item-num">10.5&nbsp;&nbsp;</span>Refuel</a></span></li><li><span><a href="#Position" data-toc-modified-id="Position-10.6"><span class="toc-item-num">10.6&nbsp;&nbsp;</span>Position</a></span></li></ul></li><li><span><a href="#Autopilot-main" data-toc-modified-id="Autopilot-main-11"><span class="toc-item-num">11&nbsp;&nbsp;</span>Autopilot main</a></span><ul class="toc-item"><li><span><a href="#status-reference" data-toc-modified-id="status-reference-11.1"><span class="toc-item-num">11.1&nbsp;&nbsp;</span>status reference</a></span></li></ul></li></ul></div>
+# <div class="toc"><ul class="toc-item"><li><span><a href="#References" data-toc-modified-id="References-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>References</a></span></li><li><span><a href="#Imports" data-toc-modified-id="Imports-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Imports</a></span></li><li><span><a href="#Logging" data-toc-modified-id="Logging-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Logging</a></span></li><li><span><a href="#Constants" data-toc-modified-id="Constants-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Constants</a></span></li><li><span><a href="#Read-ED-logs" data-toc-modified-id="Read-ED-logs-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Read ED logs</a></span><ul class="toc-item"><li><span><a href="#Get-latest-log-file" data-toc-modified-id="Get-latest-log-file-5.1"><span class="toc-item-num">5.1&nbsp;&nbsp;</span>Get latest log file</a></span></li><li><span><a href="#Extract-ship-info-from-log" data-toc-modified-id="Extract-ship-info-from-log-5.2"><span class="toc-item-num">5.2&nbsp;&nbsp;</span>Extract ship info from log</a></span></li></ul></li><li><span><a href="#Control-ED-with-direct-input" data-toc-modified-id="Control-ED-with-direct-input-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Control ED with direct input</a></span><ul class="toc-item"><li><span><a href="#Get-latest-keybinds-file" data-toc-modified-id="Get-latest-keybinds-file-6.1"><span class="toc-item-num">6.1&nbsp;&nbsp;</span>Get latest keybinds file</a></span></li><li><span><a href="#Extract-necessary-keys" data-toc-modified-id="Extract-necessary-keys-6.2"><span class="toc-item-num">6.2&nbsp;&nbsp;</span>Extract necessary keys</a></span></li></ul></li><li><span><a href="#Direct-input-function" data-toc-modified-id="Direct-input-function-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Direct input function</a></span><ul class="toc-item"><li><span><a href="#Send-input" data-toc-modified-id="Send-input-7.1"><span class="toc-item-num">7.1&nbsp;&nbsp;</span>Send input</a></span></li><li><span><a href="#Clear-input" data-toc-modified-id="Clear-input-7.2"><span class="toc-item-num">7.2&nbsp;&nbsp;</span>Clear input</a></span></li></ul></li><li><span><a href="#Autopilot-UI" data-toc-modified-id="Autopilot-UI-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>Autopilot UI</a></span><ul class="toc-item"><li><span><a href="#Tkinter-test" data-toc-modified-id="Tkinter-test-8.1"><span class="toc-item-num">8.1&nbsp;&nbsp;</span>Tkinter test</a></span></li></ul></li><li><span><a href="#OpenCV" data-toc-modified-id="OpenCV-9"><span class="toc-item-num">9&nbsp;&nbsp;</span>OpenCV</a></span><ul class="toc-item"><li><span><a href="#Get-screen" data-toc-modified-id="Get-screen-9.1"><span class="toc-item-num">9.1&nbsp;&nbsp;</span>Get screen</a></span></li><li><span><a href="#HSV-slider-tool" data-toc-modified-id="HSV-slider-tool-9.2"><span class="toc-item-num">9.2&nbsp;&nbsp;</span>HSV slider tool</a></span></li><li><span><a href="#Equalization" data-toc-modified-id="Equalization-9.3"><span class="toc-item-num">9.3&nbsp;&nbsp;</span>Equalization</a></span></li><li><span><a href="#Filter-bright" data-toc-modified-id="Filter-bright-9.4"><span class="toc-item-num">9.4&nbsp;&nbsp;</span>Filter bright</a></span></li><li><span><a href="#Filter-sun" data-toc-modified-id="Filter-sun-9.5"><span class="toc-item-num">9.5&nbsp;&nbsp;</span>Filter sun</a></span></li><li><span><a href="#Filter-orange" data-toc-modified-id="Filter-orange-9.6"><span class="toc-item-num">9.6&nbsp;&nbsp;</span>Filter orange</a></span></li><li><span><a href="#Filter-orange2" data-toc-modified-id="Filter-orange2-9.7"><span class="toc-item-num">9.7&nbsp;&nbsp;</span>Filter orange2</a></span></li><li><span><a href="#Filter-blue" data-toc-modified-id="Filter-blue-9.8"><span class="toc-item-num">9.8&nbsp;&nbsp;</span>Filter blue</a></span></li><li><span><a href="#Get-sun" data-toc-modified-id="Get-sun-9.9"><span class="toc-item-num">9.9&nbsp;&nbsp;</span>Get sun</a></span></li><li><span><a href="#Get-compass-image" data-toc-modified-id="Get-compass-image-9.10"><span class="toc-item-num">9.10&nbsp;&nbsp;</span>Get compass image</a></span></li><li><span><a href="#Get-navpoint-offset" data-toc-modified-id="Get-navpoint-offset-9.11"><span class="toc-item-num">9.11&nbsp;&nbsp;</span>Get navpoint offset</a></span></li><li><span><a href="#Get-destination-offset" data-toc-modified-id="Get-destination-offset-9.12"><span class="toc-item-num">9.12&nbsp;&nbsp;</span>Get destination offset</a></span></li></ul></li><li><span><a href="#Autopilot-routines" data-toc-modified-id="Autopilot-routines-10"><span class="toc-item-num">10&nbsp;&nbsp;</span>Autopilot routines</a></span><ul class="toc-item"><li><span><a href="#Undock" data-toc-modified-id="Undock-10.1"><span class="toc-item-num">10.1&nbsp;&nbsp;</span>Undock</a></span></li><li><span><a href="#Dock" data-toc-modified-id="Dock-10.2"><span class="toc-item-num">10.2&nbsp;&nbsp;</span>Dock</a></span></li><li><span><a href="#Align" data-toc-modified-id="Align-10.3"><span class="toc-item-num">10.3&nbsp;&nbsp;</span>Align</a></span></li><li><span><a href="#Jump" data-toc-modified-id="Jump-10.4"><span class="toc-item-num">10.4&nbsp;&nbsp;</span>Jump</a></span></li><li><span><a href="#Refuel" data-toc-modified-id="Refuel-10.5"><span class="toc-item-num">10.5&nbsp;&nbsp;</span>Refuel</a></span></li><li><span><a href="#Discovery-scanner" data-toc-modified-id="Discovery-scanner-10.6"><span class="toc-item-num">10.6&nbsp;&nbsp;</span>Discovery scanner</a></span></li><li><span><a href="#Position" data-toc-modified-id="Position-10.7"><span class="toc-item-num">10.7&nbsp;&nbsp;</span>Position</a></span></li></ul></li><li><span><a href="#Autopilot-main" data-toc-modified-id="Autopilot-main-11"><span class="toc-item-num">11&nbsp;&nbsp;</span>Autopilot main</a></span><ul class="toc-item"><li><span><a href="#status-reference" data-toc-modified-id="status-reference-11.1"><span class="toc-item-num">11.1&nbsp;&nbsp;</span>status reference</a></span></li></ul></li></ul></div>
 
 # ## References
 
@@ -22,7 +22,7 @@
 
 # ## Imports
 
-# In[66]:
+# In[118]:
 
 
 import sys
@@ -44,7 +44,7 @@ import logging
 import colorlog
 
 
-# In[67]:
+# In[119]:
 
 
 def resource_path(relative_path):
@@ -60,7 +60,7 @@ def resource_path(relative_path):
 
 # ## Logging
 
-# In[68]:
+# In[120]:
 
 
 logging.basicConfig(filename='autopilot.log', level=logging.DEBUG)
@@ -88,7 +88,7 @@ logger.error('some error message. These information is usually used for errors a
 logger.critical('some critical message. These information is usually used for critical error, and will usually result in an exception.')
 
 
-# In[69]:
+# In[121]:
 
 
 logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
@@ -96,10 +96,10 @@ logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
 
 # ## Constants
 
-# In[70]:
+# In[122]:
 
 
-RELEASE = 'v19.05.07-alpha-15'
+RELEASE = 'v19.05.09-alpha-22'
 PATH_LOG_FILES = None
 PATH_KEYBINDINGS = None
 KEY_MOD_DELAY = 0.010
@@ -123,7 +123,7 @@ logging.info('SCREEN_HEIGHT='+str(SCREEN_HEIGHT))
 
 # ### Get latest log file
 
-# In[71]:
+# In[123]:
 
 
 def get_latest_log(path_logs=None):
@@ -137,7 +137,7 @@ def get_latest_log(path_logs=None):
     return latest_log
 
 
-# In[72]:
+# In[124]:
 
 
 logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
@@ -145,7 +145,7 @@ logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
 
 # ### Extract ship info from log
 
-# In[73]:
+# In[125]:
 
 
 def ship():
@@ -248,7 +248,7 @@ def ship():
     return ship
 
 
-# In[74]:
+# In[126]:
 
 
 logging.debug('ship='+str(ship()))
@@ -258,7 +258,7 @@ logging.debug('ship='+str(ship()))
 
 # ### Get latest keybinds file
 
-# In[75]:
+# In[127]:
 
 
 def get_latest_keybinds(path_bindings=None):
@@ -271,7 +271,7 @@ def get_latest_keybinds(path_bindings=None):
     return latest_bindings
 
 
-# In[76]:
+# In[128]:
 
 
 logging.info("get_latest_keybinds="+str(get_latest_keybinds()))
@@ -279,7 +279,7 @@ logging.info("get_latest_keybinds="+str(get_latest_keybinds()))
 
 # ### Extract necessary keys
 
-# In[77]:
+# In[129]:
 
 
 keys_to_obtain = [
@@ -300,7 +300,9 @@ keys_to_obtain = [
         'UI_Select',
         'CycleNextPanel',
         'HeadLookReset',
-        'HyperSuperCombination'
+        'HyperSuperCombination',
+        'PrimaryFire',
+        'SecondaryFire'
     ]
 
 def get_bindings(keys_to_obtain=keys_to_obtain):
@@ -330,35 +332,32 @@ def get_bindings(keys_to_obtain=keys_to_obtain):
                 binding = {'pre_key': 'DIK_'+str(item[0].attrib['Key'][4:]).upper()}
             if inputTypeB == "Keyboard":
                 binding = {'pre_key': 'DIK_'+str(item[1].attrib['Key'][4:]).upper()}
+                
             if inputTypeA == "Keyboard" and len(item[0]) > 0:
                 mod = item[0][0].attrib['Key']
-                
                 if mod in convert_to_direct_keys:
                     mod = convert_to_direct_keys[mod]
                 else:
                     mod = mod[4:]
-                # print("MOD: " , mod.upper())
                 binding['pre_mod'] = 'DIK_'+mod.upper()
-            elif inputTypeB == "Keyboard" and len(item[1]) > 1:
-                mod = item[1][0].attrib['Key']
                 
+            if inputTypeB == "Keyboard" and len(item[1]) > 0:
+                mod = item[1][0].attrib['Key']
                 if mod in convert_to_direct_keys:
                     mod = convert_to_direct_keys[mod]
                 else:
                     mod = mod[4:]
-                # print("MOD: " , mod.upper())
                 binding['pre_mod'] = 'DIK_'+mod.upper()
 
             if inputTypeA == "Keyboard" or inputTypeB == "Keyboard":
-                # print (binding['pre_key'])
-                # print (item.tag, ": ", SCANCODE[binding['pre_key']])
                 binding['key'] = SCANCODE[binding['pre_key']]
                 if 'pre_mod' in binding:
                     binding['mod'] = SCANCODE[binding['pre_mod']]
                 direct_input_keys[item.tag] = binding
             else:
                 # Sanity check - no keyboard keybind found.
-                logging.warn("get_bindings_<", item.tag, ">= does not have a valid keyboard keybind.")
+                direct_input_keys[item.tag] = None
+                logging.warning("get_bindings_<"+item.tag+">= does not have a valid keyboard keybind.")
             
     # for keys in direct_input_keys:
     #    print (keys, ': ', direct_input_keys[keys])
@@ -369,25 +368,32 @@ def get_bindings(keys_to_obtain=keys_to_obtain):
         return direct_input_keys
 
 
-# In[78]:
+# In[130]:
 
 
 keys = get_bindings()
 for key in keys_to_obtain:
-    logging.info('get_bindings_<'+str(key)+'>='+str(keys[key]))
+    try:
+        logging.info('get_bindings_<'+str(key)+'>='+str(keys[key]))
+    except Exception as e:
+        logging.warning('BINDING ERROR: ', e)
 
 
 # ## Direct input function
 
 # ### Send input
 
-# In[79]:
+# In[131]:
 
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     global KEY_MOD_DELAY, KEY_DEFAULT_DELAY, KEY_REPEAT_DELAY
-    logging.debug('send=key:'+str(key)+',hold:'+str(hold)+',repeat:'+str(repeat)+',repeat_delay:'+str(repeat_delay)+',state:'+str(state))
     
+    if key is None:
+        logging.warning('send=NONE')
+        return
+    
+    logging.debug('send=key:'+str(key)+',hold:'+str(hold)+',repeat:'+str(repeat)+',repeat_delay:'+str(repeat_delay)+',state:'+str(state))
     for i in range(repeat):
         
         if state is None or state == 1:
@@ -416,7 +422,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             sleep(KEY_REPEAT_DELAY)
 
 
-# In[80]:
+# In[132]:
 
 
 # sleep(3)
@@ -425,17 +431,18 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 # ### Clear input
 
-# In[81]:
+# In[133]:
 
 
 def clear_input(to_clear=None):
     logging.info('\n'+200*'-'+'\n'+'---- CLEAR INPUT '+183*'-'+'\n'+200*'-')
     for key in to_clear.keys():
-        send(to_clear[key], state=0)
+        if key in keys:
+            send(to_clear[key], state=0)
     logging.debug('clear_input')
 
 
-# In[82]:
+# In[134]:
 
 
 # clear_input(keys)
@@ -445,7 +452,7 @@ def clear_input(to_clear=None):
 
 # ### Tkinter test
 
-# In[83]:
+# In[135]:
 
 
 # import tkinter as tk
@@ -469,7 +476,7 @@ def clear_input(to_clear=None):
 
 # ### Get screen
 
-# In[84]:
+# In[136]:
 
 
 def get_screen(x_left, y_top, x_right, y_bot):
@@ -481,7 +488,7 @@ def get_screen(x_left, y_top, x_right, y_bot):
 
 # ### HSV slider tool
 
-# In[85]:
+# In[137]:
 
 
 def callback(x):
@@ -538,7 +545,7 @@ def hsv_slider(bandw=False):
             break
 
 
-# In[86]:
+# In[138]:
 
 
 # hsv_slider()
@@ -546,7 +553,7 @@ def hsv_slider(bandw=False):
 
 # ### Equalization
 
-# In[87]:
+# In[139]:
 
 
 def equalize(image=None, testing=False):
@@ -570,7 +577,7 @@ def equalize(image=None, testing=False):
     return img_out
 
 
-# In[88]:
+# In[140]:
 
 
 # equalize(testing=True)
@@ -578,7 +585,7 @@ def equalize(image=None, testing=False):
 
 # ### Filter bright
 
-# In[89]:
+# In[141]:
 
 
 def filter_bright(image=None, testing=False):
@@ -601,7 +608,7 @@ def filter_bright(image=None, testing=False):
     return filtered
 
 
-# In[90]:
+# In[142]:
 
 
 # filter_bright(testing=True)
@@ -609,7 +616,7 @@ def filter_bright(image=None, testing=False):
 
 # ### Filter sun
 
-# In[91]:
+# In[143]:
 
 
 def filter_sun(image=None, testing=False):
@@ -632,7 +639,7 @@ def filter_sun(image=None, testing=False):
     return filtered
 
 
-# In[92]:
+# In[144]:
 
 
 # filter_sun(testing=True)
@@ -640,7 +647,7 @@ def filter_sun(image=None, testing=False):
 
 # ### Filter orange
 
-# In[93]:
+# In[145]:
 
 
 def filter_orange(image=None, testing=False):
@@ -663,7 +670,7 @@ def filter_orange(image=None, testing=False):
     return filtered
 
 
-# In[94]:
+# In[146]:
 
 
 # filter_orange(testing=True)
@@ -671,7 +678,7 @@ def filter_orange(image=None, testing=False):
 
 # ### Filter orange2
 
-# In[95]:
+# In[147]:
 
 
 def filter_orange2(image=None, testing=False):
@@ -694,7 +701,7 @@ def filter_orange2(image=None, testing=False):
     return filtered
 
 
-# In[96]:
+# In[148]:
 
 
 # filter_orange2(testing=True)
@@ -702,7 +709,7 @@ def filter_orange2(image=None, testing=False):
 
 # ### Filter blue
 
-# In[97]:
+# In[149]:
 
 
 def filter_blue(image=None, testing=False):
@@ -725,7 +732,7 @@ def filter_blue(image=None, testing=False):
     return filtered
 
 
-# In[98]:
+# In[150]:
 
 
 # filter_blue(testing=True)
@@ -733,7 +740,7 @@ def filter_blue(image=None, testing=False):
 
 # ### Get sun
 
-# In[99]:
+# In[151]:
 
 
 def sun_percent():
@@ -746,7 +753,7 @@ def sun_percent():
     return result * 100
 
 
-# In[100]:
+# In[152]:
 
 
 # sleep(3)
@@ -755,7 +762,7 @@ def sun_percent():
 
 # ### Get compass image
 
-# In[101]:
+# In[153]:
 
 
 def get_compass_image(testing=False):
@@ -787,7 +794,7 @@ def get_compass_image(testing=False):
     return compass_image, compass_width+(2*doubt), compass_height+(2*doubt)
 
 
-# In[102]:
+# In[154]:
 
 
 # get_compass_image(testing=True)
@@ -795,7 +802,7 @@ def get_compass_image(testing=False):
 
 # ### Get navpoint offset
 
-# In[103]:
+# In[155]:
 
 
 same_last_count = 0
@@ -848,7 +855,7 @@ def get_navpoint_offset(testing=False, last=None):
     return result
 
 
-# In[104]:
+# In[156]:
 
 
 # get_navpoint_offset(testing=True)
@@ -856,7 +863,7 @@ def get_navpoint_offset(testing=False, last=None):
 
 # ### Get destination offset
 
-# In[105]:
+# In[157]:
 
 
 def get_destination_offset(testing=False):
@@ -893,7 +900,7 @@ def get_destination_offset(testing=False):
     return result
 
 
-# In[106]:
+# In[158]:
 
 
 # get_destination_offset(testing=True)
@@ -903,7 +910,7 @@ def get_destination_offset(testing=False):
 
 # ### Undock
 
-# In[107]:
+# In[159]:
 
 
 def undock():
@@ -933,7 +940,7 @@ def undock():
     return True
 
 
-# In[108]:
+# In[160]:
 
 
 # sleep(3)
@@ -942,7 +949,7 @@ def undock():
 
 # ### Dock
 
-# In[109]:
+# In[161]:
 
 
 def dock():
@@ -985,7 +992,7 @@ def dock():
     return True
 
 
-# In[110]:
+# In[162]:
 
 
 # sleep(3)
@@ -994,7 +1001,7 @@ def dock():
 
 # ### Align
 
-# In[111]:
+# In[163]:
 
 
 def x_angle(point=None):
@@ -1007,7 +1014,7 @@ def x_angle(point=None):
         return -90 - result
 
 
-# In[112]:
+# In[164]:
 
 
 def align():
@@ -1106,7 +1113,7 @@ def align():
     logging.debug('align=complete')
 
 
-# In[113]:
+# In[165]:
 
 
 # sleep(3)
@@ -1115,7 +1122,7 @@ def align():
 
 # ### Jump
 
-# In[114]:
+# In[166]:
 
 
 def jump():
@@ -1147,7 +1154,7 @@ def jump():
     raise Exception("jump failure")    
 
 
-# In[115]:
+# In[167]:
 
 
 # sleep(3)
@@ -1156,7 +1163,7 @@ def jump():
 
 # ### Refuel
 
-# In[116]:
+# In[168]:
 
 
 def refuel(refuel_threshold=33):
@@ -1189,20 +1196,43 @@ def refuel(refuel_threshold=33):
         return False
 
 
-# In[117]:
+# In[169]:
 
 
 # sleep(3)
 # refuel()
 
 
+# ### Discovery scanner
+
+# In[170]:
+
+
+scanner = 0
+
+def set_scanner(state):
+    scanner = state
+    logging.info('set_scanner='+str(state))
+
+def get_scanner():
+    from dev_tray import STATE
+    return STATE
+
+
 # ### Position
 
-# In[118]:
+# In[171]:
 
 
 def position(refueled_multiplier=1):
     logging.debug('position')
+    scan = get_scanner()
+    if scan == 1:
+        logging.debug('position=scanning')
+        send(keys['PrimaryFire'], state=1)
+    elif scan == 2:
+        logging.debug('position=scanning')
+        send(keys['SecondaryFire'], state=1)
     send(keys['PitchUpButton'], state=1)
     sleep(5)
     send(keys['SetSpeed100'])
@@ -1211,11 +1241,17 @@ def position(refueled_multiplier=1):
     sleep(5)
     send(keys['PitchUpButton'], state=0)
     sleep(5*refueled_multiplier)
+    if scan == 1:
+        logging.debug('position=scanning complete')
+        send(keys['PrimaryFire'], state=0)
+    elif scan == 2:
+        logging.debug('position=scanning complete')
+        send(keys['SecondaryFire'], state=0)
     logging.debug('position=complete')
     return True
 
 
-# In[119]:
+# In[172]:
 
 
 # sleep(3)
@@ -1240,7 +1276,7 @@ def position(refueled_multiplier=1):
 # 
 # 'in-docking'
 
-# In[120]:
+# In[173]:
 
 
 def autopilot():
@@ -1266,7 +1302,7 @@ def autopilot():
     logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT END '+181*'-'+'\n'+200*'-')
 
 
-# In[121]:
+# In[174]:
 
 
 # sleep(3)
