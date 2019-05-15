@@ -22,7 +22,7 @@
 
 # ## Imports
 
-# In[118]:
+# In[181]:
 
 
 import sys
@@ -44,7 +44,7 @@ import logging
 import colorlog
 
 
-# In[119]:
+# In[182]:
 
 
 def resource_path(relative_path):
@@ -60,7 +60,7 @@ def resource_path(relative_path):
 
 # ## Logging
 
-# In[120]:
+# In[183]:
 
 
 logging.basicConfig(filename='autopilot.log', level=logging.DEBUG)
@@ -88,7 +88,7 @@ logger.error('some error message. These information is usually used for errors a
 logger.critical('some critical message. These information is usually used for critical error, and will usually result in an exception.')
 
 
-# In[121]:
+# In[184]:
 
 
 logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
@@ -96,10 +96,10 @@ logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT DATA '+180*'-'+'\n'+200*'-')
 
 # ## Constants
 
-# In[122]:
+# In[185]:
 
 
-RELEASE = 'v19.05.09-alpha-22'
+RELEASE = 'v19.05.15-alpha-18'
 PATH_LOG_FILES = None
 PATH_KEYBINDINGS = None
 KEY_MOD_DELAY = 0.010
@@ -123,7 +123,7 @@ logging.info('SCREEN_HEIGHT='+str(SCREEN_HEIGHT))
 
 # ### Get latest log file
 
-# In[123]:
+# In[186]:
 
 
 def get_latest_log(path_logs=None):
@@ -137,7 +137,7 @@ def get_latest_log(path_logs=None):
     return latest_log
 
 
-# In[124]:
+# In[187]:
 
 
 logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
@@ -145,7 +145,7 @@ logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
 
 # ### Extract ship info from log
 
-# In[125]:
+# In[188]:
 
 
 def ship():
@@ -248,7 +248,7 @@ def ship():
     return ship
 
 
-# In[126]:
+# In[189]:
 
 
 logging.debug('ship='+str(ship()))
@@ -258,7 +258,7 @@ logging.debug('ship='+str(ship()))
 
 # ### Get latest keybinds file
 
-# In[127]:
+# In[190]:
 
 
 def get_latest_keybinds(path_bindings=None):
@@ -271,7 +271,7 @@ def get_latest_keybinds(path_bindings=None):
     return latest_bindings
 
 
-# In[128]:
+# In[191]:
 
 
 logging.info("get_latest_keybinds="+str(get_latest_keybinds()))
@@ -279,28 +279,28 @@ logging.info("get_latest_keybinds="+str(get_latest_keybinds()))
 
 # ### Extract necessary keys
 
-# In[129]:
+# In[192]:
 
 
 keys_to_obtain = [
-        'PitchUpButton',
-        'PitchDownButton',
-        'RollLeftButton',
-        'RollRightButton',
         'YawLeftButton',
         'YawRightButton',
+        'RollLeftButton',
+        'RollRightButton',
+        'PitchUpButton',
+        'PitchDownButton',
         'SetSpeedZero',
         'SetSpeed100',
-        'UI_Back',
+        'HyperSuperCombination',
         'UIFocus',
         'UI_Up',
         'UI_Down',
         'UI_Left',
         'UI_Right',
         'UI_Select',
+        'UI_Back',
         'CycleNextPanel',
         'HeadLookReset',
-        'HyperSuperCombination',
         'PrimaryFire',
         'SecondaryFire'
     ]
@@ -316,51 +316,48 @@ def get_bindings(keys_to_obtain=keys_to_obtain):
         'Key_LeftControl':'LControl',
         'Key_RightControl':'RControl'
     }
+    
     latest_bindings = get_latest_keybinds()
     bindings_tree = parse(latest_bindings)
     bindings_root = bindings_tree.getroot()
-    inputTypeA = "undefined"
-    inputTypeB = "undefined"
+    
     for item in bindings_root:
         if item.tag in keys_to_obtain:
-            
-            # print ("test:", str(item[0].attrib['Device']).strip()[2:], ".")
-
-            inputTypeA = item[0].attrib['Device'].strip()
-            inputTypeB = item[1].attrib['Device'].strip()
-            if inputTypeA == "Keyboard":
-                binding = {'pre_key': 'DIK_'+str(item[0].attrib['Key'][4:]).upper()}
-            if inputTypeB == "Keyboard":
-                binding = {'pre_key': 'DIK_'+str(item[1].attrib['Key'][4:]).upper()}
-                
-            if inputTypeA == "Keyboard" and len(item[0]) > 0:
-                mod = item[0][0].attrib['Key']
-                if mod in convert_to_direct_keys:
-                    mod = convert_to_direct_keys[mod]
-                else:
-                    mod = mod[4:]
-                binding['pre_mod'] = 'DIK_'+mod.upper()
-                
-            if inputTypeB == "Keyboard" and len(item[1]) > 0:
-                mod = item[1][0].attrib['Key']
-                if mod in convert_to_direct_keys:
-                    mod = convert_to_direct_keys[mod]
-                else:
-                    mod = mod[4:]
-                binding['pre_mod'] = 'DIK_'+mod.upper()
-
-            if inputTypeA == "Keyboard" or inputTypeB == "Keyboard":
+            key = None
+            mod = None      
+            # Check primary
+            if item[0].attrib['Device'].strip() == "Keyboard":
+                key = item[0].attrib['Key']
+                if len(item[0]) > 0:
+                    mod = item[0][0].attrib['Key']
+            # Check secondary (and prefer secondary)
+            if item[1].attrib['Device'].strip() == "Keyboard":
+                key = item[1].attrib['Key']
+                if len(item[1]) > 0:
+                    mod = item[1][0].attrib['Key']
+            # Adequate key to SCANCODE dict standard
+            if key in convert_to_direct_keys:
+                key = convert_to_direct_keys[key]
+            elif key is not None:
+                key = key[4:]
+            # Adequate mod to SCANCODE dict standard
+            if mod in convert_to_direct_keys:
+                mod = convert_to_direct_keys[mod]
+            elif mod is not None:
+                mod = mod[4:]
+            # Prepare final binding
+            binding = None
+            if key is not None:
+                binding = {}
+                binding['pre_key'] = 'DIK_'+key.upper()
                 binding['key'] = SCANCODE[binding['pre_key']]
-                if 'pre_mod' in binding:
+                if mod is not None:
+                    binding['pre_mod'] = 'DIK_'+mod.upper()
                     binding['mod'] = SCANCODE[binding['pre_mod']]
+            if binding is not None:
                 direct_input_keys[item.tag] = binding
-            else:
-                # Sanity check - no keyboard keybind found.
-                direct_input_keys[item.tag] = None
-                logging.warning("get_bindings_<"+item.tag+">= does not have a valid keyboard keybind.")
-            
-    # for keys in direct_input_keys:
-    #    print (keys, ': ', direct_input_keys[keys])
+#             else:
+#                 logging.warning("get_bindings_<"+item.tag+">= does not have a valid keyboard keybind.")
 
     if len(list(direct_input_keys.keys())) < 1:
         return None
@@ -368,7 +365,7 @@ def get_bindings(keys_to_obtain=keys_to_obtain):
         return direct_input_keys
 
 
-# In[130]:
+# In[193]:
 
 
 keys = get_bindings()
@@ -376,21 +373,21 @@ for key in keys_to_obtain:
     try:
         logging.info('get_bindings_<'+str(key)+'>='+str(keys[key]))
     except Exception as e:
-        logging.warning('BINDING ERROR: ', e)
+        logging.warning(str("get_bindings_<"+key+">= does not have a valid keyboard keybind.").upper())
 
 
 # ## Direct input function
 
 # ### Send input
 
-# In[131]:
+# In[194]:
 
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     global KEY_MOD_DELAY, KEY_DEFAULT_DELAY, KEY_REPEAT_DELAY
     
     if key is None:
-        logging.warning('send=NONE')
+        logging.warning('SEND=NONE !!!!!!!!')
         return
     
     logging.debug('send=key:'+str(key)+',hold:'+str(hold)+',repeat:'+str(repeat)+',repeat_delay:'+str(repeat_delay)+',state:'+str(state))
@@ -422,7 +419,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             sleep(KEY_REPEAT_DELAY)
 
 
-# In[132]:
+# In[195]:
 
 
 # sleep(3)
@@ -431,7 +428,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 # ### Clear input
 
-# In[133]:
+# In[196]:
 
 
 def clear_input(to_clear=None):
@@ -442,7 +439,7 @@ def clear_input(to_clear=None):
     logging.debug('clear_input')
 
 
-# In[134]:
+# In[197]:
 
 
 # clear_input(keys)
@@ -452,7 +449,7 @@ def clear_input(to_clear=None):
 
 # ### Tkinter test
 
-# In[135]:
+# In[198]:
 
 
 # import tkinter as tk
@@ -476,7 +473,7 @@ def clear_input(to_clear=None):
 
 # ### Get screen
 
-# In[136]:
+# In[199]:
 
 
 def get_screen(x_left, y_top, x_right, y_bot):
@@ -488,7 +485,7 @@ def get_screen(x_left, y_top, x_right, y_bot):
 
 # ### HSV slider tool
 
-# In[137]:
+# In[200]:
 
 
 def callback(x):
@@ -545,7 +542,7 @@ def hsv_slider(bandw=False):
             break
 
 
-# In[138]:
+# In[201]:
 
 
 # hsv_slider()
@@ -553,7 +550,7 @@ def hsv_slider(bandw=False):
 
 # ### Equalization
 
-# In[139]:
+# In[202]:
 
 
 def equalize(image=None, testing=False):
@@ -577,7 +574,7 @@ def equalize(image=None, testing=False):
     return img_out
 
 
-# In[140]:
+# In[203]:
 
 
 # equalize(testing=True)
@@ -585,7 +582,7 @@ def equalize(image=None, testing=False):
 
 # ### Filter bright
 
-# In[141]:
+# In[204]:
 
 
 def filter_bright(image=None, testing=False):
@@ -608,7 +605,7 @@ def filter_bright(image=None, testing=False):
     return filtered
 
 
-# In[142]:
+# In[205]:
 
 
 # filter_bright(testing=True)
@@ -616,7 +613,7 @@ def filter_bright(image=None, testing=False):
 
 # ### Filter sun
 
-# In[143]:
+# In[206]:
 
 
 def filter_sun(image=None, testing=False):
@@ -639,7 +636,7 @@ def filter_sun(image=None, testing=False):
     return filtered
 
 
-# In[144]:
+# In[207]:
 
 
 # filter_sun(testing=True)
@@ -647,7 +644,7 @@ def filter_sun(image=None, testing=False):
 
 # ### Filter orange
 
-# In[145]:
+# In[208]:
 
 
 def filter_orange(image=None, testing=False):
@@ -670,7 +667,7 @@ def filter_orange(image=None, testing=False):
     return filtered
 
 
-# In[146]:
+# In[209]:
 
 
 # filter_orange(testing=True)
@@ -678,7 +675,7 @@ def filter_orange(image=None, testing=False):
 
 # ### Filter orange2
 
-# In[147]:
+# In[210]:
 
 
 def filter_orange2(image=None, testing=False):
@@ -701,7 +698,7 @@ def filter_orange2(image=None, testing=False):
     return filtered
 
 
-# In[148]:
+# In[211]:
 
 
 # filter_orange2(testing=True)
@@ -709,7 +706,7 @@ def filter_orange2(image=None, testing=False):
 
 # ### Filter blue
 
-# In[149]:
+# In[212]:
 
 
 def filter_blue(image=None, testing=False):
@@ -732,7 +729,7 @@ def filter_blue(image=None, testing=False):
     return filtered
 
 
-# In[150]:
+# In[213]:
 
 
 # filter_blue(testing=True)
@@ -740,7 +737,7 @@ def filter_blue(image=None, testing=False):
 
 # ### Get sun
 
-# In[151]:
+# In[214]:
 
 
 def sun_percent():
@@ -753,7 +750,7 @@ def sun_percent():
     return result * 100
 
 
-# In[152]:
+# In[215]:
 
 
 # sleep(3)
@@ -762,7 +759,7 @@ def sun_percent():
 
 # ### Get compass image
 
-# In[153]:
+# In[216]:
 
 
 def get_compass_image(testing=False):
@@ -794,7 +791,7 @@ def get_compass_image(testing=False):
     return compass_image, compass_width+(2*doubt), compass_height+(2*doubt)
 
 
-# In[154]:
+# In[217]:
 
 
 # get_compass_image(testing=True)
@@ -802,7 +799,7 @@ def get_compass_image(testing=False):
 
 # ### Get navpoint offset
 
-# In[155]:
+# In[218]:
 
 
 same_last_count = 0
@@ -855,7 +852,7 @@ def get_navpoint_offset(testing=False, last=None):
     return result
 
 
-# In[156]:
+# In[219]:
 
 
 # get_navpoint_offset(testing=True)
@@ -863,7 +860,7 @@ def get_navpoint_offset(testing=False, last=None):
 
 # ### Get destination offset
 
-# In[157]:
+# In[220]:
 
 
 def get_destination_offset(testing=False):
@@ -900,7 +897,7 @@ def get_destination_offset(testing=False):
     return result
 
 
-# In[158]:
+# In[221]:
 
 
 # get_destination_offset(testing=True)
@@ -910,7 +907,7 @@ def get_destination_offset(testing=False):
 
 # ### Undock
 
-# In[159]:
+# In[222]:
 
 
 def undock():
@@ -940,7 +937,7 @@ def undock():
     return True
 
 
-# In[160]:
+# In[223]:
 
 
 # sleep(3)
@@ -949,7 +946,7 @@ def undock():
 
 # ### Dock
 
-# In[161]:
+# In[224]:
 
 
 def dock():
@@ -992,7 +989,7 @@ def dock():
     return True
 
 
-# In[162]:
+# In[225]:
 
 
 # sleep(3)
@@ -1001,7 +998,7 @@ def dock():
 
 # ### Align
 
-# In[163]:
+# In[226]:
 
 
 def x_angle(point=None):
@@ -1014,7 +1011,7 @@ def x_angle(point=None):
         return -90 - result
 
 
-# In[164]:
+# In[227]:
 
 
 def align():
@@ -1113,7 +1110,7 @@ def align():
     logging.debug('align=complete')
 
 
-# In[165]:
+# In[228]:
 
 
 # sleep(3)
@@ -1122,7 +1119,7 @@ def align():
 
 # ### Jump
 
-# In[166]:
+# In[229]:
 
 
 def jump():
@@ -1139,7 +1136,7 @@ def jump():
         sleep(16)
         if ship()['status'] != 'starting_hyperspace':
             logging.debug('jump= misalign stop fsd')
-            send(keys['HyperSuperCombination'])
+            send(keys['HyperSuperCombination'], hold=1)
             sleep(2)
             align()
         else:
@@ -1154,7 +1151,7 @@ def jump():
     raise Exception("jump failure")    
 
 
-# In[167]:
+# In[230]:
 
 
 # sleep(3)
@@ -1163,7 +1160,7 @@ def jump():
 
 # ### Refuel
 
-# In[168]:
+# In[231]:
 
 
 def refuel(refuel_threshold=33):
@@ -1196,7 +1193,7 @@ def refuel(refuel_threshold=33):
         return False
 
 
-# In[169]:
+# In[232]:
 
 
 # sleep(3)
@@ -1205,7 +1202,7 @@ def refuel(refuel_threshold=33):
 
 # ### Discovery scanner
 
-# In[170]:
+# In[233]:
 
 
 scanner = 0
@@ -1221,7 +1218,7 @@ def get_scanner():
 
 # ### Position
 
-# In[171]:
+# In[234]:
 
 
 def position(refueled_multiplier=1):
@@ -1235,7 +1232,9 @@ def position(refueled_multiplier=1):
         send(keys['SecondaryFire'], state=1)
     send(keys['PitchUpButton'], state=1)
     sleep(5)
+    send(keys['PitchUpButton'], state=0)
     send(keys['SetSpeed100'])
+    send(keys['PitchUpButton'], state=1)
     while sun_percent() > 3:
         sleep(1)
     sleep(5)
@@ -1251,7 +1250,7 @@ def position(refueled_multiplier=1):
     return True
 
 
-# In[172]:
+# In[235]:
 
 
 # sleep(3)
@@ -1276,7 +1275,7 @@ def position(refueled_multiplier=1):
 # 
 # 'in-docking'
 
-# In[173]:
+# In[236]:
 
 
 def autopilot():
@@ -1302,7 +1301,7 @@ def autopilot():
     logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT END '+181*'-'+'\n'+200*'-')
 
 
-# In[174]:
+# In[237]:
 
 
 # sleep(3)
