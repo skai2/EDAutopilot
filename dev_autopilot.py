@@ -1005,7 +1005,7 @@ def dock():
 
 
 def x_angle(point=None):
-    if not point:
+    if not point or point['x'] == 0:
         return None
     result = degrees(atan(point['y']/point['x']))
     if point['x'] > 0:
