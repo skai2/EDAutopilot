@@ -89,4 +89,10 @@ Use at YOUR OWN RISK.
 
 ## CONTACT:
 
+# Email
+
 skai2mail@gmail.com
+
+# Discord
+
+https://discord.gg/vYS7ex
