@@ -95,4 +95,4 @@ skai2mail@gmail.com
 
 # Discord
 
-https://discord.gg/vYS7ex
+https://discord.gg/HCgkfSc
