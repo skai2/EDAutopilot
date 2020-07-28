@@ -264,7 +264,7 @@ logging.debug('ship='+str(ship()))
 def get_latest_keybinds(path_bindings=None):
     if not path_bindings:
         path_bindings = environ['LOCALAPPDATA'] + "\Frontier Developments\Elite Dangerous\Options\Bindings"
-    list_of_bindings = [join(path_bindings, f) for f in listdir(path_bindings) if isfile(join(path_bindings, f))]
+    list_of_bindings = [join(path_bindings, f) for f in listdir(path_bindings) if (isfile(join(path_bindings, f)) and join(path_bindings, f).endswith("binds"))]
     if not list_of_bindings:
         return None
     latest_bindings = max(list_of_bindings, key=getmtime)
@@ -303,6 +303,7 @@ keys_to_obtain = [
         'HeadLookReset',
         'PrimaryFire',
         'SecondaryFire'
+        'MouseReset'
     ]
 
 def get_bindings(keys_to_obtain=keys_to_obtain):
@@ -433,6 +434,8 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
 
 def clear_input(to_clear=None):
     logging.info('\n'+200*'-'+'\n'+'---- CLEAR INPUT '+183*'-'+'\n'+200*'-')
+    send(to_clear['SetSpeedZero'])
+    send(to_clear['MouseReset'])
     for key in to_clear.keys():
         if key in keys:
             send(to_clear[key], state=0)
@@ -1002,7 +1005,7 @@ def dock():
 
 
 def x_angle(point=None):
-    if not point:
+    if not point or point['x'] == 0:
         return None
     result = degrees(atan(point['y']/point['x']))
     if point['x'] > 0:

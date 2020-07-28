@@ -66,7 +66,7 @@ SCANCODE = {
     'DIK_PERIOD'          : 0x34,    # . on main keyboard */
     'DIK_SLASH'           : 0x35,    # / on main keyboard */
     'DIK_RSHIFT'          : 0x36,
-    'DIK_MULTIPLY'        : 0x37,    # * on numeric keypad */
+    'DIK_NUMPAD_MULTIPLY' : 0x37,    # * on numeric keypad */
     'DIK_LMENU'           : 0x38,    # left Alt */
     'DIK_SPACE'           : 0x39,
     'DIK_CAPITAL'         : 0x3A,
@@ -89,7 +89,7 @@ SCANCODE = {
     'DIK_NUMPAD4'         : 0x4B,
     'DIK_NUMPAD5'         : 0x4C,
     'DIK_NUMPAD6'         : 0x4D,
-    'DIK_ADD'             : 0x4E,    # + on numeric keypad */
+    'DIK_NUMPAD_ADD'      : 0x4E,    # + on numeric keypad */
     'DIK_NUMPAD1'         : 0x4F,
     'DIK_NUMPAD2'         : 0x50,
     'DIK_NUMPAD3'         : 0x51,
@@ -116,7 +116,7 @@ SCANCODE = {
     'DIK_NUMPADENTER'     : 0x9C,    # Enter on numeric keypad */
     'DIK_RCONTROL'        : 0x9D,
     'DIK_NUMPADCOMMA'     : 0xB3,    # , on numeric keypad (NEC PC98) */
-    'DIK_DIVIDE'          : 0xB5,    # / on numeric keypad */
+    'DIK_NUMPAD_DIVIDE'   : 0xB5,    # / on numeric keypad */
     'DIK_SYSRQ'           : 0xB7,
     'DIK_RMENU'           : 0xB8,    # right Alt */
     'DIK_HOME'            : 0xC7,    # Home on arrow keypad */
