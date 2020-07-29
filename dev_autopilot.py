@@ -26,7 +26,6 @@
 
 
 import sys
-import datetime
 from os import environ, listdir
 from os.path import join, isfile, getmtime, abspath
 from json import loads
