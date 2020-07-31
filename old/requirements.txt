@@ -1,0 +1,8 @@
+requests==2.23.0
+numpy==1.18.5
+kthread==0.2.2
+colorlog==4.1.0
+keyboard==0.13.5
+pystray==0.16.0
+PyAutoGUI==0.9.50
+Pillow==7.1.2
