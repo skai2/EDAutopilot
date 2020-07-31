@@ -1,0 +1,6 @@
+pip~=20.2
+setuptools~=49.2.0
+dacite~=1.5.1
+Pillow~=7.1.2
+d3dshot~=0.1.5
+numpy~=1.19.1
