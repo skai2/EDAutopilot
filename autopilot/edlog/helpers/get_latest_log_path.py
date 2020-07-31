@@ -1,5 +1,9 @@
 # Get latest log file
-def get_latest_log(path_logs=None):
+from os import environ, listdir
+from os.path import join, isfile, getmtime
+
+
+def get_latest_log_path(path_logs=None):
     """Returns the full path of the latest (most recent) elite log file (journal) from specified path"""
     if not path_logs:
         path_logs = environ['USERPROFILE'] + "\Saved Games\Frontier Developments\Elite Dangerous"
