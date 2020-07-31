@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "path": {
+    "key_binds": "",
+    "log_files": ""
+  },
+  "display": {
+    "width": "",
+    "height": ""
+  },
+  "control": {
+    "key_mod_delay": "0.010",
+    "key_default_delay": "0.200",
+    "key_repeat_delay": "0.100",
+    "function_default_delay": "0.500"
+  }
+}
