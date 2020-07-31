@@ -5,6 +5,11 @@ from distutils.version import StrictVersion
 from os.path import isfile, join
 
 import dacite as dacite
+import d3dshot
+
+_display = d3dshot.create().display
+_display_width = str(_display.resolution[0])
+_display_height = str(_display.resolution[1])
 
 _CONFIGS_PATH = join(pathlib.Path(__file__).parent, '../configs.json')
 
@@ -15,8 +20,8 @@ _RAW_CONFIG_JSON = {
         "log_files": ""
     },
     "display": {
-        "width": "1920",
-        "height": "1080"
+        "width": _display_width,
+        "height": _display_height
     },
     "control": {
         "key_mod_delay": "0.010",
@@ -28,8 +33,15 @@ _RAW_CONFIG_JSON = {
 
 
 @dataclass
-class Configuration:
+class ConfigurationDisplay:
+    width: int
+    height: int
+
+
+@dataclass
+class ConfigurationMain:
     version: StrictVersion
+    display: ConfigurationDisplay
 
 
 def _create_default_configs(configs_path):
@@ -45,18 +57,15 @@ def _read_configs_json(configs_path):
     return configs_json
 
 
-def save():
-    config()
-
-
 # define converters for values used in configuration file
 _converters = {
     StrictVersion: StrictVersion,
     pathlib.Path: pathlib.Path,
+    int: int
 }
 # create and validate the Configuration object
 config = dacite.from_dict(
-    data_class=Configuration, data=_read_configs_json(_CONFIGS_PATH),
+    data_class=ConfigurationMain, data=_read_configs_json(_CONFIGS_PATH),
     config=dacite.Config(type_hooks=_converters),
 )
 
