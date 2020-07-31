@@ -1,4 +1,4 @@
-# Elite Dangerous: AutoPilot v2
+# Elite Dangerous: AutoPilot
 Elite Dangerous computer vision based autopilot version 2
 
 Program uses openCV and other tools in python to navigate automatically in Elite Dangerous.
@@ -9,7 +9,7 @@ Look [here for the autopilot alpha version release](https://github.com/skai2/EDA
 The program will create an icon on the taskbar.
 
   1. Setup a route in the galaxy map as you would normally, then:
-  
+
   - Optionally right click the taskbar icon to set which fire group (primary or secondary) you have configured your discovery scanner to, to enable auto-scanner (remember you must have a *keyboard*, not mouse, binding as well)
 
   2. Press **Home** key to start autopilot.
@@ -81,9 +81,9 @@ instead of > pip install -r requirements.txt
 
 ## WARNING:
 
-ALPHA VERSION IN DEVELOPMENT. 
+ALPHA VERSION IN DEVELOPMENT.
 
-Absolutely DO NOT LEAVE UNSUPERVISED. 
+Absolutely DO NOT LEAVE UNSUPERVISED.
 
 Use at YOUR OWN RISK.
 
