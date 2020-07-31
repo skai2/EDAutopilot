@@ -10,3 +10,6 @@ def screenshot(left, top, right, bottom):
 
 if __name__ == '__main__':
     print(screenshot(100,100,300,300))
+    print(d.display)
+    resolution = d.display.resolution
+    print(resolution[0])
