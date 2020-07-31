@@ -6,15 +6,7 @@ Program uses openCV and other tools in python to navigate automatically in Elite
 Look [here for the autopilot alpha version release](https://github.com/skai2/EDAutopilot/releases).
 
 ## Usage:
-The program will create an icon on the taskbar.
-
-  1. Setup a route in the galaxy map as you would normally, then:
-
-  - Optionally right click the taskbar icon to set which fire group (primary or secondary) you have configured your discovery scanner to, to enable auto-scanner (remember you must have a *keyboard*, not mouse, binding as well)
-
-  2. Press **Home** key to start autopilot.
-
-  3. Press **End** key to abort autopilot.  
+Currently non-functional
 
 ## Necessary Setup:
 In game, you must have configured keyboard keys for all of the following. You may configure them in either
@@ -57,27 +49,6 @@ I recommend setting your route finder to use only scoopable stars. For full func
 Or if you'd like to set it up and run the script directly...
 
 ## Setup:
-_Requires **python 3** and **git**_
-1. Clone this repository
-```sh
-> git clone https://github.com/skai2/EDAutopilot.git
-```
-2. Install requirements
-```sh
-> cd EDAutoPilot
-> pip install -r requirements.txt
-```
-3. Run script
-```sh
-> python autopilot.py
-OR you may have to run
-> python3 autopilot.py
-if you have both python 2 and 3 installed.
-```
-
-If you encounter any issues during pip install, try running:
-> python -m pip install -r requirements.txt
-instead of > pip install -r requirements.txt
 
 ## WARNING:
 
