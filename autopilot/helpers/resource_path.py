@@ -14,4 +14,4 @@ def resource_path(relative_path):
 
 
 if __name__ == '__main__':
-    print(resource_path('.'))
+    print(resource_path('..'))
