@@ -1,28 +1,44 @@
+from time import sleep
+
+from autopilot.control import keybinds
+from autopilot.control.directinput import directinput_keys
+from autopilot.control.directinput.send import send
+from autopilot.edlog import ship
+
+keys = keybinds.get_latest()
+keys = directinput_keys.get(keys)
+
+
 def refuel(refuel_threshold=33):
-    logging.debug('refuel')
+    # logging.debug('refuel')
     scoopable_stars = ['F', 'O', 'G', 'K', 'B', 'A', 'M']
     if ship()['status'] != 'in_supercruise':
-        logging.error('refuel=err1')
+        # logging.error('refuel=err1')
         return False
-        raise Exception('not ready to refuel')
+        # raise Exception('not ready to refuel')
 
     if ship()['fuel_percent'] < refuel_threshold and ship()['star_class'] in scoopable_stars:
-        logging.debug('refuel= start refuel')
+        # logging.debug('refuel= start refuel')
         send(keys['SetSpeed100'])
         #     while not ship()['is_scooping']:
         #         sleep(1)
         sleep(4)
-        logging.debug('refuel= wait for refuel')
+        # logging.debug('refuel= wait for refuel')
         send(keys['SetSpeedZero'], repeat=3)
         while not ship()['fuel_percent'] == 100:
             sleep(1)
-        logging.debug('refuel=complete')
+        # logging.debug('refuel=complete')
         return True
     elif ship()['fuel_percent'] >= refuel_threshold:
-        logging.debug('refuel= not needed')
+        # logging.debug('refuel= not needed')
         return False
     elif ship()['star_class'] not in scoopable_stars:
-        logging.debug('refuel= needed, unsuitable star')
+        # logging.debug('refuel= needed, unsuitable star')
         return False
     else:
         return False
+
+
+if __name__ == '__main__':
+    sleep(5)
+    refuel()

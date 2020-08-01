@@ -1,3 +1,16 @@
+from math import degrees, atan
+from time import sleep
+
+from autopilot.control import keybinds
+from autopilot.control.directinput import directinput_keys
+from autopilot.control.directinput.send import send
+from autopilot.edlog import ship
+from autopilot.vision import sun_percent, navpoint_offset, destination_offset
+
+keys = keybinds.get_latest()
+keys = directinput_keys.get(keys)
+
+
 def x_angle(point=None):
     if not point:
         return None
@@ -7,28 +20,29 @@ def x_angle(point=None):
     else:
         return -90 - result
 
+
 def align():
-    logging.debug('align')
+    # logging.debug('align')
     if not (ship()['status'] == 'in_supercruise' or ship()['status'] == 'in_space'):
-        logging.error('align=err1')
+        # logging.error('align=err1')
         raise Exception('align error 1')
 
-    logging.debug('align= speed 100')
+    # logging.debug('align= speed 100')
     send(keys['SetSpeed100'])
 
-    logging.debug('align= avoid sun')
-    while sun_percent() > 5:
+    # logging.debug('align= avoid sun')
+    while sun_percent.get() > 5:
         send(keys['PitchUpButton'], state=1)
     send(keys['PitchUpButton'], state=0)
 
-    logging.debug('align= find navpoint')
-    off = get_navpoint_offset()
+    # logging.debug('align= find navpoint')
+    off = navpoint_offset.get()
     while not off:
         send(keys['PitchUpButton'], state=1)
-        off = get_navpoint_offset()
+        off = navpoint_offset.get()
     send(keys['PitchUpButton'], state=0)
 
-    logging.debug('align= crude align')
+    # logging.debug('align= crude align')
     close = 3
     close_a = 18
     hold_pitch = 0.350
@@ -46,7 +60,7 @@ def align():
 
             if ship()['status'] == 'starting_hyperspace':
                 return
-            off = get_navpoint_offset(last=off)
+            off = navpoint_offset.get(last=off)
             ang = x_angle(off)
 
         ang = x_angle(off)
@@ -59,19 +73,19 @@ def align():
 
             if ship()['status'] == 'starting_hyperspace':
                 return
-            off = get_navpoint_offset(last=off)
+            off = navpoint_offset.get(last=off)
             ang = x_angle(off)
 
-        off = get_navpoint_offset(last=off)
+        off = navpoint_offset.get(last=off)
         ang = x_angle(off)
 
-    logging.debug('align= fine align')
+    # logging.debug('align= fine align')
     sleep(0.5)
     close = 50
     hold_pitch = 0.200
     hold_yaw = 0.400
     for i in range(5):
-        new = get_destination_offset()
+        new = destination_offset.get()
         if new:
             off = new
             break
@@ -93,10 +107,15 @@ def align():
             return
 
         for i in range(5):
-            new = get_destination_offset()
+            new = destination_offset.get()
             if new:
                 off = new
                 break
             sleep(0.25)
         if not off:
             return
+
+
+if __name__ == '__main__':
+    sleep(5)
+    align()

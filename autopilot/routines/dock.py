@@ -1,7 +1,18 @@
+from time import sleep
+
+from autopilot.control import keybinds
+from autopilot.control.directinput import directinput_keys
+from autopilot.control.directinput.send import send
+from autopilot.edlog import ship
+
+keys = keybinds.get_latest()
+keys = directinput_keys.get(keys)
+
+
 def dock():
-    logging.debug('dock')
+    # logging.debug('dock')
     if ship()['status'] != "in_space":
-        logging.error('dock=err1')
+        # logging.error('dock=err1')
         raise Exception('dock error 1')
     tries = 3
     for i in range(tries):
@@ -17,8 +28,8 @@ def dock():
         sleep(1)
         if ship()['status'] == "starting_dock" or ship()['status'] == "in_dock":
             break
-        if i > tries-1:
-            logging.error('dock=err2')
+        if i > tries - 1:
+            # logging.error('dock=err2')
             raise Exception("dock error 2")
     send(keys['UI_Back'])
     send(keys['HeadLookReset'])
@@ -26,13 +37,18 @@ def dock():
     wait = 120
     for i in range(wait):
         sleep(1)
-        if i > wait-1:
-            logging.error('dock=err3')
+        if i > wait - 1:
+            # logging.error('dock=err3')
             raise Exception('dock error 3')
         if ship()['status'] == "in_station":
             break
     send(keys['UI_Up'], hold=3)
     send(keys['UI_Down'])
     send(keys['UI_Select'])
-    logging.debug('dock=complete')
+    # logging.debug('dock=complete')
     return True
+
+
+if __name__ == '__main__':
+    sleep(5)
+    dock()
