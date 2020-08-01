@@ -1,14 +1,15 @@
-from autopilot.vision.helpers import screenshot
-from autopilot.configs import config
-from numpy import array
 import cv2
+from numpy import array
+
+from autopilot.configs import config
+from autopilot.vision.helpers import screenshot
 
 
 def navpoint(image=None, testing=False):
     while True:
         if testing:
-            hsv = screenshot(left=0.0, top=(2/3)*config.display.height,
-                             right=(1/3)*config.display.width, bottom=config.display.height)
+            hsv = screenshot(left=(1 / 6) * config.display.width, top=(2 / 3) * config.display.height,
+                             right=(3 / 6) * config.display.width, bottom=config.display.height)
         else:
             hsv = image.copy()
         # converting from BGR to HSV color space
@@ -24,3 +25,6 @@ def navpoint(image=None, testing=False):
             break
     return filtered
 
+
+if __name__ == '__main__':
+    navpoint(testing=True)
