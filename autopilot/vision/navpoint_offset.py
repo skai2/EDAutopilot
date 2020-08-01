@@ -1,15 +1,18 @@
+import pathlib
+from os.path import join
 from random import random
 
 import cv2
 from numpy import where
 
-from autopilot.helpers import resource_path
 from autopilot.vision import filters
 from autopilot.vision import compass_image as compass
 
+navpoint_template_path = join(pathlib.Path(__file__).parent, "templates/navpoint.png")
+
 def get(testing=False, last=None):
     global same_last_count, last_last
-    navpoint_template = cv2.imread(resource_path("templates/navpoint.png"), cv2.IMREAD_GRAYSCALE)
+    navpoint_template = cv2.imread(navpoint_template_path, cv2.IMREAD_GRAYSCALE)
     navpoint_width, navpoint_height = navpoint_template.shape[::-1]
     pt = (0, 0)
     while True:

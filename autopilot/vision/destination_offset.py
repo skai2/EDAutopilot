@@ -1,14 +1,17 @@
+import pathlib
+from os.path import join
+
 import cv2
 from numpy import where
 
 from autopilot.configs import config
-from autopilot.helpers import resource_path
 from autopilot.vision import filters
 from autopilot.vision.display.screenshot import screenshot
 
+destination_template_path = join(pathlib.Path(__file__).parent, "templates/destination.png")
 
 def get(testing=False):
-    destination_template = cv2.imread(resource_path("templates/destination.png"), cv2.IMREAD_GRAYSCALE)
+    destination_template = cv2.imread(destination_template_path, cv2.IMREAD_GRAYSCALE)
     destination_width, destination_height = destination_template.shape[::-1]
     pt = (0, 0)
     width = (1 / 3) * config.display.width

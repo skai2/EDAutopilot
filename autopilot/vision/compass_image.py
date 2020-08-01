@@ -1,14 +1,17 @@
+import pathlib
+from os.path import join
+
 import cv2
 from numpy import where
 
 from autopilot.configs import config
-from autopilot.helpers import resource_path
 from autopilot.vision import filters
 from autopilot.vision.display.screenshot import screenshot
 
+compass_template_path = join(pathlib.Path(__file__).parent, "templates/compass.png")
 
 def get(testing=False):
-    compass_template = cv2.imread(resource_path("templates/compass.png"), cv2.IMREAD_GRAYSCALE)
+    compass_template = cv2.imread(compass_template_path, cv2.IMREAD_GRAYSCALE)
     compass_width, compass_height = compass_template.shape[::-1]
     compass_image = compass_template.copy()
     doubt = 10
