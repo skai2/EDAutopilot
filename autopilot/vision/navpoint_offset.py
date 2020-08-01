@@ -37,7 +37,7 @@ def get(testing=False, last=None):
             break
     if pt[0] == 0 and pt[1] == 0:
         if last:
-            result = {'x': round(last['x'] * (1 + random())), 'y': round(last['y'] * (1 + random()))}
+            result = {'x': round(10 * (1 + random())), 'y': round(10 * (1 + random()))}
         else:
             result = None
     else:
