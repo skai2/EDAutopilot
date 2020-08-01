@@ -1,13 +1,11 @@
-from numpy import array
-
 import cv2
+from numpy import array
 
 from autopilot.configs import config
 from autopilot.vision.display import screenshot
 
 
-# TODO: Add more descriptive name
-def orange(image=None, testing=False):
+def ui_orange(image=None, testing=False):
     while True:
         if testing:
             hsv = screenshot(left=(1 / 3) * config.display.width, top=(1 / 3) * config.display.height,
@@ -29,4 +27,4 @@ def orange(image=None, testing=False):
 
 
 if __name__ == '__main__':
-    orange(testing=True)
+    ui_orange(testing=True)

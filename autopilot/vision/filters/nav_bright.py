@@ -6,8 +6,7 @@ from autopilot.vision.display import screenshot
 from autopilot.vision.filters import equalize
 
 
-# TODO: Add more descriptive name
-def bright(image=None, testing=False):
+def nav_bright(image=None, testing=False):
     while True:
         if testing:
             img = screenshot(left=(5 / 16) * config.display.width, top=(5 / 8) * config.display.height,
@@ -29,4 +28,4 @@ def bright(image=None, testing=False):
 
 
 if __name__ == '__main__':
-    bright(testing=True)
+    nav_bright(testing=True)

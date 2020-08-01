@@ -5,8 +5,7 @@ from autopilot.configs import config
 from autopilot.vision.display import screenshot
 
 
-# TODO: Add more descriptive name
-def sun(image=None, testing=False):
+def star_bright(image=None, testing=False):
     while True:
         if testing:
             hsv = screenshot(left=(1 / 3) * config.display.width, top=(1 / 3) * config.display.height,
@@ -28,4 +27,4 @@ def sun(image=None, testing=False):
 
 
 if __name__ == '__main__':
-    sun(testing=True)
+    star_bright(testing=True)
