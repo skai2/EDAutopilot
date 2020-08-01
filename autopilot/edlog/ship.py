@@ -1,11 +1,12 @@
 # Get status of ship being used
 from datetime import datetime
 from os.path import getmtime
-from .helpers import get_latest_log_path
+from . import get_latest_journal_path
+
 
 def ship():
     """Returns a 'status' dict containing relevant game status information (state, fuel, ...)"""
-    latest_log = get_latest_log_path(PATH_LOG_FILES)
+    latest_log = get_latest_journal_path(PATH_LOG_FILES)
     ship = {
         'time': (datetime.now() - datetime.fromtimestamp(getmtime(latest_log))).seconds,
         'status': None,

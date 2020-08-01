@@ -31,6 +31,7 @@ keys_needed = [
 
 
 def get_latest_keybinds_path(path_to_search=default_path):
+    """Returns the full path of the latest elite keybinds file from specified path"""
     path_to_search = pathlib.Path(path_to_search)
     list_of_files = glob.glob(str(path_to_search)+'\*.binds')
     latest_file = max(list_of_files, key=getmtime)
