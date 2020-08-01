@@ -5,13 +5,13 @@ from random import random
 import cv2
 from numpy import where
 
-from autopilot.vision import filters
 from autopilot.vision import compass_image as compass
+from autopilot.vision import filters
 
 navpoint_template_path = join(pathlib.Path(__file__).parent, "templates/navpoint.png")
 
+
 def get(testing=False, last=None):
-    global same_last_count, last_last
     navpoint_template = cv2.imread(navpoint_template_path, cv2.IMREAD_GRAYSCALE)
     navpoint_width, navpoint_height = navpoint_template.shape[::-1]
     pt = (0, 0)
@@ -37,19 +37,7 @@ def get(testing=False, last=None):
             break
     if pt[0] == 0 and pt[1] == 0:
         if last:
-            if last == last_last:
-                same_last_count = same_last_count + 1
-            else:
-                last_last = last
-                same_last_count = 0
-            if same_last_count > 5:
-                same_last_count = 0
-                if random() < .9:
-                    result = {'x': 1, 'y': 100}
-                else:
-                    result = {'x': 100, 'y': 1}
-            else:
-                result = last
+            result = {'x': round(last['x'] * (1 + random())), 'y': round(last['y'] * (1 + random()))}
         else:
             result = None
     else:
