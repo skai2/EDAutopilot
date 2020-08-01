@@ -1,7 +1,17 @@
+import cv2
+from numpy import array
+
+from autopilot.configs import config
+from autopilot.vision.display import screenshot
+from autopilot.vision.filters import equalize
+
+
+# TODO: Add more descriptive name
 def bright(image=None, testing=False):
     while True:
         if testing:
-            img = get_screen((5/16)*SCREEN_WIDTH, (5/8)*SCREEN_HEIGHT,(2/4)*SCREEN_WIDTH, (15/16)*SCREEN_HEIGHT)
+            img = screenshot(left=(5 / 16) * config.display.width, top=(5 / 8) * config.display.height,
+                             right=(2 / 4) * config.display.width, bottom=(15 / 16) * config.display.height)
         else:
             img = image.copy()
         equalized = equalize(img)
@@ -16,3 +26,7 @@ def bright(image=None, testing=False):
         else:
             break
     return filtered
+
+
+if __name__ == '__main__':
+    bright(testing=True)

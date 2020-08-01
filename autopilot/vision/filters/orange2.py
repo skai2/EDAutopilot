@@ -1,11 +1,20 @@
+import cv2
+from numpy import array
+
+from autopilot.configs import config
+from autopilot.vision.display import screenshot
+
+
+# TODO: Add more descriptive name
 def orange2(image=None, testing=False):
     while True:
         if testing:
-            hsv = get_screen((1/3)*SCREEN_WIDTH, (1/3)*SCREEN_HEIGHT,(2/3)*SCREEN_WIDTH, (2/3)*SCREEN_HEIGHT)
+            hsv = screenshot(left=(1 / 3) * config.display.width, top=(1 / 3) * config.display.height,
+                             right=(2 / 3) * config.display.width, bottom=(2 / 3) * config.display.height)
         else:
             hsv = image.copy()
         # converting from BGR to HSV color space
-        hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(hsv, cv2.COLOR_RGB2HSV)
         # filter Elite UI orange
         filtered = cv2.inRange(hsv, array([15, 220, 220]), array([30, 255, 255]))
         if testing:
@@ -16,3 +25,7 @@ def orange2(image=None, testing=False):
         else:
             break
     return filtered
+
+
+if __name__ == '__main__':
+    orange2(testing=True)
