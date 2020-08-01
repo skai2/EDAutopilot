@@ -1,4 +1,0 @@
-from autopilot.vision.get_compass_image import get_compass_image
-from autopilot.vision.get_destination_offset import get_destination_offset
-from autopilot.vision.get_navpoint_offset import get_navpoint_offset
-from autopilot.vision.get_sun_percent import get_sun_percent

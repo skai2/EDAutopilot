@@ -1,6 +1,4 @@
-from autopilot.control import keybinds
-# The below imports should define which control module is used in all
-# autopilot routines which should simply import autopilot.control
-# (As long as they always implement the necessary send() and clear())
-from autopilot.control.directinput.send import send
-from autopilot.control.directinput.clear import clear
+# Define and easily change control method with import below
+from .directinput import directinput_configs as control_configs
+from .directinput.send import send
+from .directinput.clear import clear

@@ -1,1 +1,16 @@
-{"version": "1.0.0", "display": {"width": "2560", "height": "1080"}, "direct_input": {"key_mod_delay": "0.010", "key_default_delay": "0.200", "key_repeat_delay": "0.100"}, "routines": {"function_default_delay": "0.500"}}
+{
+  "version": "1.0.0",
+  "display": {
+    "number": "0",
+    "width": "2560",
+    "height": "1080"
+  },
+  "directinput": {
+    "key_mod_delay": "0.010",
+    "key_default_delay": "0.200",
+    "key_repeat_delay": "0.100"
+  },
+  "routines": {
+    "function_default_delay": "0.500"
+  }
+}

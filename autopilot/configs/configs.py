@@ -6,22 +6,15 @@ from os.path import isfile, join
 
 import dacite as dacite
 
-from autopilot.vision import display
-from autopilot.control import directinput
+from autopilot.control.directinput import directinput_configs
+from autopilot.vision.display import display_configs
 
 _DEFAULT_CONFIGS_PATH = join(pathlib.Path(__file__).parent, '../configs.json')
 
 _DEFAULT_CONFIG_JSON = {
     "version": "1.0.0",
-    "display": {
-        "width": str(display.width),
-        "height": str(display.height)
-    },
-    "direct_input": {
-        "key_mod_delay": "0.010",
-        "key_default_delay": "0.200",
-        "key_repeat_delay": "0.100"
-    },
+    "display": display_configs.default_configs_json,
+    'directinput': directinput_configs.default_configs_json,
     "routines": {
         "function_default_delay": "0.500"
     }
@@ -31,8 +24,8 @@ _DEFAULT_CONFIG_JSON = {
 @dataclass
 class Configuration:
     version: StrictVersion
-    display: display.Configuration
-    direct_input: directinput.send.Configuration
+    display: display_configs.Configuration
+    directinput: directinput_configs.Configuration
 
 
 def _create_default_configs(configs_path):

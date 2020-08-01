@@ -1,1 +1,0 @@
-from autopilot.control.directinput import send, clear

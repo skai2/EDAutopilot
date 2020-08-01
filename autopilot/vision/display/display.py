@@ -1,21 +1,15 @@
-from dataclasses import dataclass
-
 import cv2
 import d3dshot  # <--- Apparently fastest screenshot method on windows
 import numpy
 
+from autopilot.configs import config
+
+display = config.display
+width = config.display.width
+height = config.display.height
+
 _d3d = d3dshot.create(capture_output="numpy")
-
-display = _d3d.display
-displays = _d3d.displays
-width = display.resolution[0]
-height = display.resolution[1]
-
-
-@dataclass
-class Configuration:
-    width: int
-    height: int
+_d3d.display = _d3d.displays[display]
 
 
 def screenshot(left, top, right, bottom):
@@ -32,4 +26,3 @@ def screenshot(left, top, right, bottom):
 
 if __name__ == '__main__':
     print(screenshot(100.5, 100, 300, 300))
-    print(_d3d.displays[0])

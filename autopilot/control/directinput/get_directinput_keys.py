@@ -1,5 +1,5 @@
-from autopilot.control.directinput import directinput
-from autopilot.control.keybinds import get_latest_keybinds
+from . import directinput
+from ..keybinds import get_latest_keybinds
 
 
 def get_directinput_keys(edkeybinds_dict=get_latest_keybinds()):

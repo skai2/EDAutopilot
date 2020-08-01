@@ -6,17 +6,11 @@ from win32gui import GetWindowText, GetForegroundWindow
 from autopilot.control.directinput.directinput import PressKey, ReleaseKey
 from autopilot.configs import config
 
-@dataclass
-class Configuration:
-    key_mod_delay: float
-    key_default_delay: float
-    key_repeat_delay: float
-
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     """Sends specified key if ED is active window"""
-    KEY_MOD_DELAY = config.key_mod_delay
-    KEY_DEFAULT_DELAY = config.key_default_delay
-    KEY_REPEAT_DELAY = config.key_repeat_delay
+    key_mod_delay = config.directinput.key_mod_delay
+    key_default_delay = config.directinput.key_default_delay
+    key_repeat_delay = config.directinput.key_repeat_delay
 
     # Halt if ED window is inactive
     if GetWindowText(GetForegroundWindow()) != 'Elite - Dangerous (CLIENT)':
@@ -33,7 +27,7 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
         if state is None or state == 1:
             if 'mod' in key:
                 PressKey(key['mod'])
-                sleep(KEY_MOD_DELAY)
+                sleep(key_mod_delay)
 
             PressKey(key['key'])
 
@@ -41,22 +35,22 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
             if hold:
                 sleep(hold)
             else:
-                sleep(KEY_DEFAULT_DELAY)
+                sleep(key_default_delay)
 
         if state is None or state == 0:
             ReleaseKey(key['key'])
 
             if 'mod' in key:
-                sleep(KEY_MOD_DELAY)
+                sleep(key_mod_delay)
                 ReleaseKey(key['mod'])
 
         if repeat_delay:
             sleep(repeat_delay)
         else:
-            sleep(KEY_REPEAT_DELAY)
+            sleep(key_repeat_delay)
 
 
 if __name__ == '__main__':
     directinput_testkey = {'HyperSuperCombination': {'pre_key': 'DIK_F', 'key': 33}}
-    sleep(3)
+    sleep(5)
     send(directinput_testkey['HyperSuperCombination'])

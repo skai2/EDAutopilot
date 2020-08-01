@@ -1,4 +1,4 @@
-from autopilot.control.directinput.send import send
+from .send import send
 
 
 def clear(to_clear=None):
