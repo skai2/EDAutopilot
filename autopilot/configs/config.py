@@ -4,28 +4,20 @@ from dataclasses import dataclass
 from distutils.version import StrictVersion
 from os.path import isfile, join
 
-import d3dshot
 import dacite as dacite
 
-_d3d = d3dshot.create()
-_display = _d3d.display
-_displays = _d3d.displays
-_display_width = _display.resolution[0]
-_display_height = _display.resolution[1]
+from autopilot.vision import display
+from autopilot.control import keybinds
 
-_CONFIGS_PATH = join(pathlib.Path(__file__).parent, '../configs.json')
+_DEFAULT_CONFIGS_PATH = join(pathlib.Path(__file__).parent, '../configs.json')
 
-_RAW_CONFIG_JSON = {
+_DEFAULT_CONFIG_JSON = {
     "version": "1.0.0",
-    "path": {
-        "key_binds": "",
-        "log_files": ""
-    },
     "display": {
-        "width": str(_display_width),
-        "height": str(_display_height)
+        "width": str(display.width),
+        "height": str(display.height)
     },
-    "control": {
+    "direct_input": {
         "key_mod_delay": "0.010",
         "key_default_delay": "0.200",
         "key_repeat_delay": "0.100",
@@ -35,20 +27,14 @@ _RAW_CONFIG_JSON = {
 
 
 @dataclass
-class ConfigurationDisplay:
-    width: int
-    height: int
-
-
-@dataclass
-class ConfigurationMain:
+class Configuration:
     version: StrictVersion
-    display: ConfigurationDisplay
+    display: display.Configuration
 
 
 def _create_default_configs(configs_path):
     with open(configs_path, 'w', encoding='utf8') as json_file:
-        json.dump(_RAW_CONFIG_JSON, json_file)
+        json.dump(_DEFAULT_CONFIG_JSON, json_file)
 
 
 def _read_configs_json(configs_path):
@@ -67,7 +53,7 @@ _converters = {
 }
 # create and validate the Configuration object
 config = dacite.from_dict(
-    data_class=ConfigurationMain, data=_read_configs_json(_CONFIGS_PATH),
+    data_class=Configuration, data=_read_configs_json(_DEFAULT_CONFIGS_PATH),
     config=dacite.Config(type_hooks=_converters),
 )
 

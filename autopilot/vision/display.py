@@ -1,8 +1,19 @@
+from dataclasses import dataclass
+
 import d3dshot  # <--- Apparently fastest screenshot method on windows
 import numpy
 
 _d3d = d3dshot.create(capture_output="numpy")
 
+display = _d3d.display
+displays = _d3d.displays
+width = display.resolution[0]
+height = display.resolution[1]
+
+@dataclass
+class Configuration:
+    width: int
+    height: int
 
 def screenshot(left, top, right, bottom):
     """Gets RGB screenshot in cv2 numpy format specified by given region"""

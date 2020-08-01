@@ -1,26 +1,3 @@
-keys_to_obtain = [
-        'YawLeftButton',
-        'YawRightButton',
-        'RollLeftButton',
-        'RollRightButton',
-        'PitchUpButton',
-        'PitchDownButton',
-        'SetSpeedZero',
-        'SetSpeed100',
-        'HyperSuperCombination',
-        'UIFocus',
-        'UI_Up',
-        'UI_Down',
-        'UI_Left',
-        'UI_Right',
-        'UI_Select',
-        'UI_Back',
-        'CycleNextPanel',
-        'HeadLookReset',
-        'PrimaryFire',
-        'SecondaryFire'
-    ]
-
 def get_bindings(keys_to_obtain=keys_to_obtain):
     """Returns a dict with the directinput equivalent of the requested keys_to_obtain"""
     direct_input_keys = {}
