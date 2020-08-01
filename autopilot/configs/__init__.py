@@ -1,1 +1,1 @@
-from . config import config
+from autopilot.configs import config

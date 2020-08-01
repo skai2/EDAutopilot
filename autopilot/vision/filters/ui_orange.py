@@ -13,7 +13,7 @@ def ui_orange(image=None, testing=False):
         else:
             hsv = image.copy()
         # converting from BGR to HSV color space
-        hsv = cv2.cvtColor(hsv, cv2.COLOR_RGB2HSV)
+        hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
         # filter Elite UI orange
         filtered = cv2.inRange(hsv, array([0, 130, 123]), array([25, 235, 220]))
         if testing:

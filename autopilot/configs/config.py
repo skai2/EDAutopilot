@@ -7,7 +7,6 @@ from os.path import isfile, join
 import dacite as dacite
 
 from autopilot.vision import display
-from autopilot.control import keybinds
 
 _DEFAULT_CONFIGS_PATH = join(pathlib.Path(__file__).parent, '../configs.json')
 
