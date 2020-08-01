@@ -11,6 +11,9 @@
     "key_repeat_delay": "0.100"
   },
   "routines": {
+    "scanner": "primary_fire"
+  },
+  "autopilot": {
     "function_default_delay": "0.500"
   }
 }
