@@ -4,12 +4,14 @@ from dataclasses import dataclass
 from distutils.version import StrictVersion
 from os.path import isfile, join
 
-import dacite as dacite
 import d3dshot
+import dacite as dacite
 
-_display = d3dshot.create().display
-_display_width = str(_display.resolution[0])
-_display_height = str(_display.resolution[1])
+_d3d = d3dshot.create()
+_display = _d3d.display
+_displays = _d3d.displays
+_display_width = _display.resolution[0]
+_display_height = _display.resolution[1]
 
 _CONFIGS_PATH = join(pathlib.Path(__file__).parent, '../configs.json')
 
@@ -20,8 +22,8 @@ _RAW_CONFIG_JSON = {
         "log_files": ""
     },
     "display": {
-        "width": _display_width,
-        "height": _display_height
+        "width": str(_display_width),
+        "height": str(_display_height)
     },
     "control": {
         "key_mod_delay": "0.010",

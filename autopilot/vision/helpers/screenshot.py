@@ -16,4 +16,4 @@ def screenshot(left, top, right, bottom):
 
 if __name__ == '__main__':
     print(screenshot(100.5, 100, 300, 300))
-    print(_d3d.display)
+    print(_d3d.displays[0])
