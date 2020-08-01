@@ -1,14 +1,16 @@
 # Get status of ship being used
 from datetime import datetime
+from json import loads
 from os.path import getmtime
-from . import get_latest_journal_path
+
+from autopilot.edlog.journal import get_latest_journal_path
 
 
 def ship():
     """Returns a 'status' dict containing relevant game status information (state, fuel, ...)"""
-    latest_log = get_latest_journal_path(PATH_LOG_FILES)
+    latest_journal = get_latest_journal_path()
     ship = {
-        'time': (datetime.now() - datetime.fromtimestamp(getmtime(latest_log))).seconds,
+        'time': (datetime.now() - datetime.fromtimestamp(getmtime(latest_journal))).seconds,
         'status': None,
         'type': None,
         'location': None,
@@ -18,9 +20,10 @@ def ship():
         'fuel_level': None,
         'fuel_percent': None,
         'is_scooping': False,
+        'log_path': str(latest_journal)
     }
     # Read log line by line and parse data
-    with open(latest_log, encoding="utf-8") as f:
+    with open(latest_journal, encoding="utf-8") as f:
         for line in f:
             log = loads(line)
 
@@ -100,7 +103,11 @@ def ship():
 
             # exceptions
             except Exception as e:
-                logging.exception("Exception occurred")
+                # logging.exception("Exception occurred")
                 print(e)
     #     logging.debug('ship='+str(ship))
     return ship
+
+
+if __name__ == '__main__':
+    print(ship())
