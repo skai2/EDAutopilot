@@ -4,7 +4,7 @@ import pathlib
 from os import environ
 from os.path import join, getmtime
 
-default_path = join(environ['USERPROFILE'], "\Saved Games\Frontier Developments\Elite Dangerous")
+default_path = join(environ['USERPROFILE'], "Saved Games\Frontier Developments\Elite Dangerous")
 
 
 def get_latest_journal_path(path_to_search=default_path):
