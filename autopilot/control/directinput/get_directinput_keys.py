@@ -1,5 +1,9 @@
-def get_bindings(keys_to_obtain=keys_to_obtain):
-    """Returns a dict with the directinput equivalent of the requested keys_to_obtain"""
+from autopilot.control.directinput import directinput
+from autopilot.control.keybinds import get_latest_keybinds
+
+
+def get_directinput_keys(edkeybinds_dict=get_latest_keybinds()):
+    """Converts ED keybinds dict keys to directinput compatible keys"""
     direct_input_keys = {}
     convert_to_direct_keys = {
         'Key_LeftShift': 'LShift',
@@ -10,49 +14,36 @@ def get_bindings(keys_to_obtain=keys_to_obtain):
         'Key_RightControl': 'RControl'
     }
 
-    latest_bindings = get_latest_keybinds()
-    bindings_tree = parse(latest_bindings)
-    bindings_root = bindings_tree.getroot()
+    for keybind in edkeybinds_dict:
+        mod = edkeybinds_dict[keybind]['mod']
+        key = edkeybinds_dict[keybind]['key']
+        # Adequate key to directinput.SCANCODE dict standard
+        if key in convert_to_direct_keys:
+            key = convert_to_direct_keys[key]
+        elif key is not None:
+            key = key[4:]
+        # Adequate mod to directinput.SCANCODE dict standard
+        if mod in convert_to_direct_keys:
+            mod = convert_to_direct_keys[mod]
+        elif mod is not None:
+            mod = mod[4:]
+        # Prepare final binding
+        binding = None
+        if key is not None:
+            binding = {}
+            binding['pre_key'] = 'DIK_' + key.upper()
+            binding['key'] = directinput.SCANCODE[binding['pre_key']]
+            if mod is not None:
+                binding['pre_mod'] = 'DIK_' + mod.upper()
+                binding['mod'] = directinput.SCANCODE[binding['pre_mod']]
+        direct_input_keys[keybind] = binding
 
-    for item in bindings_root:
-        if item.tag in keys_to_obtain:
-            key = None
-            mod = None
-            # Check primary
-            if item[0].attrib['Device'].strip() == "Keyboard":
-                key = item[0].attrib['Key']
-                if len(item[0]) > 0:
-                    mod = item[0][0].attrib['Key']
-            # Check secondary (and prefer secondary)
-            if item[1].attrib['Device'].strip() == "Keyboard":
-                key = item[1].attrib['Key']
-                if len(item[1]) > 0:
-                    mod = item[1][0].attrib['Key']
-            # Adequate key to SCANCODE dict standard
-            if key in convert_to_direct_keys:
-                key = convert_to_direct_keys[key]
-            elif key is not None:
-                key = key[4:]
-            # Adequate mod to SCANCODE dict standard
-            if mod in convert_to_direct_keys:
-                mod = convert_to_direct_keys[mod]
-            elif mod is not None:
-                mod = mod[4:]
-            # Prepare final binding
-            binding = None
-            if key is not None:
-                binding = {}
-                binding['pre_key'] = 'DIK_' + key.upper()
-                binding['key'] = SCANCODE[binding['pre_key']]
-                if mod is not None:
-                    binding['pre_mod'] = 'DIK_' + mod.upper()
-                    binding['mod'] = SCANCODE[binding['pre_mod']]
-            if binding is not None:
-                direct_input_keys[item.tag] = binding
-    #             else:
-    #                 logging.warning("get_bindings_<"+item.tag+">= does not have a valid keyboard keybind.")
+    if len(direct_input_keys) < len(edkeybinds_dict):
+        # log -> Failed to bind keys
+        # handle failures
+        pass
+    return direct_input_keys
 
-    if len(list(direct_input_keys.keys())) < 1:
-        return None
-    else:
-        return direct_input_keys
+
+if __name__ == '__main__':
+    print(get_directinput_keys())

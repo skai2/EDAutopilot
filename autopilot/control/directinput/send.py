@@ -1,13 +1,17 @@
+from time import sleep
+
+from autopilot.control.directinput.directinput import PressKey, ReleaseKey
+
+
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     """Sends specified key"""
     global KEY_MOD_DELAY, KEY_DEFAULT_DELAY, KEY_REPEAT_DELAY
 
     if key is None:
-        logging.warning('SEND=NONE !!!!!!!!')
+        # logging.warning('SEND=NONE !!!!!!!!')
         return
 
-    logging.debug('send=key:' + str(key) + ',hold:' + str(hold) + ',repeat:' + str(repeat) + ',repeat_delay:' + str(
-        repeat_delay) + ',state:' + str(state))
+    # logging.debug('send=key:' + str(key) + ',hold:' + str(hold) + ',repeat:' + str(repeat) + ',repeat_delay:' + str(repeat_delay) + ',state:' + str(state))
     for i in range(repeat):
 
         if state is None or state == 1:
