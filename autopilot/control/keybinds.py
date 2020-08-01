@@ -30,7 +30,7 @@ keys_needed = [
 ]
 
 
-def get_latest_keybinds_path(path_to_search=default_path):
+def get_latest_path(path_to_search=default_path):
     """Returns the full path of the latest elite keybinds file from specified path"""
     path_to_search = pathlib.Path(path_to_search)
     list_of_files = glob.glob(str(path_to_search)+'\*.binds')
@@ -38,10 +38,10 @@ def get_latest_keybinds_path(path_to_search=default_path):
     return latest_file
 
 
-def get_latest_keybinds(keys_to_obtain=keys_needed):
+def get_latest(keys_to_obtain=keys_needed):
     """Returns a dict with the ED names of bindings for keys_to_obtain"""
     key_bindings = {}
-    latest_bindings = get_latest_keybinds_path()
+    latest_bindings = get_latest_path()
     bindings_tree = parse(latest_bindings)
     bindings_root = bindings_tree.getroot()
 
@@ -69,5 +69,5 @@ def get_latest_keybinds(keys_to_obtain=keys_needed):
 
 
 if __name__ == '__main__':
-    print(get_latest_keybinds_path())
-    print(get_latest_keybinds())
+    print(get_latest_path())
+    print(get_latest())

@@ -1,18 +1,20 @@
 import cv2
 from numpy import where
 
+from autopilot.configs import config
 from autopilot.helpers import resource_path
-from autopilot.vision import display, filters
+from autopilot.vision import filters
+from autopilot.vision.display.screenshot import screenshot
 
 
-def get_compass_image(testing=False):
+def get(testing=False):
     compass_template = cv2.imread(resource_path("templates/compass.png"), cv2.IMREAD_GRAYSCALE)
     compass_width, compass_height = compass_template.shape[::-1]
     compass_image = compass_template.copy()
     doubt = 10
     while True:
-        screen = display.screenshot((5 / 16) * display.width, (5 / 8) * display.height, (2 / 4) * display.width,
-                                    (15 / 16) * display.height)
+        screen = screenshot((5 / 16) * config.display.width, (5 / 8) * config.display.height, (2 / 4) * config.display.width,
+                                    (15 / 16) * config.display.height)
         #         mask_orange = filter_orange(screen)
         equalized = filters.equalize(screen)
         match = cv2.matchTemplate(equalized, compass_template, cv2.TM_CCOEFF_NORMED)
@@ -37,4 +39,4 @@ def get_compass_image(testing=False):
 
 
 if __name__ == '__main__':
-    get_compass_image(testing=True)
+    get(testing=True)

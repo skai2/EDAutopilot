@@ -3,8 +3,8 @@ from numpy import array
 
 import cv2
 
-from autopilot.vision.display import screenshot
-from autopilot.vision.filters.equalize import equalize
+from autopilot.vision.display.screenshot import screenshot
+from autopilot.vision.filters import equalize
 
 
 # TODO: Add more descriptive name

@@ -1,8 +1,8 @@
 from . import directinput
-from ..keybinds import get_latest_keybinds
+from ..keybinds import get_latest
 
 
-def get_directinput_keys(edkeybinds_dict=get_latest_keybinds()):
+def get(edkeybinds_dict=get_latest()):
     """Converts ED keybinds dict keys to directinput compatible keys"""
     direct_input_keys = {}
     convert_to_direct_keys = {
@@ -46,4 +46,4 @@ def get_directinput_keys(edkeybinds_dict=get_latest_keybinds()):
 
 
 if __name__ == '__main__':
-    print(get_directinput_keys())
+    print(get())

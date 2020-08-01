@@ -4,16 +4,16 @@ import cv2
 from numpy import where
 
 from autopilot.helpers import resource_path
-from autopilot.vision import filters, get_compass_image
+from autopilot.vision import filters
+from autopilot.vision import compass_image as compass
 
-
-def get_navpoint_offset(testing=False, last=None):
+def get(testing=False, last=None):
     global same_last_count, last_last
     navpoint_template = cv2.imread(resource_path("templates/navpoint.png"), cv2.IMREAD_GRAYSCALE)
     navpoint_width, navpoint_height = navpoint_template.shape[::-1]
     pt = (0, 0)
     while True:
-        compass_image, compass_width, compass_height = get_compass_image()
+        compass_image, compass_width, compass_height = compass.get()
         mask_blue = filters.nav_blue(compass_image)
         # filtered = filter_bright(compass_image)
         match = cv2.matchTemplate(mask_blue, navpoint_template, cv2.TM_CCOEFF_NORMED)
@@ -56,4 +56,4 @@ def get_navpoint_offset(testing=False, last=None):
 
 
 if __name__ == '__main__':
-    get_navpoint_offset(testing=True)
+    get(testing=True)

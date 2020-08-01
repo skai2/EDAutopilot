@@ -4,12 +4,12 @@ import numpy
 
 from autopilot.configs import config
 
-display = config.display
+number = config.display.number
 width = config.display.width
 height = config.display.height
 
 _d3d = d3dshot.create(capture_output="numpy")
-_d3d.display = _d3d.displays[display]
+_d3d.display = _d3d.displays[number]
 
 
 def screenshot(left, top, right, bottom):
