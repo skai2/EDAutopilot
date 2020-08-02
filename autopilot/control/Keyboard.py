@@ -6,9 +6,9 @@ from time import sleep
 from typing import List
 from xml.etree.ElementTree import parse
 
-import directinput
-from EDKeyCodes import EDKeyCodes
-from configs import config
+from autopilot.control import directinput
+from autopilot.control.EDKeyCodes import EDKeyCodes
+from autopilot.configs import config
 
 @dataclass
 class ModKey:
