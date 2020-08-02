@@ -2,10 +2,10 @@ import numpy as np
 
 from autopilot.configs import config
 from autopilot.vision import filters
-from autopilot.vision.display.screenshot import screenshot
+from autopilot.vision.display import screenshot
 
 
-def get():
+def get_sun_percent():
     screen = screenshot((1 / 3) * config.display.width, (1 / 3) * config.display.height, (2 / 3) * config.display.width,
                         (2 / 3) * config.display.height)
     filtered = filters.star_bright(screen)
@@ -16,4 +16,4 @@ def get():
 
 
 if __name__ == '__main__':
-    print(get())
+    print(get_sun_percent())

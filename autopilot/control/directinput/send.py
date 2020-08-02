@@ -1,10 +1,10 @@
-from dataclasses import dataclass
 from time import sleep
 
 from win32gui import GetWindowText, GetForegroundWindow
 
-from autopilot.control.directinput.directinput import PressKey, ReleaseKey
 from autopilot.configs import config
+from autopilot.control.directinput.main import PressKey, ReleaseKey
+
 
 def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     """Sends specified key if ED is active window"""

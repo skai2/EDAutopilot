@@ -1,1 +1,1 @@
-from .configs import config
+from .ap_main import config

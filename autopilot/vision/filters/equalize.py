@@ -1,7 +1,7 @@
 import cv2
 
 from autopilot.configs import config
-from autopilot.vision.display.screenshot import screenshot
+from autopilot.vision.display import screenshot
 
 
 # TODO: Add more descriptive name

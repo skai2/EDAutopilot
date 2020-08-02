@@ -1,1 +1,1 @@
-from .resource_path import resource_path
+from autopilot.helpers.resource_path import resource_path

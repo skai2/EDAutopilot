@@ -4,17 +4,9 @@
 ################################################################################
 from time import sleep
 
-from autopilot.control import keybinds
-from autopilot.control.directinput import directinput_keys
-from autopilot.control.directinput.send import send
-from autopilot.edlog.ship import ship
-from autopilot.routines.align import align
-from autopilot.routines.jump import jump
-from autopilot.routines.refuel import refuel
-from autopilot.routines.reposition import reposition
-
-keys = keybinds.get_latest()
-keys = directinput_keys.get(keys)
+from autopilot.control import keys, send
+from autopilot.edlog import ship
+from autopilot.routines import align, jump, refuel, reposition
 
 
 def activate():

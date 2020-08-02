@@ -1,14 +1,9 @@
 from math import degrees, atan
 from time import sleep
 
-from autopilot.control import keybinds
-from autopilot.control.directinput import directinput_keys
-from autopilot.control.directinput.send import send
+from autopilot.control import keys, send
 from autopilot.edlog import ship
-from autopilot.vision import sun_percent, navpoint_offset, destination_offset
-
-keys = keybinds.get_latest()
-keys = directinput_keys.get(keys)
+from autopilot.vision import get_sun_percent, get_navpoint_offset, get_destination_offset
 
 
 def x_angle(point=None):
@@ -31,15 +26,15 @@ def align():
     send(keys['SetSpeed100'])
 
     # logging.debug('align= avoid sun')
-    while sun_percent.get() > 5:
+    while get_sun_percent() > 5:
         send(keys['PitchUpButton'], state=1)
     send(keys['PitchUpButton'], state=0)
 
     # logging.debug('align= find navpoint')
-    off = navpoint_offset.get()
+    off = get_navpoint_offset()
     while not off:
         send(keys['PitchUpButton'], state=1)
-        off = navpoint_offset.get()
+        off = get_navpoint_offset()
     send(keys['PitchUpButton'], state=0)
 
     # logging.debug('align= crude align')
@@ -60,7 +55,7 @@ def align():
 
             if ship()['status'] == 'starting_hyperspace':
                 return
-            off = navpoint_offset.get(last=off)
+            off = get_navpoint_offset(last=off)
             ang = x_angle(off)
 
         ang = x_angle(off)
@@ -73,10 +68,10 @@ def align():
 
             if ship()['status'] == 'starting_hyperspace':
                 return
-            off = navpoint_offset.get(last=off)
+            off = get_navpoint_offset(last=off)
             ang = x_angle(off)
 
-        off = navpoint_offset.get(last=off)
+        off = get_navpoint_offset(last=off)
         ang = x_angle(off)
 
     # logging.debug('align= fine align')
@@ -85,7 +80,7 @@ def align():
     hold_pitch = 0.200
     hold_yaw = 0.400
     for i in range(5):
-        new = destination_offset.get()
+        new = get_destination_offset()
         if new:
             off = new
             break
@@ -107,7 +102,7 @@ def align():
             return
 
         for i in range(5):
-            new = destination_offset.get()
+            new = get_destination_offset()
             if new:
                 off = new
                 break

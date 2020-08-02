@@ -1,13 +1,8 @@
 from time import sleep
 
-from autopilot.control import keybinds
-from autopilot.control.directinput import directinput_keys
-from autopilot.control.directinput.send import send
+from autopilot.control import keys, send
 from autopilot.edlog import ship
-from autopilot.routines.align import align
-
-keys = keybinds.get_latest()
-keys = directinput_keys.get(keys)
+from autopilot.routines import align
 
 
 def jump():

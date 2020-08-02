@@ -2,7 +2,7 @@ import cv2
 from numpy import array
 
 from autopilot.configs import config
-from autopilot.vision.display.screenshot import screenshot
+from autopilot.vision.display import screenshot
 
 
 def star_bright(image=None, testing=False):

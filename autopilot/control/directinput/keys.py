@@ -1,8 +1,8 @@
-from . import directinput
-from ..keybinds import get_latest
+from autopilot.control.directinput.main import SCANCODE
+from autopilot.control.keybinds import get_latest
 
 
-def get(edkeybinds_dict=get_latest()):
+def get_keys(edkeybinds_dict=get_latest()):
     """Converts ED keybinds dict keys to directinput compatible keys"""
     direct_input_keys = {}
     convert_to_direct_keys = {
@@ -32,10 +32,10 @@ def get(edkeybinds_dict=get_latest()):
         if key is not None:
             binding = {}
             binding['pre_key'] = 'DIK_' + key.upper()
-            binding['key'] = directinput.SCANCODE[binding['pre_key']]
+            binding['key'] = SCANCODE[binding['pre_key']]
             if mod is not None:
                 binding['pre_mod'] = 'DIK_' + mod.upper()
-                binding['mod'] = directinput.SCANCODE[binding['pre_mod']]
+                binding['mod'] = SCANCODE[binding['pre_mod']]
         direct_input_keys[keybind] = binding
 
     if len(direct_input_keys) < len(edkeybinds_dict):
@@ -45,5 +45,7 @@ def get(edkeybinds_dict=get_latest()):
     return direct_input_keys
 
 
+keys = get_keys()
+
 if __name__ == '__main__':
-    print(get())
+    print(keys)

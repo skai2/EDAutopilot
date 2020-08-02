@@ -1,13 +1,8 @@
 from time import sleep
 
 from autopilot.configs import config
-from autopilot.control import keybinds
-from autopilot.control.directinput import directinput_keys
-from autopilot.control.directinput.send import send
-from autopilot.vision import sun_percent
-
-keys = keybinds.get_latest()
-keys = directinput_keys.get(keys)
+from autopilot.control import keys, send
+from autopilot.vision import get_sun_percent
 
 
 def get_scanner():
@@ -33,7 +28,7 @@ def reposition(refueled_multiplier=1):
     send(keys['PitchUpButton'], state=0)
     send(keys['SetSpeed100'])
     send(keys['PitchUpButton'], state=1)
-    while sun_percent.get() > 3:
+    while get_sun_percent() > 3:
         sleep(1)
     sleep(5)
     send(keys['PitchUpButton'], state=0)

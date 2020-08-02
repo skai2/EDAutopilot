@@ -6,11 +6,12 @@ from numpy import where
 
 from autopilot.configs import config
 from autopilot.vision import filters
-from autopilot.vision.display.screenshot import screenshot
+from autopilot.vision.display import screenshot
 
 destination_template_path = join(pathlib.Path(__file__).parent, "templates/destination.png")
 
-def get(testing=False):
+
+def get_destination_offset(testing=False):
     destination_template = cv2.imread(destination_template_path, cv2.IMREAD_GRAYSCALE)
     destination_width, destination_height = destination_template.shape[::-1]
     pt = (0, 0)
@@ -18,7 +19,7 @@ def get(testing=False):
     height = (1 / 3) * config.display.height
     while True:
         screen = screenshot((1 / 3) * config.display.width, (1 / 3) * config.display.height,
-                                           (2 / 3) * config.display.width, (2 / 3) * config.display.height)
+                            (2 / 3) * config.display.width, (2 / 3) * config.display.height)
         mask_orange = filters.ui_orange(screen)
         #         equalized = equalize(screen)
         match = cv2.matchTemplate(mask_orange, destination_template, cv2.TM_CCOEFF_NORMED)
@@ -46,4 +47,4 @@ def get(testing=False):
 
 
 if __name__ == '__main__':
-    get(testing=True)
+    get_destination_offset(testing=True)
