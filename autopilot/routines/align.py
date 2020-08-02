@@ -18,7 +18,7 @@ def x_angle(point=None):
 
 def align():
     # logging.debug('align')
-    if not (ship()['status'] == 'in_supercruise' or ship()['status'] == 'in_space'):
+    if not (ship().status.in_supercruise or ship().status.in_space):
         # logging.error('align=err1')
         raise Exception('align error 1')
 
@@ -53,7 +53,7 @@ def align():
             if off['x'] < -close and ang < -close:
                 send(keys['RollLeftButton'], hold=hold_roll)
 
-            if ship()['status'] == 'starting_hyperspace':
+            if ship().status.starting_hyperspace:
                 return
             off = get_navpoint_offset(last=off)
             ang = x_angle(off)
@@ -66,7 +66,7 @@ def align():
             if off['y'] < -close:
                 send(keys['PitchDownButton'], hold=hold_pitch)
 
-            if ship()['status'] == 'starting_hyperspace':
+            if ship().status.starting_hyperspace:
                 return
             off = get_navpoint_offset(last=off)
             ang = x_angle(off)
@@ -98,7 +98,7 @@ def align():
         if off['y'] < -close:
             send(keys['PitchDownButton'], hold=hold_pitch)
 
-        if ship()['status'] == 'starting_hyperspace':
+        if ship().status.starting_hyperspace:
             return
 
         for i in range(5):

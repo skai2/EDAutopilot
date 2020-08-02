@@ -15,8 +15,8 @@ def activate():
     # logging.debug('ship='+str(ship()))
     #     if ship()['target']:
     #         undock()
-    while ship()['target']:
-        if ship()['status'] == 'in_space' or ship()['status'] == 'in_supercruise':
+    while ship().has_target:
+        if ship().status.in_space or ship().status.in_supercruise:
             # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT ALIGN '+179*'-'+'\n'+200*'-')
             align()
             # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT JUMP '+180*'-'+'\n'+200*'-')

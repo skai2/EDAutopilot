@@ -6,7 +6,7 @@ from autopilot.edlog import ship
 
 def undock():
     # logging.debug('undock')
-    if ship()['status'] != "in_station":
+    if ship().status.in_station:
         # logging.error('undock=err1')
         raise Exception('undock error 1')
     send(keys['UI_Back'], repeat=10)
@@ -14,7 +14,7 @@ def undock():
     send(keys['UI_Down'], hold=3)
     send(keys['UI_Select'])
     sleep(1)
-    if not (ship()['status'] == "starting_undock" or ship()['status'] == "in_undock"):
+    if not (ship().status.starting_undocking or ship().status.in_undocking):
         # logging.error('undock=err2')
         raise Exception("undock error 2")
     send(keys['HeadLookReset'])
@@ -25,7 +25,7 @@ def undock():
         if i > wait - 1:
             # logging.error('undock=err3')
             raise Exception('undock error 3')
-        if ship()['status'] == "in_space":
+        if ship().status.in_space:
             break
     # logging.debug('undock=complete')
     return True

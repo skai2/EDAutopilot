@@ -6,7 +6,7 @@ from autopilot.edlog import ship
 
 def dock():
     # logging.debug('dock')
-    if ship()['status'] != "in_space":
+    if not ship().status.in_space:
         # logging.error('dock=err1')
         raise Exception('dock error 1')
     tries = 3
@@ -21,7 +21,7 @@ def dock():
         send(keys['UI_Right'])
         send(keys['UI_Select'])
         sleep(1)
-        if ship()['status'] == "starting_dock" or ship()['status'] == "in_dock":
+        if ship().status.starting_docking or ship().status.in_docking:
             break
         if i > tries - 1:
             # logging.error('dock=err2')
@@ -35,7 +35,7 @@ def dock():
         if i > wait - 1:
             # logging.error('dock=err3')
             raise Exception('dock error 3')
-        if ship()['status'] == "in_station":
+        if ship().status.in_station:
             break
     send(keys['UI_Up'], hold=3)
     send(keys['UI_Down'])
