@@ -1,6 +1,6 @@
 from time import sleep
 
-from win32gui import GetWindowText, GetForegroundWindow
+#from win32gui import GetWindowText, GetForegroundWindow
 
 from autopilot.configs import config
 from autopilot.control.directinput.main import PressKey, ReleaseKey
@@ -13,9 +13,9 @@ def send(key, hold=None, repeat=1, repeat_delay=None, state=None):
     key_repeat_delay = config.directinput.key_repeat_delay
 
     # Halt if ED window is inactive
-    if GetWindowText(GetForegroundWindow()) != 'Elite - Dangerous (CLIENT)':
+    #if GetWindowText(GetForegroundWindow()) != 'Elite - Dangerous (CLIENT)':
         # logging, handling, etc
-        raise Exception("ED:Autopilot halted due to inactive window")
+        #raise Exception("ED:Autopilot halted due to inactive window")
 
     if key is None:
         # logging.warning('SEND=NONE !!!!!!!!')
