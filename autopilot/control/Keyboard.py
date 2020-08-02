@@ -1,7 +1,9 @@
+import glob
 import logging
+import pathlib
 from dataclasses import dataclass, field
-from os import environ, listdir
-from os.path import join, isfile, getmtime
+from os import environ
+from os.path import join, getmtime
 from time import sleep
 from typing import List
 from xml.etree.ElementTree import parse
@@ -25,6 +27,9 @@ class InputKey:
 
 
 class Keyboard:
+
+    default_path = join(environ['LOCALAPPDATA'], 'Frontier Developments\Elite Dangerous\Options\Bindings')
+
     required_keys = [
         'YawLeftButton',
         'YawRightButton',
@@ -75,13 +80,13 @@ class Keyboard:
     # Get latest keybinds file
     def _get_latest_keybinds(self, path_bindings=None):
         if not path_bindings:
-            path_bindings = environ['LOCALAPPDATA'] + "\Frontier Developments\Elite Dangerous\Options\Bindings"
-        list_of_bindings = [join(path_bindings, f) for f in listdir(path_bindings) if
-                            (isfile(join(path_bindings, f)) and join(path_bindings, f).endswith("binds"))]
-        if not list_of_bindings:
-            return None
-        latest_bindings = max(list_of_bindings, key=getmtime)
-        return latest_bindings
+            path_bindings = self.default_path
+
+        """Returns the full path of the latest elite keybinds file from specified path"""
+        path_to_search = pathlib.Path(path_bindings)
+        list_of_files = glob.glob(str(path_to_search)+'\*.binds')
+        latest_file = max(list_of_files, key=getmtime)
+        return latest_file
 
     def _get_bindings(self, keysToObtain=None):
         """Returns a dict struct with the direct input equivalent of the necessary elite keybindings"""
