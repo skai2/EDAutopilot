@@ -150,16 +150,20 @@ class Keyboard:
             for mod in key.mod:
                 directinput.release_key(mod.ScanCode)
 
-    def tap(self, key: InputKey):
+    def tap(self, key: InputKey, repeat: int = 1):
         if not self.cv_testing:
-            if key is None:
-                self.logger.warning('SEND=NONE !!!!!!!!')
+            if repeat < 1:
+                self.logger.warning('Repeat must be greater than 0')
                 return
+            for _ in range(repeat):
+                if key is None:
+                    self.logger.warning('SEND=NONE !!!!!!!!')
+                    return
 
-            self.logger.debug('tap=key:' + str(key))
-            self.press(key)
-            sleep(self.KEY_DEFAULT_DELAY)
-            self.release(key)
+                self.logger.debug('tap=key:' + str(key))
+                self.press(key)
+                sleep(self.KEY_DEFAULT_DELAY)
+                self.release(key)
 
     def hold(self, key: InputKey, hold: float):
         if not self.cv_testing:
