@@ -10,10 +10,12 @@ from autopilot.control import directinput
 from autopilot.control.EDKeyCodes import EDKeyCodes
 from autopilot.configs import config
 
+
 @dataclass
 class ModKey:
     EDKeyCode: str
     ScanCode: int
+
 
 @dataclass
 class InputKey:
@@ -23,7 +25,6 @@ class InputKey:
 
 
 class Keyboard:
-
     required_keys = [
         'YawLeftButton',
         'YawRightButton',
@@ -57,17 +58,26 @@ class Keyboard:
     def __init__(self, cv_testing=False):
         self.cv_testing = cv_testing
         self._get_bindings()
+
+        # TODO: Check if this was the intention behind the logger
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.DEBUG)
+        fh = logging.FileHandler('Keyboard.log')
+        fh.setLevel(logging.DEBUG)
+        self.logger.addHandler(fh)
+
         for key in self.required_keys:
             try:
-                self.logger.info('get_bindings: '+str(key)+' = '+str(self.keybinds[key]))
+                self.logger.info('get_bindings: ' + str(key) + ' = ' + str(self.keybinds[key]))
             except Exception as e:
-                self.logger.warning(str("get_bindings: "+key+" = does not have a valid keybind.").upper())
+                self.logger.warning(str("get_bindings: " + key + " = does not have a valid keybind.").upper())
 
     # Get latest keybinds file
     def _get_latest_keybinds(self, path_bindings=None):
         if not path_bindings:
-            path_bindings = environ['LOCALAPPDATA']+"\Frontier Developments\Elite Dangerous\Options\Bindings"
-        list_of_bindings = [join(path_bindings, f) for f in listdir(path_bindings) if (isfile(join(path_bindings, f)) and join(path_bindings, f).endswith("binds"))]
+            path_bindings = environ['LOCALAPPDATA'] + "\Frontier Developments\Elite Dangerous\Options\Bindings"
+        list_of_bindings = [join(path_bindings, f) for f in listdir(path_bindings) if
+                            (isfile(join(path_bindings, f)) and join(path_bindings, f).endswith("binds"))]
         if not list_of_bindings:
             return None
         latest_bindings = max(list_of_bindings, key=getmtime)
@@ -123,7 +133,7 @@ class Keyboard:
                 self.logger.warning('SEND=NONE !!!!!!!!')
                 return
 
-            self.logger.debug('press=key:'+str(key))
+            self.logger.debug('press=key:' + str(key))
             for mod in key.mod:
                 directinput.press_key(mod.ScanCode)
                 sleep(self.KEY_MOD_DELAY)
@@ -135,7 +145,7 @@ class Keyboard:
                 self.logger.warning('SEND=NONE !!!!!!!!')
                 return
 
-            self.logger.debug('release=key:'+str(key))
+            self.logger.debug('release=key:' + str(key))
             directinput.release_key(key.ScanCode)
             for mod in key.mod:
                 directinput.release_key(mod.ScanCode)
@@ -146,7 +156,7 @@ class Keyboard:
                 self.logger.warning('SEND=NONE !!!!!!!!')
                 return
 
-            self.logger.debug('tap=key:'+str(key))
+            self.logger.debug('tap=key:' + str(key))
             self.press(key)
             sleep(self.KEY_DEFAULT_DELAY)
             self.release(key)
@@ -157,14 +167,14 @@ class Keyboard:
                 self.logger.warning('SEND=NONE !!!!!!!!')
                 return
 
-            self.logger.debug('tap=key:'+str(key)+',hold:'+str(hold))
+            self.logger.debug('tap=key:' + str(key) + ',hold:' + str(hold))
             self.press(key)
             sleep(hold if hold > self.KEY_DEFAULT_DELAY else self.KEY_DEFAULT_DELAY)
             self.release(key)
 
     def clear_input(self, to_clear=None):
         if not self.cv_testing:
-            logging.info('---- CLEAR INPUT '+183*'-')
+            logging.info('---- CLEAR INPUT ' + 183 * '-')
             self.tap(to_clear['SetSpeedZero'])
             self.tap(to_clear['MouseReset'])
 
@@ -179,7 +189,7 @@ class Keyboard:
 
 if __name__ == "__main__":
     for i in list(range(3))[::-1]:
-        print(i+1)
+        print(i + 1)
         sleep(1)
     print('press')
 
