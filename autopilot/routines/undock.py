@@ -1,24 +1,25 @@
 from time import sleep
 
-from autopilot.control import keys, send
+from autopilot.control.Keyboard import Keyboard
 from autopilot.edlog import ship
 
 
 def undock():
     # logging.debug('undock')
+    keyboard = Keyboard()
     if ship().status.in_station:
         # logging.error('undock=err1')
         raise Exception('undock error 1')
-    send(keys['UI_Back'], repeat=10)
-    send(keys['HeadLookReset'])
-    send(keys['UI_Down'], hold=3)
-    send(keys['UI_Select'])
+    keyboard.tap(keyboard.keybinds['UI_Back'], repeat=10)
+    keyboard.tap(keyboard.keybinds['HeadLookReset'])
+    keyboard.hold(keyboard.keybinds['UI_Down'], hold=3)
+    keyboard.tap(keyboard.keybinds['UI_Select'])
     sleep(1)
     if not (ship().status.starting_undocking or ship().status.in_undocking):
         # logging.error('undock=err2')
         raise Exception("undock error 2")
-    send(keys['HeadLookReset'])
-    send(keys['SetSpeedZero'], repeat=2)
+    keyboard.tap(keyboard.keybinds['HeadLookReset'])
+    keyboard.tap(keyboard.keybinds['SetSpeedZero'], repeat=2)
     wait = 120
     for i in range(wait):
         sleep(1)

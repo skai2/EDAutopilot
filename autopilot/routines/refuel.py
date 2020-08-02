@@ -1,11 +1,13 @@
 from time import sleep
 
-from autopilot.control import keys, send
+from autopilot.control.Keyboard import Keyboard
 from autopilot.edlog import ship
 
 
 def refuel(refuel_threshold=33):
     # logging.debug('refuel')
+    keyboard = Keyboard()
+
     scoopable_stars = ['F', 'O', 'G', 'K', 'B', 'A', 'M']
     if ship().status.in_supercruise:
         # logging.error('refuel=err1')
@@ -14,12 +16,12 @@ def refuel(refuel_threshold=33):
 
     if ship().fuel_percent < refuel_threshold and ship().star_class in scoopable_stars:
         # logging.debug('refuel= start refuel')
-        send(keys['SetSpeed100'])
+        keyboard.tap(keyboard.keybinds['SetSpeed100'])
         #     while not ship()['is_scooping']:
         #         sleep(1)
         sleep(4)
         # logging.debug('refuel= wait for refuel')
-        send(keys['SetSpeedZero'], repeat=3)
+        keyboard.tap(keyboard.keybinds['SetSpeedZero'], repeat=3)
         while not ship().fuel_percent == 100:
             sleep(1)
         # logging.debug('refuel=complete')

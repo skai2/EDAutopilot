@@ -4,7 +4,7 @@
 ################################################################################
 from time import sleep
 
-from autopilot.control import keys, send
+from autopilot.control.Keyboard import Keyboard
 from autopilot.edlog import ship
 from autopilot.routines import align, jump, refuel, reposition
 
@@ -15,6 +15,9 @@ def activate():
     # logging.debug('ship='+str(ship()))
     #     if ship()['target']:
     #         undock()
+
+    keyboard = Keyboard()
+
     while ship().has_target:
         if ship().status.in_space or ship().status.in_supercruise:
             # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT ALIGN '+179*'-'+'\n'+200*'-')
@@ -28,7 +31,8 @@ def activate():
                 reposition(refueled_multiplier=4)
             else:
                 reposition(refueled_multiplier=1)
-    send(keys['SetSpeedZero'])
+
+    keyboard.tap(keyboard.keybinds['SetSpeedZero'])
     # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT END '+181*'-'+'\n'+200*'-')
 
 

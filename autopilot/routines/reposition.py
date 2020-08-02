@@ -1,7 +1,7 @@
 from time import sleep
 
 from autopilot.configs import config
-from autopilot.control import keys, send
+from autopilot.control.Keyboard import Keyboard
 from autopilot.vision import get_sun_percent
 
 
@@ -16,29 +16,31 @@ def get_scanner():
 
 def reposition(refueled_multiplier=1):
     # logging.debug('position')
+    keyboard = Keyboard()
+
     scan = get_scanner()
     if scan == 1:
         # logging.debug('position=scanning')
-        send(keys['PrimaryFire'], state=1)
+        keyboard.press(keyboard.keybinds['PrimaryFire'])
     elif scan == 2:
         # logging.debug('position=scanning')
-        send(keys['SecondaryFire'], state=1)
-    send(keys['PitchUpButton'], state=1)
+        keyboard.press(keyboard.keybinds['SecondaryFire'])
+    keyboard.press(keyboard.keybinds['PitchUpButton'])
     sleep(5)
-    send(keys['PitchUpButton'], state=0)
-    send(keys['SetSpeed100'])
-    send(keys['PitchUpButton'], state=1)
+    keyboard.release(keyboard.keybinds['PitchUpButton'])
+    keyboard.tap(keyboard.keybinds['SetSpeed100'])
+    keyboard.press(keyboard.keybinds['PitchUpButton'])
     while get_sun_percent() > 3:
         sleep(1)
     sleep(5)
-    send(keys['PitchUpButton'], state=0)
+    keyboard.release(keyboard.keybinds['PitchUpButton'])
     sleep(5 * refueled_multiplier)
     if scan == 1:
         # logging.debug('position=scanning complete')
-        send(keys['PrimaryFire'], state=0)
+        keyboard.release(keyboard.keybinds['PrimaryFire'])
     elif scan == 2:
         # logging.debug('position=scanning complete')
-        send(keys['SecondaryFire'], state=0)
+        keyboard.release(keyboard.keybinds['SecondaryFire'])
     # logging.debug('position=complete')
     return True
 

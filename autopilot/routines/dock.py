@@ -1,6 +1,6 @@
 from time import sleep
 
-from autopilot.control import keys, send
+from autopilot.control.Keyboard import Keyboard
 from autopilot.edlog import ship
 
 
@@ -9,26 +9,29 @@ def dock():
     if not ship().status.in_space:
         # logging.error('dock=err1')
         raise Exception('dock error 1')
+    
+    keyboard = Keyboard()
+
     tries = 3
     for i in range(tries):
-        send(keys['UI_Back'], repeat=10)
-        send(keys['HeadLookReset'])
-        send(keys['UIFocus'], state=1)
-        send(keys['UI_Left'])
-        send(keys['UIFocus'], state=0)
-        send(keys['CycleNextPanel'], repeat=2)
-        send(keys['UI_Up'], hold=3)
-        send(keys['UI_Right'])
-        send(keys['UI_Select'])
+        keyboard.tap(keyboard.keybinds['UI_Back'], repeat=10)
+        keyboard.tap(keyboard.keybinds['HeadLookReset'])
+        keyboard.press(keyboard.keybind['UIFocus'])
+        keyboard.tap(keyboard.keybinds['UI_Left'])
+        keyboard.release(keyboard.keybinds['UIFocus'])
+        keyboard.tap(keyboard.keybinds['CycleNextPanel'], repeat=2)
+        keyboard.hold(keyboard.keybinds['UI_Up'], hold=3)
+        keyboard.tap(keyboard.keybinds['UI_Right'])
+        keyboard.tap(keyboard.keybinds['UI_Select'])
         sleep(1)
         if ship().status.starting_docking or ship().status.in_docking:
             break
         if i > tries - 1:
             # logging.error('dock=err2')
             raise Exception("dock error 2")
-    send(keys['UI_Back'])
-    send(keys['HeadLookReset'])
-    send(keys['SetSpeedZero'], repeat=2)
+    keyboard.tap(keyboard.keybinds['UI_Back'])
+    keyboard.tap(keyboard.keybinds['HeadLookReset'])
+    keyboard.tap(keyboard.keybinds['SetSpeedZero'], repeat=2)
     wait = 120
     for i in range(wait):
         sleep(1)
@@ -37,9 +40,9 @@ def dock():
             raise Exception('dock error 3')
         if ship().status.in_station:
             break
-    send(keys['UI_Up'], hold=3)
-    send(keys['UI_Down'])
-    send(keys['UI_Select'])
+    keyboard.hold(keyboard.keybinds['UI_Up'], hold=3)
+    keyboard.tap(keyboard.keybinds['UI_Down'])
+    keyboard.tap(keyboard.keybinds['UI_Select'])
     # logging.debug('dock=complete')
     return True
 
