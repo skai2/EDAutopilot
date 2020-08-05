@@ -8,9 +8,11 @@ from time import sleep
 from typing import List
 from xml.etree.ElementTree import parse
 
+from win32gui import GetWindowText, GetForegroundWindow
+
+from autopilot.configs import config
 from autopilot.control import directinput
 from autopilot.control.EDKeyCodes import EDKeyCodes
-from autopilot.configs import config
 
 
 @dataclass
@@ -27,7 +29,6 @@ class InputKey:
 
 
 class Keyboard:
-
     default_path = join(environ['LOCALAPPDATA'], 'Frontier Developments\Elite Dangerous\Options\Bindings')
 
     required_keys = [
@@ -84,7 +85,7 @@ class Keyboard:
 
         """Returns the full path of the latest elite keybinds file from specified path"""
         path_to_search = pathlib.Path(path_bindings)
-        list_of_files = glob.glob(str(path_to_search)+'\*.binds')
+        list_of_files = glob.glob(str(path_to_search) + '\*.binds')
         latest_file = max(list_of_files, key=getmtime)
         return latest_file
 
@@ -133,6 +134,13 @@ class Keyboard:
     # Direct input function
     # Send input
     def press(self, key: InputKey):
+        # Halt if ED window is inactive
+        if GetWindowText(GetForegroundWindow()) != 'Elite - Dangerous (CLIENT)':
+            # if GetWindowText(GetForegroundWindow()) != 'Elite - Dangerous (CLIENT)':
+            # logging, handling, etc
+            raise Exception("ED:Autopilot halted due to inactive window")
+            # raise Exception("ED:Autopilot halted due to inactive window")
+
         if not self.cv_testing:
             if key is None:
                 self.logger.warning('SEND=NONE !!!!!!!!')
@@ -145,6 +153,13 @@ class Keyboard:
             directinput.press_key(key.ScanCode)
 
     def release(self, key: InputKey):
+        # Halt if ED window is inactive
+        if GetWindowText(GetForegroundWindow()) != 'Elite - Dangerous (CLIENT)':
+            # if GetWindowText(GetForegroundWindow()) != 'Elite - Dangerous (CLIENT)':
+            # logging, handling, etc
+            raise Exception("ED:Autopilot halted due to inactive window")
+            # raise Exception("ED:Autopilot halted due to inactive window")
+
         if not self.cv_testing:
             if key is None:
                 self.logger.warning('SEND=NONE !!!!!!!!')
