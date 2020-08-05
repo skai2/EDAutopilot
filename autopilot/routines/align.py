@@ -1,7 +1,7 @@
 from math import degrees, atan
 from time import sleep
 
-from autopilot.control.Keyboard import Keyboard
+from autopilot.control import keyboard, keys
 from autopilot.edlog import ship
 from autopilot.vision import get_sun_percent, get_navpoint_offset, get_destination_offset
 
@@ -22,22 +22,20 @@ def align():
         # logging.error('align=err1')
         raise Exception('align error 1')
 
-    keyboard = Keyboard()
-
     # logging.debug('align= speed 100')
-    keyboard.tap(keyboard.keybinds['SetSpeed100'])
+    keyboard.tap(keys['SetSpeed100'])
 
     # logging.debug('align= avoid sun')
     while get_sun_percent() > 5:
-        keyboard.press(keyboard.keybinds['PitchUpButton'])
-    keyboard.release(keyboard.keybinds['PitchUpButton'])
+        keyboard.press(keys['PitchUpButton'])
+    keyboard.release(keys['PitchUpButton'])
 
     # logging.debug('align= find navpoint')
     off = get_navpoint_offset()
     while not off:
-        keyboard.press(keyboard.keybinds['PitchUpButton'])
+        keyboard.press(keys['PitchUpButton'])
         off = get_navpoint_offset()
-    keyboard.release(keyboard.keybinds['PitchUpButton'])
+    keyboard.release(keys['PitchUpButton'])
 
     # logging.debug('align= crude align')
     close = 3
@@ -51,9 +49,9 @@ def align():
         while (off['x'] > close and ang > close_a) or (off['x'] < -close and ang < -close_a):
 
             if off['x'] > close and ang > close:
-                keyboard.hold(keyboard.keybinds['RollRightButton'], hold=hold_roll)
+                keyboard.hold(keys['RollRightButton'], hold=hold_roll)
             if off['x'] < -close and ang < -close:
-                keyboard.hold(keyboard.keybinds['RollLeftButton'], hold=hold_roll)
+                keyboard.hold(keys['RollLeftButton'], hold=hold_roll)
 
             if ship().status.starting_hyperspace:
                 return
@@ -64,9 +62,9 @@ def align():
         while (off['y'] > close) or (off['y'] < -close):
 
             if off['y'] > close:
-                keyboard.tap(keyboard.keybinds['PitchUpButton'], hold=hold_pitch)
+                keyboard.tap(keys['PitchUpButton'], hold=hold_pitch)
             if off['y'] < -close:
-                keyboard.hold(keyboard.keybinds['PitchDownButton'], hold=hold_pitch)
+                keyboard.hold(keys['PitchDownButton'], hold=hold_pitch)
 
             if ship().status.starting_hyperspace:
                 return
@@ -92,13 +90,13 @@ def align():
     while (off['x'] > close) or (off['x'] < -close) or (off['y'] > close) or (off['y'] < -close):
 
         if off['x'] > close:
-            keyboard.hold(keyboard.keybinds['YawRightButton'], hold=hold_yaw)
+            keyboard.hold(keys['YawRightButton'], hold=hold_yaw)
         if off['x'] < -close:
-            keyboard.hold(keyboard.keybinds['YawLeftButton'], hold=hold_yaw)
+            keyboard.hold(keys['YawLeftButton'], hold=hold_yaw)
         if off['y'] > close:
-            keyboard.hold(keyboard.keybinds['PitchUpButton'], hold=hold_pitch)
+            keyboard.hold(keys['PitchUpButton'], hold=hold_pitch)
         if off['y'] < -close:
-            keyboard.hold(keyboard.keybinds['PitchDownButton'], hold=hold_pitch)
+            keyboard.hold(keys['PitchDownButton'], hold=hold_pitch)
 
         if ship().status.starting_hyperspace:
             return
