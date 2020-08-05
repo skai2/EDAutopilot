@@ -1,6 +1,5 @@
 .git
 .idea
-.log
 __pycache__
 venv
 configs.json
