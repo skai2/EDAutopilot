@@ -1,13 +1,12 @@
 from time import sleep
 
-from autopilot.control.Keyboard import Keyboard
+from autopilot.control import keyboard, keys
 from autopilot.edlog import ship
 from autopilot.routines import align
 
 
 def jump():
     # logging.debug('jump')
-    keyboard = Keyboard()
     tries = 3
     for i in range(tries):
         # logging.debug('jump= try:'+str(i))
@@ -16,11 +15,11 @@ def jump():
             raise Exception('not ready to jump')
         sleep(0.5)
         # logging.debug('jump= start fsd')
-        keyboard.hold(keyboard.keybinds['HyperSuperCombination'], hold=1)
+        keyboard.hold(keys['HyperSuperCombination'], hold=1)
         sleep(16)
         if ship().status.starting_hyperspace:
             # logging.debug('jump= misalign stop fsd')
-            keyboard.hold(keyboard.keybinds['HyperSuperCombination'], hold=1)
+            keyboard.hold(keys['HyperSuperCombination'], hold=1)
             sleep(2)
             align()
         else:
@@ -28,7 +27,7 @@ def jump():
             while not ship().status.in_supercruise:
                 sleep(1)
             # logging.debug('jump= speed 0')
-            keyboard.tap(keyboard.keybinds['SetSpeedZero'])
+            keyboard.tap(keys['SetSpeedZero'])
             # logging.debug('jump=complete')
             return True
     # logging.error('jump=err2')
