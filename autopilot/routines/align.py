@@ -62,7 +62,7 @@ def align():
         while (off['y'] > close) or (off['y'] < -close):
 
             if off['y'] > close:
-                keyboard.tap(keys['PitchUpButton'], hold=hold_pitch)
+                keyboard.hold(keys['PitchUpButton'], hold=hold_pitch)
             if off['y'] < -close:
                 keyboard.hold(keys['PitchDownButton'], hold=hold_pitch)
 
