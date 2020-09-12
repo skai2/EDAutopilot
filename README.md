@@ -5,6 +5,10 @@ Program uses openCV and other tools in python to navigate automatically in Elite
 
 Look [here for the autopilot alpha version release](https://github.com/skai2/EDAutopilot/releases).
 
+# Warning:
+The .exe file avalable on the release page is broken on many systems.\
+Feel free to try it however if you get a popup saying `Failed to execute` then you will need to run from the source code untill the restructure is finished and a new .exe is created.
+
 ## Usage:
 The program will create an icon on the taskbar.
 
