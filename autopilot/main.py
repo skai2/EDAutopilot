@@ -1,41 +1,91 @@
-################################################################################
-#                       Elite Dangerous Autopilot v2
-#    A computer vision based, completely external autopilot module for ED
-################################################################################
-from time import sleep
+import threading
+from pathlib import Path
 
-from autopilot.control.Keyboard import Keyboard
-from autopilot.edlog import ship
-from autopilot.routines import align, jump, refuel, reposition
+import keyboard as kb
+import kthread
+from PIL import Image  # big
+from autopilot.routines import apmain
+from autopilot.control import keyboard
+from pystray import Icon, MenuItem, Menu
+
+STATE = 0
 
 
-def activate():
-    # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT START '+179*'-'+'\n'+200*'-')
-    # logging.info('get_latest_log='+str(get_latest_log(PATH_LOG_FILES)))
-    # logging.debug('ship='+str(ship()))
-    #     if ship()['target']:
-    #         undock()
+def setup(icon):
+    icon.visible = True
 
-    keyboard = Keyboard()
 
-    while ship().has_target:
-        if ship().status.in_space or ship().status.in_supercruise:
-            # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT ALIGN '+179*'-'+'\n'+200*'-')
-            align()
-            # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT JUMP '+180*'-'+'\n'+200*'-')
-            jump()
-            # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT REFUEL '+178*'-'+'\n'+200*'-')
-            refueled = refuel()
-            # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT POSIT '+179*'-'+'\n'+200*'-')
-            if refueled:
-                reposition(refueled_multiplier=4)
-            else:
-                reposition(refueled_multiplier=1)
+def exit_action():
+    stop_action()
+    icon.visible = False
+    icon.stop()
 
-    keyboard.tap(keyboard.keybinds['SetSpeedZero'])
-    # logging.info('\n'+200*'-'+'\n'+'---- AUTOPILOT END '+181*'-'+'\n'+200*'-')
+
+def start_action():
+    stop_action()
+    kthread.KThread(target=apmain, name="EDAutopilot").start()
+
+
+def stop_action():
+    for thread in threading.enumerate():
+        if thread.getName() == 'EDAutopilot':
+            thread.kill()
+    keyboard.clear_input()
+
+
+def set_state(v):
+    def inner(icon, item):
+        global STATE
+        STATE = v
+        # set_scanner(STATE)
+
+    return inner
+
+
+def get_state(v):
+    def inner(item):
+        return STATE == v
+
+    return inner
+
+
+def tray():
+    global icon, thread
+    icon = None
+    thread = None
+
+    name = 'ED - Autopilot'
+    icon = Icon(name=name, title=name)
+    logo = Image.open(Path('assets/logo.png'))
+    icon.icon = logo
+
+    icon.menu = Menu(
+        MenuItem(
+            'Scan Off',
+            set_state(0),
+            checked=get_state(0),
+            radio=True
+        ),
+        MenuItem(
+            'Scan on Primary Fire',
+            set_state(1),
+            checked=get_state(1),
+            radio=True
+        ),
+        MenuItem(
+            'Scan on Secondary Fire',
+            set_state(2),
+            checked=get_state(2),
+            radio=True
+        ),
+        MenuItem('Exit', lambda: exit_action())
+    )
+
+    kb.add_hotkey('home', start_action)
+    kb.add_hotkey('end', stop_action)
+
+    icon.run(setup)
 
 
 if __name__ == '__main__':
-    sleep(5)
-    activate()
+    tray()

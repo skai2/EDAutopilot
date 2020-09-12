@@ -4,3 +4,4 @@ from autopilot.routines.jump import jump
 from autopilot.routines.refuel import refuel
 from autopilot.routines.reposition import reposition
 from autopilot.routines.undock import undock
+from autopilot.routines.apmain import apmain
