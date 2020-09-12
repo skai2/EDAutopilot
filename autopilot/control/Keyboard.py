@@ -199,8 +199,8 @@ class Keyboard:
     def clear_input(self, to_clear=None):
         if not self.cv_testing:
             logging.info('---- CLEAR INPUT ' + 183 * '-')
-            self.tap(to_clear['SetSpeedZero'])
-            self.tap(to_clear['MouseReset'])
+            self.tap(self.keybinds['SetSpeedZero'])
+            self.tap(self.keybinds['MouseReset'])
 
             if to_clear is None:
                 to_clear = self.keybinds
