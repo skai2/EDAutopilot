@@ -6,3 +6,4 @@ d3dshot~=0.1.5
 dacite~=1.5.1
 opencv-python~=4.3.0.36
 pywin32~=228
+keyboard~=0.13.5
