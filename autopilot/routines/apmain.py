@@ -35,5 +35,7 @@ def apmain():
 
 
 if __name__ == '__main__':
-    sleep(5)
+    for i in list(range(3))[::-1]:
+        print(i + 1)
+        sleep(1)
     apmain()
