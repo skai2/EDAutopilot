@@ -2,7 +2,7 @@ from math import degrees, atan
 from time import sleep
 
 from autopilot.control import keyboard, keys
-from autopilot.edlog import ship
+from autopilot.elite import ship
 from autopilot.vision import get_sun_percent, get_navpoint_offset, get_destination_offset
 
 

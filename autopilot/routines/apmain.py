@@ -5,7 +5,7 @@
 from time import sleep
 
 from autopilot.control import keyboard, keys
-from autopilot.edlog import ship
+from autopilot.elite import ship
 from autopilot.routines import align, jump, refuel, reposition
 
 

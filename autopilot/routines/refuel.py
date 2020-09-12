@@ -1,7 +1,7 @@
 from time import sleep
 
 from autopilot.control import keyboard, keys
-from autopilot.edlog import ship
+from autopilot.elite import ship
 
 
 def refuel(refuel_threshold=33):

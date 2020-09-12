@@ -7,7 +7,7 @@ from pathlib import Path
 
 from dacite import from_dict, Config
 
-from autopilot.edlog.journal import get_latest_journal_path
+from autopilot.elite.journal import get_latest_journal_path
 
 @dataclass
 class Status:
