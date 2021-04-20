@@ -175,6 +175,8 @@ def ship():
                 
                 if log_event == 'StartJump':
                     ship['status'] = str('starting_'+log['JumpType']).lower()
+                    if log['JumpType'] == 'Hyperspace':
+                        ship['star_class'] = log['StarClass']
                     
                 elif log_event == 'SupercruiseEntry' or log_event == 'FSDJump':
                     ship['status'] = 'in_supercruise'
@@ -226,9 +228,7 @@ def ship():
                 # parse location
                 if (log_event == 'Location' or log_event == 'FSDJump') and 'StarSystem' in log:
                     ship['location'] = log['StarSystem']
-                if 'StarClass' in log:
-                    ship['star_class'] = log['StarClass']
-                    
+
                 # parse target
                 if log_event == 'FSDTarget':
                     if log['Name'] == ship['location']:
@@ -244,7 +244,7 @@ def ship():
             except Exception as e:
                 logging.exception("Exception occurred")
                 print(e)
-#     logging.debug('ship='+str(ship))
+        # logging.debug('ship='+str(ship))
     return ship
 
 
