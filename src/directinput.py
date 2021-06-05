@@ -82,18 +82,18 @@ SCANCODE = {
     'DIK_F10'             : 0x44,
     'DIK_NUMLOCK'         : 0x45,
     'DIK_SCROLL'          : 0x46,    # Scroll Lock */
-    'DIK_NUMPAD7'         : 0x47,
-    'DIK_NUMPAD8'         : 0x48,
-    'DIK_NUMPAD9'         : 0x49,
+    'DIK_NUMPAD_7'         : 0x47,
+    'DIK_NUMPAD_8'         : 0x48,
+    'DIK_NUMPAD_9'         : 0x49,
     'DIK_SUBTRACT'        : 0x4A,    # - on numeric keypad */
-    'DIK_NUMPAD4'         : 0x4B,
-    'DIK_NUMPAD5'         : 0x4C,
-    'DIK_NUMPAD6'         : 0x4D,
+    'DIK_NUMPAD_4'         : 0x4B,
+    'DIK_NUMPAD_5'         : 0x4C,
+    'DIK_NUMPAD_6'         : 0x4D,
     'DIK_NUMPAD_ADD'      : 0x4E,    # + on numeric keypad */
-    'DIK_NUMPAD1'         : 0x4F,
-    'DIK_NUMPAD2'         : 0x50,
-    'DIK_NUMPAD3'         : 0x51,
-    'DIK_NUMPAD0'         : 0x52,
+    'DIK_NUMPAD_1'         : 0x4F,
+    'DIK_NUMPAD_2'         : 0x50,
+    'DIK_NUMPAD_3'         : 0x51,
+    'DIK_NUMPAD_0'         : 0x52,
     'DIK_DECIMAL'         : 0x53,    # . on numeric keypad */
     'DIK_F11'             : 0x57,
     'DIK_F12'             : 0x58,
